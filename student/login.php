@@ -16,7 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->fetch() && password_verify($password, $hashedPassword)) {
         $_SESSION['student_id'] = $id;
         $_SESSION['student_name'] = $name;
-        header("Location: dashboard.php");
+        header("Location: /IMS/student/dashboard.php");
+
         exit;
     } else {
         $error = "Invalid email or password.";
