@@ -1,13 +1,14 @@
 <?php
 $host = "localhost";
-$port = 3307; // or 3306 if default
+$port = 3307; // or 3306
 $user = "root";
 $pass = "";
 $dbname = "internship_db";
 
-$conn = new mysqli($host, $user, $pass, $dbname, $port);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    $db = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $user, $pass);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
 ?>

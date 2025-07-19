@@ -1,73 +1,202 @@
-<?php
-session_start();
-include("../includes/db.php");
-$error = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $stmt = $conn->prepare("SELECT id, full_name, password FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($id, $name, $hashedPassword);
-
-    if ($stmt->fetch() && password_verify($password, $hashedPassword)) {
-        $_SESSION['student_id'] = $id;
-        $_SESSION['student_name'] = $name;
-        header("Location: /IMS/student/dashboard.php");
-
-        exit;
-    } else {
-        $error = "Invalid email or password.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Student Login</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | INDSAC Softech</title>
   <style>
     body {
-      background-color: #f8f9fa;
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
     }
-    .login-container {
-      max-width: 450px;
+
+    /* Header */
+   nav {
+      background-color: #1a73e8;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav .logo a {
+      color: white;
+      text-decoration: none;
+    }
+
+    nav .logo a:hover {
+      color: white;
+    }
+    nav .nav-buttons a {
+      text-decoration: none;
+      color: white;
+      background-color: #0f5acc;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav .nav-buttons a:hover {
+      background-color: #0c48a1;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 400px;
       margin: 80px auto;
+      background-color: white;
       padding: 30px;
-      background-color: #ffffff;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
       border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
-    h3 {
+
+    h2 {
       text-align: center;
-      margin-bottom: 25px;
+      color: #1a73e8;
+      margin-bottom: 30px;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #1a73e8;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0f5acc;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #222;
+      color: white;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-buttons {
+        margin-top: 10px;
+      }
+      .container {
+        margin: 40px 20px;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="login-container">
-    <h3>Student Login</h3>
-    <?php if ($error): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
-    <form method="POST">
-      <div class="mb-3">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control" required>
-      </div>
-      <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-success">Login</button>
-        <a href="register.php" class="btn btn-link text-center">New user? Register</a>
-      </div>
-    </form>
+
+<!-- Header -->
+<nav>
+  <div class="logo"><a href="https://indsac.com" target="_blank"> INDSAC SOFTECH</a></div>
+  <div class="nav-buttons">
+    <a href="/ims/index.php">Home</a>
+<a href="login.php">Login</a>
+<a href="register.php">Register</a>
   </div>
+</nav>
+
+<!-- Login Form -->
+<div class="container">
+  <h2>Login to Internship Portal</h2>
+
+<?php
+include("../includes/db.php");
+
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim($_POST["email"]);
+    $password = $_POST["sifre"];
+
+    // === Admin Login (hardcoded credentials) ===
+    $admin_email = "admin@gmail.com";
+    $admin_password = "admin123"; // plain password
+
+    if ($email === $admin_email && $password === $admin_password) {
+        $_SESSION["login"] = true;
+        $_SESSION["user"] = [
+            "email" => $admin_email,
+            "role" => "admin"
+        ];
+        header("Location: ../admin/admin-dashboard.php");
+        exit;
+    }
+
+    // === Student Login ===
+    $query = $db->prepare("SELECT * FROM users WHERE email = :email");
+    $query->bindParam(':email', $email);
+    $query->execute();
+
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user["password"])) {
+        $_SESSION["login"] = true;
+        $_SESSION["user"] = [
+            "id" => $user["id"],
+            "email" => $user["email"],
+            "name" => $user["full_name"],
+            "role" => "student"
+        ];
+
+        header("Location: ../student/dashboard.php");
+        exit;
+    } else {
+        echo "<script>alert('Invalid email or password!'); window.location.href='login.php';</script>";
+        exit;
+    }
+}
+?>
+  <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
+    <label for="email">Email Address</label>
+    <input type="text" id="mail" name="email" placeholder="Enter your email" required />
+
+    <label for="password">Password</label>
+    <input type="password" id="sifre" name="sifre" placeholder="Enter your password" required />
+
+    <button type="submit">Login</button>
+  </form>
 </div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; 2025 INDSAC Softech | Email: internships@indsac.com | <a style="color: #bbb;" href="https://indsac.com" target="_blank">indsac.com</a>
+</div>
+
 </body>
 </html>
+

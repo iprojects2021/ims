@@ -1,170 +1,85 @@
 <?php
 session_start();
-include("../includes/db.php");
 
-if (!isset($_SESSION['student_id'])) {
-    header("Location: login.php");
-    exit();
+// Check if user is logged in and is a student
+if (!isset($_SESSION["login"]) || $_SESSION["user"]["role"] !== "student") {
+    header("Location: ../login/login.php");
+    exit;
 }
 
-$student_id = $_SESSION['student_id'];
-
-// Fetch student details
-$query = mysqli_query($conn, "SELECT * FROM users WHERE id = '$student_id'");
-$student = mysqli_fetch_assoc($query);
-
-// Redirect to login if student not found
-if (!$student) {
-    header("Location: login.php");
-    exit();
-}
-
-// Page routing
-$page = isset($_GET['page']) ? $_GET['page'] : 'status';
+$user = $_SESSION["user"];
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../assets/style.css"> <!-- Optional: Add your CSS file -->
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f3f6f9;
+            margin: 0;
+            padding: 0;
         }
 
-        .sidebar {
-            width: 220px;
-            height: 100vh;
-            background-color: #2c3e50;
-            color: white;
-            position: fixed;
-            padding-top: 20px;
+        .dashboard-container {
+            max-width: 600px;
+            margin: 80px auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
         }
 
-        .sidebar a {
-            display: block;
-            padding: 15px 20px;
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .info {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .info p {
+            margin: 8px 0;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .logout-btn a {
+            padding: 10px 20px;
+            background-color: #ff4b5c;
             color: white;
             text-decoration: none;
+            border-radius: 6px;
         }
 
-        .sidebar a:hover {
-            background-color: #34495e;
-        }
-
-        .main-content {
-            margin-left: 220px;
-            padding: 20px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .toggle-btn {
-            display: none;
-            font-size: 22px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                left: -220px;
-                position: absolute;
-                transition: 0.3s ease;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .toggle-btn {
-                display: block;
-            }
-        }
-
-        .profile-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
-            max-width: 400px;
-        }
-
-        .progress-steps {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            gap: 20px;
-        }
-
-        .progress-steps li {
-            padding: 10px 20px;
-            background: #ddd;
-            border-radius: 5px;
-        }
-
-        .progress-steps li.completed {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .progress-steps li.active {
-            background: #FFA500;
-            color: white;
+        .logout-btn a:hover {
+            background-color: #e43f4a;
         }
     </style>
 </head>
 <body>
 
-<div class="sidebar" id="sidebar">
-    <h2 style="text-align: center;">Student</h2>
-    <a href="dashboard.php?page=profile">👤 Profile</a>
-    <a href="dashboard.php?page=status">📄 Application Status</a>
-    <a href="logout.php">🚪 Logout</a>
-</div>
+<div class="dashboard-container">
+    <h1>Welcome, <?php echo htmlspecialchars($user["name"]); ?> 👋</h1>
 
-<div class="main-content">
-    <div class="topbar">
-        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-        <h1>Welcome, <?php echo htmlspecialchars($student['full_name']); ?></h1>
+    <div class="info">
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($user["email"]); ?></p>
+        <p><strong>Role:</strong> Student</p>
+        <!-- Add more profile info if available -->
     </div>
 
-    <div class="content-section">
-        <?php if ($page === 'profile') { ?>
-            <h2>Your Profile</h2>
-            <div class="profile-card">
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($student['full_name']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($student['email']); ?></p>
-                <p><strong>Password:</strong> ********</p>
-            </div>
-        <?php } elseif ($page === 'status') { ?>
-            <h2>Application Status</h2>
-            <ul class="progress-steps">
-                <li class="completed">Applied</li>
-                <li class="completed">Under Review</li>
-                <li class="active">Shortlisted</li>
-                <li>Selected</li>
-            </ul>
-        <?php } ?>
+    <div class="logout-btn">
+        <a href="logout.php">Logout</a>
     </div>
 </div>
-
-<script>
-    function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("active");
-    }
-</script>
 
 </body>
 </html>
