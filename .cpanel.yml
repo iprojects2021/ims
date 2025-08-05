@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/indsac/public_html/ims
+    - /bin/cp -R * $DEPLOYPATH
