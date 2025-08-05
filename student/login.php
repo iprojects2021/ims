@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "email" => $admin_email,
             "role" => "admin"
         ];
-        header("Location: ../admin/admin-dashboard.php");
+        header("Location: ../panel/admin-dashboard.php");
         exit;
     }
 
@@ -173,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "role" => "student"
         ];
 
-        header("Location: ../student/dashboard.php");
+        header("Location: ../panel/student-dashboard.php");
         exit;
     } else {
         echo "<script>alert('Invalid email or password!'); window.location.href='login.php';</script>";
