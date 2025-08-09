@@ -1,53 +1,65 @@
 <?php
-// MySQL database connection
 $servername = "localhost";
-$username = "root"; // Your MySQL username
-$password = ""; // Your MySQL password
-$dbname = "indsac_internship"; // Your database name
+$username = "root";
+$password = "";
+$dbname = "indsac_internship"; // Change this to your database name
 
-// Create a connection
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-session_start();
-// Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Check if the file is uploaded successfully
-    if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == 0) {
 
-        // File details
-        $fileTmp = $_FILES['profileImage']['tmp_name'];
-        $fileName = $_FILES['profileImage']['name'];
-        $fileType = $_FILES['profileImage']['type'];
-        $fileSize = $_FILES['profileImage']['size'];
+if (isset($_POST['submit'])) {
+    // Check if a file has been uploaded
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $image = $_FILES['image'];
+        $imageName = $image['name'];
+        $imageTmpName = $image['tmp_name'];
+        $imageSize = $image['size'];
+        $imageError = $image['error'];
 
-        // Get file content (binary data)
-        $fileData = file_get_contents($fileTmp);
+        // Get the file extension
+        $imageExt = pathinfo($imageName, PATHINFO_EXTENSION);
+        $imageExt = strtolower($imageExt); // Convert to lowercase to handle extensions case-insensitively
 
-        // Escape the data for insertion into the database
-        $fileData = $conn->real_escape_string($fileData);
+        // Allowed file extensions
+        $allowedExt = ['jpg', 'jpeg', 'png', 'gif'];
 
-        // Get user name and email from the form
-        
-        // Insert user data and image into the database
-       
-        $useriddata=$_SESSION['user']['id'];
-        $sql="UPDATE users SET profile_image=('$fileData') WHERE id=$useriddata";
-        // Prepare the update query
-        
+        if (in_array($imageExt, $allowedExt)) {
+            // Check file size (5MB max)
+            if ($imageSize <= 5000000) {
+                // Create a unique name for the image
+                $newImageName = uniqid('', true) . "." . $imageExt;
+                $uploadDir = 'uploads/'; // Directory to store uploaded images
+                $imagePath = $uploadDir . $newImageName;
 
+                // Move the image to the server directory
+                if (move_uploaded_file($imageTmpName, $imagePath)) {
+                    // Save the image path in the database
+                    $sql = "INSERT INTO users (image_path) VALUES (?)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s", $imagePath);
 
-        if ($conn->query($sql) === TRUE) {
-            echo "Profile image uploaded and saved successfully!";
+                    if ($stmt->execute()) {
+                        echo "Image uploaded and saved in database successfully!";
+                    } else {
+                        echo "Error saving image path to database.";
+                    }
+                    $stmt->close();
+                } else {
+                    echo "Error moving the uploaded file.";
+                }
+            } else {
+                echo "File size exceeds 5MB.";
+            }
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.";
         }
-
     } else {
-        echo "No file uploaded or there was an error during upload.";
+        echo "No file was uploaded.";
     }
 }
 

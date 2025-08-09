@@ -7,6 +7,24 @@ $stmt = $db->prepare("SELECT * FROM users where id=$useriddata");
 $stmt->execute();
 $clients = $stmt->fetchAll();
 //echo "<pre>";print_r($clients);die;
+
+
+// update form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $full_name = $_POST['full_name'];
+  $email = $_POST['email'];
+  $contact = $_POST['contact'];
+  $skills = $_POST['skills'];
+  $experience = $_POST['experience'];
+  $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=? WHERE id =$useriddata");
+  $stmt->execute([$full_name, $email, $contact, $skills,$experience]);
+  
+  header('Location: profile.php');
+  
+  exit();
+  
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1160,37 +1178,37 @@ $clients = $stmt->fetchAll();
                   <!-- /.tab-pane -->
 
                   <div class="tab-pane active" id="settings">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" method="post">
                       <div class="form-group row">
                         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                         
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName" value="<?php echo htmlspecialchars($client['full_name']); ?>">
+                          <input type="text" class="form-control" name="full_name" id="inputName" value="<?php echo htmlspecialchars($client['full_name']); ?>">
                         </div>
                         
                       </div>
                       <div class="form-group row">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputEmail" value="<?php echo htmlspecialchars($client['email']); ?>">
+                          <input type="text" name="email" class="form-control" id="inputEmail" value="<?php echo htmlspecialchars($client['email']); ?>">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputName2" class="col-sm-2 col-form-label">Mobile No</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" value="<?php echo htmlspecialchars($client['contact']); ?>">
+                          <input type="text" name="contact" class="form-control" id="inputName2" value="<?php echo htmlspecialchars($client['contact']); ?>">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
                         <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                          <textarea class="form-control" name="experience"  id="inputExperience" placeholder="Experience"><?php echo htmlspecialchars($client['experience']); ?></textarea>
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" value="<?php echo htmlspecialchars($client['skills']); ?>">
+                          <input type="text" name="skills" class="form-control" id="inputSkills" value="<?php echo htmlspecialchars($client['skills']); ?>">
                         </div>
                       </div>
                       <div class="form-group row">

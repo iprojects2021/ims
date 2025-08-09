@@ -17,12 +17,12 @@ if (
        
         // Prepare and execute query securely
      
-        $stmt = $db->prepare("SELECT id, full_name, profile_image_path FROM users WHERE id = :id");
+        $stmt = $db->prepare("SELECT*FROM users WHERE id = :id");
         $stmt->bindParam(':id', $_SESSION["user"]["id"]);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $stud = $stmt->fetch(PDO::FETCH_ASSOC);
-            $studResumePath = $stud['profile_image_path'];
+            $studResumePath = $stud['image_path'];
         }else {
             echo "No Data  found: ";
         }
@@ -35,7 +35,7 @@ if (
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  | Profile Image Upload</title>
+  <title>INDSAC SOFTECH  |Upload Profile Image</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -414,63 +414,50 @@ if (
   <?php
 // Ensure session is started and $sid, $studName, $studResumePath are available
 
-if (isset($_POST['upload']) && !empty($_POST['upload'])) {
-    if (isset($_FILES['resume_file']) && !empty($_FILES['resume_file']['name'])) {
 
-        // File upload config
-        $targetDir = "../".$uploadFolder ."/resume/";
-        $baseFileName = basename($_FILES['resume_file']['name']);
-        $fileType = strtolower(pathinfo($baseFileName, PATHINFO_EXTENSION));
-        $fileSize = $_FILES['resume_file']['size'];
+if (isset($_POST['upload']) && isset($_FILES['image_file'])) {
+  $targetDir = "../" . $uploadFolder . "/resume/";
+  $baseFileName = basename($_FILES['image_file']['name']);
+  $fileType = strtolower(pathinfo($baseFileName, PATHINFO_EXTENSION));
+  $fileSize = $_FILES['image_file']['size'];
+  $fileError = $_FILES['image_file']['error'];
+  $tmpFilePath = $_FILES['image_file']['tmp_name'];
+  
+// Filename should be unique and student-specific
+$fileName =  time();
+$targetFilePath = $targetDir . $fileName . '.' . $fileType;
 
-        // Filename should be unique and student-specific
-        $fileName =  time();
-        $targetFilePath = $targetDir . $fileName . '.' . $fileType;
+  if ($fileSize > 1048576) { // 1MB in bytes
+      $message = "File size should be less than 1 MB.";
+  } elseif (!in_array($fileType, $allowedTypes)) {
+      $message = "Only JPG, JPEG, or PNG images are allowed.";
+  } else {
+      if (!is_dir($targetDir)) {
+          mkdir($targetDir, 0755, true);
+      }
 
-        // Validate file
-        if ($fileSize > 1153433) {
-            $msg = "<script>showNotify('File size should be less than 1 MB.',1);</script>";
-        } elseif ($fileType !== 'jpeg') {
-            $msg = "<script>showNotify('Upload resume only in PDF format.',1);</script>";
-        } else {
-            try {
-                // Connect with PDO
-            
-                // Prepare the update query
-                $stmt = $db->prepare("UPDATE users SET profile_image_path = :path WHERE id = :sid");
-                $stmt->bindParam(':path', $targetFilePath);
-                $stmt->bindParam(':sid', $_SESSION["user"]["id"]);
+      if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+          try {
+              $stmt = $db->prepare("UPDATE users SET image_path = :path WHERE id = :sid");
+              $relativePath = str_replace("../", "", $targetFilePath);
+              $stmt->bindParam(':path', $relativePath);
+              $stmt->bindParam(':sid', $_SESSION["user"]["id"]);
 
-                // Create directory if it doesn't exist
-if (!is_dir($targetDir)) {
-    mkdir($targetDir, 0755, true);
+              if ($stmt->execute()) {
+                  $message = "Image uploaded successfully.";
+                  $userImagePath = $relativePath;
+              } else {
+                  $message = "Failed to update image path in database.";
+              }
+          } catch (PDOException $e) {
+              $message = "Database error: " . $e->getMessage();
+          }
+      } else {
+          $message = "Image upload failed.";
+      }
+  }
 }
-                if ($stmt->execute()) {
-                    if (move_uploaded_file($_FILES['resume_file']['tmp_name'], $targetFilePath)) {
-                     
-                       
-                        $message = "Uploaded Successfully";
-                        $studResumePath = $targetFilePath;
-                        $msg = "";
 
-                    } else {
-                        $msg = "File upload failed. Try again";
-                    }
-                } else {
-                    $msg = "Database update failed";
-                }
-
-            } catch (PDOException $e) {
-                $msg = "Error: " . addslashes($e->getMessage()) . "',1);";
-            }
-        }
-
-    } else {
-        $msg = "Invalid file format or size";
-    }
-
-    echo $msg;
-}
 ?>
 
     <!-- Main content -->
@@ -479,7 +466,7 @@ if (!is_dir($targetDir)) {
         <!-- Small boxes (Stat box) -->
   
          <div class="resume-container">
-                <h2>Upload profile Image</h2>
+                <h2>Upload Profile Image</h2>
                 <div class="profile-message1">
                   
 
@@ -490,7 +477,7 @@ if (!is_dir($targetDir)) {
 <?php else: ?>
     <!-- Optionally show nothing or a different message -->
     <p> 
-                        &#9888; Always make sure it is up to date. Resume file format should be PDF with size less than 1 MB
+                        &#9888; Always make sure it is up to date. Profile image file format should be Jpeg and Png  with size less than 1 MB
                     </p>
 <?php endif; ?>
                    
