@@ -358,7 +358,7 @@
         <header>
             <h1>Software Development Internship Training</h1>
             <p class="tagline">Gain real-world experience and build your portfolio with hands-on projects in cutting-edge technologies</p>
-            <a href="#apply" class="cta-button">Apply Now</a>
+            <a href="internshipliveproject.php" class="cta-button">Apply Now</a>
         </header>
         
         <h2 style="text-align: center; margin-bottom: 2rem; color: var(--dark);">Choose Your Specialization Track</h2>

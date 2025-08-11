@@ -15,6 +15,14 @@ if (
 // Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
 ?>
+<?php
+$email = $_SESSION['user']['email'];
+$stmt = $db->prepare("SELECT * FROM enquiry WHERE email = :email");
+$stmt->execute(['email' => $email]);
+$enuiry_data = $stmt->fetchAll();
+
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,18 +89,20 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
   </div>
 </div>
 
+
+
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
                 <h3>Status</h3>
-
-                <p>Not Applied </p>
-              </div>
+                <?php foreach ($enuiry_data as $enquiry): ?> 
+                <p><?php echo htmlspecialchars($enquiry['type']); ?>--<?php echo htmlspecialchars($enquiry['status']); ?> </p>
+              </div><?php endforeach; ?>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <p  class="small-box-footer">Internship Status </p>
+              <p  class="small-box-footer">Application Status </p>
             </div>
           </div>
           <!-- ./col -->

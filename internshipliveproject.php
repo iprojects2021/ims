@@ -221,7 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="form-container">
-                    <h2 class="form-title">Final Year Project Enquiry</h2>
+                    <h2 class="form-title">Software Development Internship Training
+Enquiry</h2>
                     <form id="projectForm" method="post">
                         <!-- Mobile Number -->
                         <div class="mb-3">
