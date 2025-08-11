@@ -19,7 +19,7 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  |Student Dashboard</title>
+  <title>Programs | INDSAC SOFTECH  </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -41,6 +41,63 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <style>
+    :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+      .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .service-desc {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -54,12 +111,12 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">Programs</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Programs</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -75,125 +132,70 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
           <div class="col-12">
   <div class="callout callout-success">
     <h5> Welcome!</h5>
-    Hello <strong><?php echo htmlspecialchars($studentName); ?></strong>, we're glad to have you here. Explore your dashboard, and make the most of your learning journey. Let's achieve greatness together!
+    Discover and enroll in programs that match your goals—start your journey today!
   </div>
 </div>
-
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>Status</h3>
-
-                <p>Not Applied </p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <p  class="small-box-footer">Internship Status </p>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>Resume</h3>
-
-                <p>--</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="resume_upload.php" class="small-box-footer">Upload Resume <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
+    
           <!-- ./col -->
         </div>
-        <!-- /.row -->
+ 
          <div class="row">
-          <div class="dashboard-container">
-    <!-- Internship Status -->
-    <div class="card">
-      <h2>Internship Status</h2>
-      <p><strong>Position:</strong> Web Developer Intern</p>
-      <p><strong>Company:</strong> TechSoft Solutions</p>
-      <p><strong>Status:</strong> Selected</p>
-      <p><strong>Duration:</strong> 3 Months</p>
-    </div>
+          <div class="col-12">
+  
+  <div class="services-grid">
+            <!-- Service 1 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3 class="service-title">College Final Year Projects Development </h3>
+                <p class="service-desc">
+                    End-to-end project development from concept to execution with documentation support.
+                </p>
+                <a href="../collegeprojects.php" class="btn">Learn More</a>
+            </div>
+            
+            <!-- Service 2 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="service-title">Professional Training Program</h3>
+                <p class="service-desc">
+                    Industry-aligned certification courses and hands-on workshops on emerging technologies.
+                </p>
+                <a href="../trainingprograms.php" class="btn">Learn More</a>
+            </div>
 
-    <!-- Applications Summary -->
-    <div class="card">
-      <h2>Application Summary</h2>
-      <p>Applied: <strong>5</strong></p>
-      <p>Shortlisted: <strong>2</strong></p>
-      <p>Selected: <strong>1</strong></p>
-      <p>Rejected: <strong>2</strong></p>
-    </div>
+             <!-- Service 4 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="service-title">Internship & Live Project Support</h3>
+                <p class="service-desc">
+                    Real-world project experience with mentorship from industry professionals.
+                </p>
+                <a href="../developmentinternships.php" class="btn">Learn More</a>
+            </div>
+            
+            <!-- Service 3 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="service-title">Interview & Career Preparation</h3>
+                <p class="service-desc">
+                    Resume building, mock interviews, and coding bootcamps to make you job-ready.
+                </p>
+                <a href="../interviewpreparation.php" class="btn">Learn More</a>
+            </div>
+            
+           
+        </div>
+</div>
 
-    <!-- Upcoming Events -->
-    <div class="card">
-      <h2>Upcoming Interview</h2>
-      <p><strong>Date:</strong> July 28, 2025</p>
-      <p><strong>Time:</strong> 11:00 AM</p>
-      <p><strong>Company:</strong> FutureTech Inc</p>
-    </div>
-
-    <!-- Document Upload -->
-    <div class="card">
-      <h2>Documents</h2>
-      <p>Resume: ✅</p>
-      <p>NOC: ❌ <a href="#" class="btn">Upload</a></p>
-      <p>Offer Letter: ❌</p>
-    </div>
-
-    <!-- Mentor Info -->
-    <div class="card">
-      <h2>Mentor Info</h2>
-      <p><strong>Name:</strong> Mr. Raj Malhotra</p>
-      <p><strong>Email:</strong> raj@example.com</p>
-      <p><strong>Status:</strong> Online 🟢</p>
-    </div>
-
-    <!-- Recommendations -->
-    <div class="card">
-      <h2>Recommended Internships</h2>
-      <p><strong>Role:</strong> Data Analyst Intern</p>
-      <p><strong>Company:</strong> Insight Labs</p>
-      <a href="#" class="btn">Apply Now</a>
-    </div>
-  </div>
-
+          <!-- ./col -->
         </div>
     
       </div><!-- /.container-fluid -->

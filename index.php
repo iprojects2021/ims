@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Internshop</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -84,7 +84,61 @@
       font-size: 18px;
       cursor: pointer;
     }
-
+:root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+      .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .service-desc {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+        }
     /* Hero */
     .hero {
       height: 440px;
@@ -282,7 +336,7 @@
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="#">Internships</a></li>
+      <li><a href="">Home</a></li>
       <li><a href="student/register.php">Register</a></li>
       <li><a href="student/login.php">Login</a></li>
     </ul>
@@ -295,7 +349,57 @@
       <button><i class="fas fa-search"></i></button>
     </div>
   </div>
+<div class="services-grid">
+            <!-- Service 1 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3 class="service-title">College Final Year Projects Development </h3>
+                <p class="service-desc">
+                    End-to-end project development from concept to execution with documentation support.
+                </p>
+                <a href="collegeprojects.php" class="btn">Learn More</a>
+            </div>
+            
+            <!-- Service 2 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="service-title">Professional Training Program</h3>
+                <p class="service-desc">
+                    Industry-aligned certification courses and hands-on workshops on emerging technologies.
+                </p>
+                <a href="trainingprograms.php" class="btn">Learn More</a>
+            </div>
 
+             <!-- Service 4 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="service-title">Internship & Live Project Support</h3>
+                <p class="service-desc">
+                    Real-world project experience with mentorship from industry professionals.
+                </p>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+            </div>
+            
+            <!-- Service 3 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="service-title">Interview & Career Preparation</h3>
+                <p class="service-desc">
+                    Resume building, mock interviews, and coding bootcamps to make you job-ready.
+                </p>
+                <a href="interviewpreparation.php" class="btn">Learn More</a>
+            </div>
+            
+           
+        </div>
   <!-- 📢 Hero Section -->
   <div class="hero"></div>
 
@@ -306,7 +410,7 @@
     <div class="cities">
       <div class="city-box"><img src="assets/images/1wfh.png"><p>Work from home</p></div>
       <div class="city-box"><img src="assets/images/2delhi.png"><p>Delhi/NCR</p></div>
-      <div class="city-box"><img src="assets/images/3banglor.png"><p>Bangalore</p></div>
+      <div class="city-box"><img src="assets/images/3banglor.png"><p>Remote (WFH)</p></div>
       <div class="city-box"><img src="assets/images/4mumbai.png"><p>Mumbai</p></div>
       <div class="city-box"><img src="assets/images/5chennai.png"><p>Chennai</p></div>
       <div class="city-box"><img src="assets/images/6kolkata.png"><p>Kolkata</p></div>
