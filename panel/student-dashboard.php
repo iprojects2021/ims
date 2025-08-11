@@ -1,4 +1,5 @@
 <?php
+include("../includes/db.php");
 // Start the session
 session_start();
 // Check if user session exists and name is not empty
@@ -14,6 +15,7 @@ if (
 // Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,14 +115,24 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+              <?php
+              $useriddata=$_SESSION['user']['id'];
+              $stmt = $db->prepare("SELECT * FROM users where id=$useriddata");
+              $stmt->execute();
+              $clients = $stmt->fetchAll();
 
-                <p>User Registrations</p>
-              </div>
+
+              
+?>
+<?php foreach ($clients as $client): ?>
+                <h3><?php echo htmlspecialchars($client['id']); ?></h3>
+                <p><?php echo htmlspecialchars($client['full_name']); ?></p>
+                <p><?php echo htmlspecialchars($client['email']); ?></p>
+              </div><?php endforeach; ?>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
