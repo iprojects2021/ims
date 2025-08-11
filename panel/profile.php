@@ -16,12 +16,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $contact = $_POST['contact'];
   $skills = $_POST['skills'];
   $experience = $_POST['experience'];
-  $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=? WHERE id =$useriddata");
-  $stmt->execute([$full_name, $email, $contact, $skills,$experience]);
+  $course = $_POST['course'];
+  $college = $_POST['college'];
+  $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=?,course=?,college=? WHERE id =$useriddata");
+  $stmt->execute([$full_name, $email, $contact, $skills,$experience,$course,$college]);
   
-  header('Location: profile.php');
+
   
-  exit();
+ // Check if the query was successful
+ if ($stmt->rowCount() > 0) {
+  // Success: Show alert and redirect
+  echo '<div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h5><i class="icon fas fa-check"></i> Alert!</h5>
+          Profile updated successfully
+        </div>';
+
+  // Redirect using JavaScript after displaying the success message
+  echo '<script type="text/javascript">
+          setTimeout(function() {
+              window.location.href = "profile.php"; 
+          }, 2000); // Redirect after 2 seconds
+        </script>';
+} else {
+  // Error: Show error alert
+  echo '<div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h5><i class="icon fas fa-times"></i> Error!</h5>
+          There was an error updating the data.
+        </div>';
+}
+
+  
+  
+  //exit();
   
 }
 
@@ -42,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+  
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -894,7 +923,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <p class="text-muted text-center"><?php echo htmlspecialchars($client['role']); ?></p>
                 
-                <ul class="list-group list-group-unbordered mb-3">
+                <!--<ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
                     <b>Followers</b> <a class="float-right">1,322</a>
                   </li>
@@ -904,9 +933,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <li class="list-group-item">
                     <b>Friends</b> <a class="float-right">13,287</a>
                   </li>
-                </ul>
+                </ul>-->
 
-                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
               </div>
               <!-- /.card-body -->
             </div>
@@ -945,9 +974,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <hr>
 
-                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+                <!--<strong><i class="far fa-file-alt mr-1"></i></strong>-->
 
-                <p class="text-muted"><?php echo htmlspecialchars($client['course']); ?></p>
+                <p class="text-muted"></p>
               </div><?php endforeach; ?>
               <!-- /.card-body -->
             </div>
@@ -1206,12 +1235,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                       </div>
                       <div class="form-group row">
+                        <label for="inputEducation" class="col-sm-2 col-form-label">Education</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="course" class="form-control"  value="<?php echo htmlspecialchars($client['course']); ?>">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputCollege" class="col-sm-2 col-form-label">College</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="college" class="form-control"  value="<?php echo htmlspecialchars($client['college']); ?>">
+                        </div>
+                      </div>
+                      <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
                         <div class="col-sm-10">
                           <input type="text" name="skills" class="form-control" id="inputSkills" value="<?php echo htmlspecialchars($client['skills']); ?>">
                         </div>
                       </div>
-                      <div class="form-group row">
+                      <!--<div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
                           <div class="checkbox">
                             <label>
@@ -1219,7 +1260,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </label>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                       <div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
                           <button type="submit" class="btn btn-danger">Submit</button>
