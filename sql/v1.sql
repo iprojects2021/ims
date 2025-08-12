@@ -4,7 +4,7 @@ ALTER TABLE users
 ADD image_path VARCHAR(100);
 ALTER TABLE users
 ADD experience VARCHAR(100);
-CREATE TABLE enquiry (
+CREATE TABLE application (
     id INT PRIMARY KEY,           
     mobile VARCHAR(15),           
     email VARCHAR(255),           
@@ -16,5 +16,11 @@ CREATE TABLE enquiry (
     status VARCHAR(50),          
     notes TEXT                    
 );
+ALTER TABLE application
+ADD COLUMN createddata TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE application
+CHANGE COLUMN createddata createddate TIMESTAMP;
+
+
 
 

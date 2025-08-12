@@ -17,7 +17,9 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
 ?>
 <?php
 $email = $_SESSION['user']['email'];
-$stmt = $db->prepare("SELECT * FROM enquiry WHERE email = :email");
+$stmt = $db->prepare("SELECT *FROM application WHERE email = :email ORDER BY createddate DESC 
+LIMIT 1;
+");
 $stmt->execute(['email' => $email]);
 $enuiry_data = $stmt->fetchAll();
 
@@ -97,7 +99,7 @@ $enuiry_data = $stmt->fetchAll();
               <div class="inner">
                 <h3>Status</h3>
                 <?php foreach ($enuiry_data as $enquiry): ?> 
-                <p><?php echo htmlspecialchars($enquiry['type']); ?>--<?php echo htmlspecialchars($enquiry['status']); ?> </p>
+                <p><?php echo htmlspecialchars($enquiry['type']); ?>--<?php echo htmlspecialchars($enquiry['status']); ?></p>
               </div><?php endforeach; ?>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -137,7 +139,7 @@ $enuiry_data = $stmt->fetchAll();
 <?php foreach ($clients as $client): ?>
                 <h3><?php echo htmlspecialchars($client['id']); ?></h3>
                 <p><?php echo htmlspecialchars($client['full_name']); ?></p>
-                <p><?php echo htmlspecialchars($client['email']); ?></p>
+                
               </div><?php endforeach; ?>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -166,54 +168,54 @@ $enuiry_data = $stmt->fetchAll();
          <div class="row">
           <div class="dashboard-container">
     <!-- Internship Status -->
-    <div class="card">
+   <!-- <div class="card">
       <h2>Internship Status</h2>
       <p><strong>Position:</strong> Web Developer Intern</p>
       <p><strong>Company:</strong> TechSoft Solutions</p>
       <p><strong>Status:</strong> Selected</p>
       <p><strong>Duration:</strong> 3 Months</p>
-    </div>
+    </div>-->
 
     <!-- Applications Summary -->
-    <div class="card">
+    <!--<div class="card">
       <h2>Application Summary</h2>
       <p>Applied: <strong>5</strong></p>
       <p>Shortlisted: <strong>2</strong></p>
       <p>Selected: <strong>1</strong></p>
       <p>Rejected: <strong>2</strong></p>
-    </div>
+    </div>-->
 
     <!-- Upcoming Events -->
-    <div class="card">
+    <!--<div class="card">
       <h2>Upcoming Interview</h2>
       <p><strong>Date:</strong> July 28, 2025</p>
       <p><strong>Time:</strong> 11:00 AM</p>
       <p><strong>Company:</strong> FutureTech Inc</p>
-    </div>
+    </div>-->
 
     <!-- Document Upload -->
-    <div class="card">
+   <!-- <div class="card">
       <h2>Documents</h2>
       <p>Resume: ✅</p>
       <p>NOC: ❌ <a href="#" class="btn">Upload</a></p>
       <p>Offer Letter: ❌</p>
-    </div>
+    </div>-->
 
     <!-- Mentor Info -->
-    <div class="card">
+    <!--<div class="card">
       <h2>Mentor Info</h2>
       <p><strong>Name:</strong> Mr. Raj Malhotra</p>
       <p><strong>Email:</strong> raj@example.com</p>
       <p><strong>Status:</strong> Online 🟢</p>
-    </div>
+    </div>-->
 
     <!-- Recommendations -->
-    <div class="card">
+    <!--<div class="card">
       <h2>Recommended Internships</h2>
       <p><strong>Role:</strong> Data Analyst Intern</p>
       <p><strong>Company:</strong> Insight Labs</p>
       <a href="#" class="btn">Apply Now</a>
-    </div>
+    </div>-->
   </div>
 
         </div>

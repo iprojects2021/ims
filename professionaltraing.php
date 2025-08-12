@@ -176,12 +176,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $mobile = $_POST['mobile'];
   $email = $_POST['email'];
   $project = $_POST['project'];
-  $expected_start_date = $_POST['expected_start_date'];
   $expected_due_date = $_POST['expected_due_date'];
- // $experience = $_POST['experience'];
-  $stmt = $db->prepare("INSERT INTO enquiry(mobile, email,project,expected_start_date,expected_due_date) VALUES (?, ?, ?, ?, ?)");
-  $stmt->execute([$mobile, $email, $project, $expected_start_date, $expected_due_date]);
-  // Check if the query was successful
+  $outcome = $_POST['outcome'];
+  $stmt = $db->prepare("INSERT INTO application(mobile, email,project,expected_due_date,outcome,status,type) VALUES (?, ?, ?, ?,?,?,?)");
+  $stmt->execute([$mobile, $email, $project, $expected_due_date,$outcome,"Submited","Professional Training Program
+  "]);
+   // Check if the query was successful
  if ($stmt->rowCount() > 0) {
   // Success: Show alert and redirect
   echo '<div class="alert alert-success alert-dismissible">
@@ -245,7 +245,7 @@ Enquiry</h2>
                         <!-- Expected Outcome -->
                         <div class="mb-3">
                             <label for="outcome" class="form-label">Expected Outcome*</label>
-                            <textarea class="form-control" name="expected_start_date" id="outcome" rows="3" placeholder="What do you hope to achieve with this project?" required></textarea>
+                            <textarea class="form-control" name="outcome" id="outcome" rows="3" placeholder="What do you hope to achieve with this project?" required></textarea>
                         </div>
 
                         <!-- Due Date -->
