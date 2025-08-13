@@ -891,7 +891,7 @@ $applicationdata = $stmt->fetchAll();
                     
                   <td><?php echo htmlspecialchars($row['project']); ?></td>
                     <td><?php echo htmlspecialchars($row['outcome']); ?></td>
- <td><small class="badge badge-success"><?php echo htmlspecialchars($row['status']); ?></small></td>
+ <td><?php echo getStatusBadge($row['status']); ?></td>
   <td><?php echo htmlspecialchars($row['type']); ?></td>
   <td><?php echo htmlspecialchars($row['createddate']); ?></td>   
                   </tr>
@@ -989,6 +989,62 @@ $applicationdata = $stmt->fetchAll();
         });
     });
 </script>
+<?php
+function getStatusBadge($status) {
+    $status = strtolower(trim($status));
+    switch ($status) {
+      case 'draft':
+          $class = 'badge-secondary';
+          break;
+      case 'submitted':
+          $class = 'badge-warning';
+          break;
+      case 'under review':
+          $class = 'badge-primary';
+          break;
+      case 'shortlisted':
+          $class = 'badge-warning';
+          break;
+      case 'approved':
+          $class = 'badge-success';
+          break;
+      case 'rejected':
+          $class = 'badge-danger';
+          break;
+      case 'waitlisted':
+          $class = 'badge-orange';
+          break;
+      case 'offer sent':
+          $class = 'badge-warning';
+          break;
+      case 'confirmed':
+          $class = 'badge-success';
+          break;
+      case 'ongoing':
+          $class = 'badge-success';
+          break;
+      case 'completed':
+          $class = 'badge-success';
+          break;
+      case 'withdrawn':
+          $class = 'badge-danger';
+          break;
+      case 'terminated':
+          $class = 'badge-danger';
+          break;
+      default:
+          $class = 'badge-light';
+          break;
+  }
 
+    return "<small class='badge $class'>" . htmlspecialchars(ucwords($status)) . "</small>";
+}
+?>
+<style>
+.badge-orange {
+    background-color: #fd7e14; /* Bootstrap's orange */
+    color: #fff;
+}
+</style>
 </body>
 </html>
