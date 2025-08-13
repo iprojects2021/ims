@@ -1,20 +1,21 @@
 <?php
 
 include("../includes/db.php");
-session_start();
-$email = $_SESSION['user']['email'];
-$stmt = $db->prepare("SELECT * FROM application WHERE email = :email");
-$stmt->execute(['email' => $email]);
-$applicationdata = $stmt->fetchAll();
-
-
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
+  $id = $_POST['id'];
+  $stmt = $db->prepare("SELECT * FROM application WHERE id = ?");
+  $stmt->execute([$id]);
+  $applicationdata = $stmt->fetchAll();
+  //echo "<pre>";print_r($applicationdata);die; 
+   
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Project Detail</title>
+  <title>AdminLTE 3 | Application Type</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -560,7 +561,7 @@ $applicationdata = $stmt->fetchAll();
               <li class="nav-item">
                 <a href="../examples/project-detail.html" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Project Detail</p>
+                  <p>Application Type</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -847,12 +848,12 @@ $applicationdata = $stmt->fetchAll();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Project Detail</h1>
+            <h1>Application Type</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Project Detail</li>
+              <li class="breadcrumb-item active">Application Type</li>
             </ol>
           </div>
         </div>
@@ -865,7 +866,7 @@ $applicationdata = $stmt->fetchAll();
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Projects Detail</h3>
+          <h3 class="card-title">Application Type</h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -971,15 +972,37 @@ $applicationdata = $stmt->fetchAll();
             </div>
             <?php foreach ($applicationdata as $applications): ?>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Application Data</h3>
-              <p class="text-muted">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
-              <br>
+              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Application Type</h3>
               <div class="text-muted">
-                <p class="text-sm">Client Company
-                  <b class="d-block">Deveint Inc</b>
+                <p class="text-sm">Id
+                  <b class="d-block"><?php echo htmlspecialchars($applications['id']); ?></b>
                 </p>
-                <p class="text-sm">Project Leader
-                  <b class="d-block">Tony Chicken</b>
+                <p class="text-sm">Mobile No
+                  <b class="d-block"><?php echo htmlspecialchars($applications['mobile']); ?></b>
+                </p>
+                <p class="text-sm">Email
+                  <b class="d-block"><?php echo htmlspecialchars($applications['email']); ?></b>
+                </p>
+                <p class="text-sm">Project
+                  <b class="d-block"><?php echo htmlspecialchars($applications['project']); ?></b>
+                </p>
+                <p class="text-sm">Outcome
+                  <b class="d-block"><?php echo htmlspecialchars($applications['outcome']); ?></b>
+                </p>
+                <p class="text-sm">Expected Start Date
+                  <b class="d-block"><?php echo htmlspecialchars($applications['expected_start_date']); ?></b>
+                </p>
+                <p class="text-sm">Expected Due Date
+                  <b class="d-block"><?php echo htmlspecialchars($applications['expected_due_date']); ?></b>
+                </p>
+                <p class="text-sm">Type
+                  <b class="d-block"><?php echo htmlspecialchars($applications['type']); ?></b>
+                </p>
+                <p class="text-sm">Status
+                  <b class="d-block"><?php echo htmlspecialchars($applications['status']); ?></b>
+                </p>
+                  <p class="text-sm">Created Date
+                  <b class="d-block"><?php echo htmlspecialchars($applications['createddate']); ?></b>
                 </p>
               </div>
 

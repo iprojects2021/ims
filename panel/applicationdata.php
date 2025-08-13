@@ -885,15 +885,15 @@ $applicationdata = $stmt->fetchAll();
                     <th>CreatedDate</th>
                   </tr>
                   </thead>
-                  <tbody><?php foreach ($applicationdata as $applications): ?>
+                  <tbody><?php foreach ($applicationdata as $row): ?>
                   
-                  <tr>
+                    <tr class="clickable-row" data-id="<?= $row['id'] ?>">
                     
-                  <td><a href="typedetails.php?id=<?php echo $applications['id']; ?>"><?php echo htmlspecialchars($applications['project']); ?></a></td>
-                    <td><a href="typedetails.php?id=<?php echo $applications['id']; ?>"><?php echo htmlspecialchars($applications['outcome']); ?></a></td>
- <td><a href="typedetails.php?id=<?php echo $applications['id']; ?>"><small class="badge badge-success"><?php echo htmlspecialchars($applications['status']); ?></small></a></td>
-  <td><a href="typedetails.php?id=<?php echo $applications['id']; ?>"><?php echo htmlspecialchars($applications['type']); ?></a></td>
-  <td><a href="typedetails.php?id=<?php echo $applications['id']; ?>"><?php echo htmlspecialchars($applications['createddate']); ?></a></td>   
+                  <td><?php echo htmlspecialchars($row['project']); ?></td>
+                    <td><?php echo htmlspecialchars($row['outcome']); ?></td>
+ <td><small class="badge badge-success"><?php echo htmlspecialchars($row['status']); ?></small></td>
+  <td><?php echo htmlspecialchars($row['type']); ?></td>
+  <td><?php echo htmlspecialchars($row['createddate']); ?></td>   
                   </tr>
                    <?php endforeach; ?>
                   </tbody>
@@ -975,5 +975,20 @@ $applicationdata = $stmt->fetchAll();
     });
   });
 </script>
+<!-- Hidden form to send POST -->
+<form id="postForm" method="POST" action="typedetails.php" style="display:none;">
+    <input type="hidden" name="id" id="hiddenId">
+</form>
+<script>
+  
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            document.getElementById('hiddenId').value = id;
+            document.getElementById('postForm').submit();
+        });
+    });
+</script>
+
 </body>
 </html>
