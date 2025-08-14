@@ -1,5 +1,5 @@
 <?php
-
+include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
@@ -866,7 +866,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Application Type</h3>
+          <h3 class="card-title"><?php foreach ($applicationdata as $applications): ?><?php echo htmlspecialchars($applications['type']); ?><?php endforeach; ?></h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -995,11 +995,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
                 <p class="text-sm">Expected Due Date
                   <b class="d-block"><?php echo htmlspecialchars($applications['expected_due_date']); ?></b>
                 </p>
-                <p class="text-sm">Type
+                <p class="text-sm">Program
+ Type
                   <b class="d-block"><?php echo htmlspecialchars($applications['type']); ?></b>
                 </p>
                 <p class="text-sm">Status
-                  <b class="d-block"><?php echo htmlspecialchars($applications['status']); ?></b>
+                  <b class="d-block"><?php echo getStatusBadge($applications['status']); ?></b>
                 </p>
                   <p class="text-sm">Created Date
                   <b class="d-block"><?php echo htmlspecialchars($applications['createddate']); ?></b>
