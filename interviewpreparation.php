@@ -363,7 +363,7 @@
         <header>
             <h1>Career & Interview Preparation</h1>
             <p class="tagline">Get job-ready with our comprehensive career development programs and ace your technical interviews</p>
-            <a href="#contact" class="cta-button">Start Your Preparation</a>
+            <a href="interviewpreprationpage.php" class="cta-button">Start Your Preparation</a>
         </header>
         
         <h2 style="text-align: center; margin-bottom: 2rem; color: var(--dark);">Our Career Services</h2>

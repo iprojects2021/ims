@@ -466,7 +466,7 @@
         <header>
             <h1>Professional IT Training Programs</h1>
             <p class="tagline">Master in-demand technologies with hands-on training from industry experts</p>
-            <a href="#contact" class="cta-button1">Enroll Now</a>
+            <a href="professionaltraing.php" class="cta-button1">Enroll Now</a>
         </header>
         
         <!-- Unique Selling Strategies -->

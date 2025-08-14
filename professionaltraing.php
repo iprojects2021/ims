@@ -179,9 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $expected_due_date = $_POST['expected_due_date'];
   $outcome = $_POST['outcome'];
   $stmt = $db->prepare("INSERT INTO application(mobile, email,project,expected_due_date,outcome,status,type) VALUES (?, ?, ?, ?,?,?,?)");
-  $stmt->execute([$mobile, $email, $project, $expected_due_date,$outcome,"Submited","College Final Year Projects Development
+  $stmt->execute([$mobile, $email, $project, $expected_due_date,$outcome,"Submited","Professional Training Program
   "]);
-  // Check if the query was successful
+   // Check if the query was successful
  if ($stmt->rowCount() > 0) {
   // Success: Show alert and redirect
   echo '<div class="alert alert-success alert-dismissible">
@@ -221,7 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="form-container">
-                    <h2 class="form-title">Final Year Project Enquiry</h2>
+                    <h2 class="form-title">Professional IT Training Programs
+Enquiry</h2>
                     <form id="projectForm" method="post">
                         <!-- Mobile Number -->
                         <div class="mb-3">
