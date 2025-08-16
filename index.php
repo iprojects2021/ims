@@ -1,4 +1,11 @@
+<?php
+session_start();
+
+// Example: Assume the role is stored in session
+$role = $_SESSION['user']['role'] ?? null;
+?>
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -333,14 +340,23 @@
 <body>
 
   <!-- ✅ Navbar -->
-  <nav class="navbar">
+  
+
+<nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="">Home</a></li>
-      <li><a href="student/register.php">Register</a></li>
-      <li><a href="student/login.php">Login</a></li>
+        <?php if ($role === 'admin'): ?>
+          <li><a href="/ims/index.php">Home</a></li>
+<li><a href="/ims/panel/admin_dashboard.php">Dashboard</a></li>
+<li><a href="/ims/panel/adminlogout.php">Logout</a></li>
+
+             <?php else: ?>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="student/register.php">Register</a></li>
+            <li><a href="student/login.php">Login</a></li>
+        <?php endif; ?>
     </ul>
-  </nav>
+</nav>
 
   <!-- 🔍 Search Bar -->
   <div class="search-wrapper">

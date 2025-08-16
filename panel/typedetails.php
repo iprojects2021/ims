@@ -1056,7 +1056,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
+<style>
+.badge-orange {
+    background-color: #fd7e14; /* Bootstrap's orange */
+    color: #fff;
+}
+</style>
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

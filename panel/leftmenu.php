@@ -15,7 +15,7 @@ $role = $_SESSION['user']['role'] ?? null;
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="student-dashboard.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -188,10 +188,20 @@ $role = $_SESSION['user']['role'] ?? null;
         <i class="nav-icon fas fa-th"></i>
         <p>
           Add Programs
-          <span class="right badge badge-danger">New</span>
+         <!-- <span class="right badge badge-danger">New</span>-->
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="adminlogout.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          LogOut
+          
+        </p>
+      </a>
+    </li>
+
 
   <?php else: ?>
     <!-- Show for Students or other roles (non-admin) -->
