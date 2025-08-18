@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
   <title>Career & Interview Preparation | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">

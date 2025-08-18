@@ -8,6 +8,7 @@ $role = $_SESSION['user']['role'] ?? null;
 
 <html lang="en">
 <head>
+  <link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
   <title>Student Portal | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
