@@ -134,53 +134,48 @@
 <div class="container">
   <h2>Login to Internship Portal</h2>
 
-<?php
+  <?php
 include("../includes/db.php");
-
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = trim($_POST["email"]);
+    // Sanitize and get input
+    $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
     $password = $_POST["sifre"];
 
-    // === Admin Login (hardcoded credentials) ===
-    $admin_email = "admin@gmail.com";
-    $admin_password = "admin123"; // plain password
-
-    if ($email === $admin_email && $password === $admin_password) {
-        $_SESSION["login"] = true;
-        $_SESSION["user"] = [
-            "email" => $admin_email,
-            "role" => "admin"
-        ];
-        header("Location: ../panel/admin-dashboard.php");
-        exit;
-    }
-
-    // === Student Login ===
-    $query = $db->prepare("SELECT * FROM users WHERE email = :email");
-    $query->bindParam(':email', $email);
+    // Query user (admin or student)
+    $query = $db->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
     $query->execute();
 
     $user = $query->fetch(PDO::FETCH_ASSOC);
 
+    // Verify password and handle based on role
     if ($user && password_verify($password, $user["password"])) {
         $_SESSION["login"] = true;
         $_SESSION["user"] = [
             "id" => $user["id"],
             "email" => $user["email"],
             "name" => $user["full_name"],
-            "role" => "student"
+            "role" => $user["role"]
         ];
 
-        header("Location: ../panel/student-dashboard.php");
+        // Redirect based on role
+        if ($user["role"] === "admin") {
+            header("Location: ../panel/admin_dashboard.php");
+        } else {
+            header("Location: ../panel/student-dashboard.php");
+        }
         exit;
     } else {
-        echo "<script>alert('Invalid email or password!'); window.location.href='login.php';</script>";
+        // Login failed
+        $_SESSION["error"] = "Invalid email or password!";
+        header("Location: login.php");
         exit;
     }
 }
 ?>
+
   <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
     <label for="email">Email Address</label>
     <input type="text" id="mail" name="email" placeholder="Enter your email" required />

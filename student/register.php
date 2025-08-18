@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // Insert new user
-            $insert_query = "INSERT INTO users (full_name, email, password, contact, college, course)
-                             VALUES (?, ?, ?, ?, ?, ?)";
+            $insert_query = "INSERT INTO users (full_name, email, password, contact, college, course ,role)
+                             VALUES (?, ?, ?, ?, ?, ?, 'student')";
             $stmt = $db->prepare($insert_query);
 
             if ($stmt->execute([$full_name, $email, $hashed_password, $contact, $college, $course])) {

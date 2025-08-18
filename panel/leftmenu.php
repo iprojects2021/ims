@@ -1,3 +1,7 @@
+<?php
+//session_start(); // Ensure session is started at the top of the file
+$role = $_SESSION['user']['role'] ?? null;
+?>
 <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
@@ -11,7 +15,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="student-dashboard.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -175,141 +179,129 @@
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="student-dashboard.php" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="browseprograms.php" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Browse Programs
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="applicationdata.php" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                My Applications
-                <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">6</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Current Internship
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Tasks / Worklogs
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Documents
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Evaluations
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Notifications
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Learning Resources
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Support / Helpdesk
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="profile.php" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Profile
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Setting
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Logout
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            
-          </li>
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+  
+  <?php if ($role === 'admin'): ?>
+    <!-- Show ONLY for Admin -->
+    <li class="nav-item">
+      <a href="admin_addprogrms.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Add Programs
+         <!-- <span class="right badge badge-danger">New</span>-->
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="adminlogout.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          LogOut
           
-          
-        </ul>
+        </p>
+      </a>
+    </li>
+
+
+  <?php else: ?>
+    <!-- Show for Students or other roles (non-admin) -->
+    <li class="nav-item menu-open">
+      <a href="student-dashboard.php" class="nav-link active">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>Dashboard</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="browseprograms.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Browse Programs
+          <span class="right badge badge-danger">New</span>
+        </p>
+      </a>
+    </li>
+
+
+    <li class="nav-item">
+      <a href="applicationdata.php" class="nav-link">
+        <i class="nav-icon fas fa-copy"></i>
+        <p>My Applications</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-chart-pie"></i>
+        <p>Current Internship</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-tasks"></i>
+        <p>Tasks / Worklogs</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-file"></i>
+        <p>Documents</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-clipboard-check"></i>
+        <p>Evaluations</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-bell"></i>
+        <p>Notifications</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-book"></i>
+        <p>Learning Resources</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-headset"></i>
+        <p>Support / Helpdesk</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="profile.php" class="nav-link">
+        <i class="nav-icon fas fa-user"></i>
+        <p>Profile</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-cog"></i>
+        <p>Setting</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="logout.php" class="nav-link">
+        <i class="nav-icon fas fa-sign-out-alt"></i>
+        <p>Logout</p>
+      </a>
+    </li>
+  <?php endif; ?>
+
+</ul>
+
       </nav>
       <!-- /.sidebar-menu -->
     </div>
