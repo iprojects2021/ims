@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
 <title>Software Development Internship Training | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
@@ -385,7 +385,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> Authentication systems</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Performance tuning</li>
                 </ul>
-                <a href="#backend" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
             
             <!-- Frontend Development -->
@@ -409,7 +409,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> Responsive design principles</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> API integration</li>
                 </ul>
-                <a href="#frontend" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
             
             <!-- DevOps -->
@@ -433,7 +433,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> Monitoring & logging</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Web Development</li>
                 </ul>
-                <a href="#devops" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
 
                 <!-- Software Testing -->
@@ -457,7 +457,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> API testing</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Test case management</li>
                 </ul>
-                <a href="#testing" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a hhref="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
             
             <!-- Software Testing -->
@@ -481,7 +481,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> API testing</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Test case management</li>
                 </ul>
-                <a href="#testing" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
             
             <!-- Systems Programming -->
@@ -505,7 +505,7 @@
                     <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
                 </ul>
-                <a href="#systems" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
             </div>
         </div>
         

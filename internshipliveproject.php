@@ -8,7 +8,7 @@ include(__DIR__ . '/includes/db.php'); // if db.php is in ims/includes/
 
 
 <html lang="en">
-<head>
+<head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
   <title>College Projects Form | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
