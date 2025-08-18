@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
   <title>Professional IT Training Programs | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
@@ -464,7 +464,7 @@
   </nav>
   <div class="container">
         <header>
-            <h1>Professional IT Training Programs</h1>
+            <h1>Professional Online IT Training Programs</h1>
             <p class="tagline">Master in-demand technologies with hands-on training from industry experts</p>
             <a href="professionaltraing.php" class="cta-button1">Enroll Now</a>
         </header>
@@ -519,7 +519,7 @@
         <div class="hero-section text-center">
             
             <div class="price-badge">
-                ₹5,000  Only <span class="guarantee-badge ms-2">70% Cheaper Than Market</span>
+                ₹5,000  Only <span class="guarantee-badge ms-2">70% Less Than Market</span>
             </div>
             <p class="lead mb-4">Others charge ₹15,000+ for similar training. Save big while learning from industry experts!</p>
             <a href="#enroll" class="btn btn-light btn-lg cta-button1 me-2">
@@ -538,34 +538,146 @@
                     <div class="category-icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
-                    <h3 class="category-title">Programming Languages</h3>
+                    <h3 class="category-title">C and C++ Programming Languages</h3>
                 </div>
                 <ul class="course-list">
                     <li class="course-item"><i class="fas fa-check"></i> C Programming</li>
                     <li class="course-item"><i class="fas fa-check"></i> C++ with OOP</li>
-                    <li class="course-item"><i class="fas fa-check"></i> Python (Basic to Advanced)</li>
-                    <li class="course-item"><i class="fas fa-check"></i> Java & J2EE</li>
-                    <li class="course-item"><i class="fas fa-check"></i> PHP with Laravel</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Operators and expressions</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Control flow statements</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Functions and modular programming</li>
                     <li class="course-item"><i class="fas fa-check"></i> Data Structures & Algorithms</li>
                 </ul>
+           <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            
             </div>
             
-            <!-- Frontend Technologies -->
+            <!-- Core Java Technologies -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">
                         <i class="fas fa-paint-brush"></i>
                     </div>
-                    <h3 class="category-title">Frontend Technologies</h3>
+                    <h3 class="category-title">Core Java Programming</h3>
                 </div>
                 <ul class="course-list">
-                    <li class="course-item"><i class="fas fa-check"></i> HTML5 & CSS3</li>
-                    <li class="course-item"><i class="fas fa-check"></i> JavaScript (ES6+)</li>
-                    <li class="course-item"><i class="fas fa-check"></i> React.js with Redux</li>
-                    <li class="course-item"><i class="fas fa-check"></i> Angular Framework</li>
-                    <li class="course-item"><i class="fas fa-check"></i> Vue.js</li>
-                    <li class="course-item"><i class="fas fa-check"></i> Responsive Web Design</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Fundamental Programming Structures</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Object-Oriented Programming (OOP)</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Exception Handling </li>
+                    <li class="course-item"><i class="fas fa-check"></i> Collections Framework</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Input/Output (I/O) Streams</li>
                 </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+             <!-- Advanced Java Technologies -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-title">Advanced Java Spring Programming</h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> Core Java Concept</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  Core Spring Framework</li>
+                    <li class="course-item"><i class="fas fa-check"></i> IoC Container</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Aspect-Oriented Programming (AOP)</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Spring Web MVC</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Spring Security</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+            <!-- Python Technologies -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-title">Python Programming</h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> Introduction Python</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  Native Datatypes</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Working With Files And Directories</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Regular Expressions</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Closures & Generators</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Classes & Iterators</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+              <!-- PHP Technologies -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-title">PHP Programming</h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> Dedicated PHP Library</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  Manual Parsing with DOMDocument</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  PHP Functions</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Regular Expressions</li>
+                    <li class="course-item"><i class="fas fa-check"></i> PHP Mail Function</li>
+                    <li class="course-item"><i class="fas fa-check"></i> PHP Database Functions (MYSQL)</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+              <!-- Frontend Technologies Basics -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-title">Frontend Technologies Basics</h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> Foundations: The Three Pillars</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  HTML, CSS, JavaScript</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  Enhancing Functionality and Efficiency</li>
+                    <li class="course-item"><i class="fas fa-check"></i> JQuery</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Bootstrap</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Design and Prototyping Tools</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+             <!-- Frontend Technologies Basics -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="category-title">Advanced Frontend ReactJS Technologies </h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> React Basics and Working with Components</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  React State and Working with Events</li>
+                    <li class="course-item"><i class="fas fa-check"></i>  Rendering Lists and Conditional Content</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Styling React Components</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Debugging React Apps</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Handling Side Effects, Using Reducers, and Using the Context API</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
             </div>
             
             <!-- Software Testing -->
@@ -584,6 +696,9 @@
                     <li class="course-item"><i class="fas fa-check"></i> TestNG Framework</li>
                     <li class="course-item"><i class="fas fa-check"></i> Postman for API Testing</li>
                 </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
             </div>
             
             <!-- DevOps & Cloud -->
@@ -602,6 +717,30 @@
                     <li class="course-item"><i class="fas fa-check"></i> Terraform for IaC</li>
                     <li class="course-item"><i class="fas fa-check"></i> Ansible for Configuration Management</li>
                 </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
+            </div>
+
+              <!-- ML -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="category-title">Machine Learning </h3>
+                </div>
+                <ul class="course-list">
+                    <li class="course-item"><i class="fas fa-check"></i> Machine Learning Fundamentals</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Supervised Learning</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Unsupervised Learning</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Reinforcement Learning</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Deep Learning (for ML)</li>
+                    <li class="course-item"><i class="fas fa-check"></i> Model Deployment and Monitoring</li>
+                </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
             </div>
             
             <!-- AI/ML -->
@@ -620,6 +759,9 @@
                     <li class="course-item"><i class="fas fa-check"></i> AI with Python</li>
                     <li class="course-item"><i class="fas fa-check"></i> Data Science Essentials</li>
                 </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
             </div>
             
             <!-- Database -->
@@ -638,6 +780,9 @@
                     <li class="course-item"><i class="fas fa-check"></i> Database Design & Normalization</li>
                     <li class="course-item"><i class="fas fa-check"></i> Redis for Caching</li>
                 </ul>
+                 <a href="trainingprograms/trainingprograms.php" class="btn btn-light btn-lg cta-button1 me-2">
+                <i class="fas fa-arrow-right me-2"></i> Enroll Now
+            </a>
             </div>
         </div>
         
