@@ -193,6 +193,16 @@ $role = $_SESSION['user']['role'] ?? null;
       </a>
     </li>
     <li class="nav-item">
+      <a href="admintickets.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          Tickets
+         <!-- <span class="right badge badge-danger">New</span>-->
+        </p>
+      </a>
+    </li>
+  
+    <li class="nav-item">
       <a href="adminlogout.php" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
@@ -291,7 +301,12 @@ $role = $_SESSION['user']['role'] ?? null;
         <p>Setting</p>
       </a>
     </li>
-
+    <li class="nav-item">
+      <a href="studenthelp.php" class="nav-link">
+        <i class="nav-icon fas fa-sign-out-alt"></i>
+        <p>Help</p>
+      </a>
+    </li>
     <li class="nav-item">
       <a href="logout.php" class="nav-link">
         <i class="nav-icon fas fa-sign-out-alt"></i>

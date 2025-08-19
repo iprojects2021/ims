@@ -93,61 +93,71 @@ $enuiry_data = $stmt->fetchAll();
 
 
 
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>Status</h3>
-                <?php foreach ($enuiry_data as $enquiry): ?> 
-                <p><?php echo htmlspecialchars($enquiry['type']); ?>--<?php echo htmlspecialchars($enquiry['status']); ?></p>
-              </div><?php endforeach; ?>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <p  class="small-box-footer">Application Status </p>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>Resume</h3>
+<div class="col-lg-3 col-6">
+  <!-- small box -->
+  <div class="small-box bg-info">
+    <div class="inner">
+      <h3>Status</h3>
+      <?php if (!empty($enuiry_data)): ?>
+        <?php foreach ($enuiry_data as $enquiry): ?> 
+          <p><?php echo htmlspecialchars($enquiry['type']); ?> -- <?php echo htmlspecialchars($enquiry['status']); ?></p>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>-</p>
+      <?php endif; ?>
+    </div>
+    <div class="icon">
+      <i class="ion ion-bag"></i>
+    </div>
+    <p class="small-box-footer">Application Status</p>
+  </div>
+</div>
+<!-- ./col -->
 
-                <p>--</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="resume_upload.php" class="small-box-footer">Upload Resume <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-              <?php
-              $useriddata=$_SESSION['user']['id'];
-              $stmt = $db->prepare("SELECT * FROM users where id=$useriddata");
-              $stmt->execute();
-              $clients = $stmt->fetchAll();
+<div class="col-lg-3 col-6">
+  <!-- small box -->
+  <div class="small-box bg-success">
+    <div class="inner">
+      <h3>Resume</h3>
+      <p>--</p>
+    </div>
+    <div class="icon">
+      <i class="ion ion-stats-bars"></i>
+    </div>
+    <a href="resume_upload.php" class="small-box-footer">Upload Resume <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
 
+<div class="col-lg-3 col-6">
+  <!-- small box -->
+  <div class="small-box bg-warning">
+    <div class="inner">
+      <?php
+      $useriddata = $_SESSION['user']['id'];
+      $stmt = $db->prepare("SELECT * FROM users WHERE id = :id");
+      $stmt->execute(['id' => $useriddata]);
+      $clients = $stmt->fetchAll();
+      ?>
 
-              
-?>
-<?php foreach ($clients as $client): ?>
-                <h3><?php echo htmlspecialchars($client['id']); ?></h3>
-                <p><?php echo htmlspecialchars($client['full_name']); ?></p>
-                
-              </div><?php endforeach; ?>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
+      <?php if (!empty($clients)): ?>
+        <?php foreach ($clients as $client): ?>
+          <h3><?php echo htmlspecialchars($client['id']); ?></h3>
+          <p><?php echo htmlspecialchars($client['full_name']); ?></p>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <h3>-</h3>
+        <p>-</p>
+      <?php endif; ?>
+    </div>
+    <div class="icon">
+      <i class="ion ion-person-add"></i>
+    </div>
+    <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>
+  </div>
+</div>
+<!-- ./col -->
+  <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
