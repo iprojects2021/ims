@@ -2,7 +2,7 @@
 $host = "localhost";
 $port = 3306; // or 3306
 $user = "root";
-$pass = "mysql";
+$pass = "";
 $dbname = "internship_db";
 $uploadFolder ="upload";
 

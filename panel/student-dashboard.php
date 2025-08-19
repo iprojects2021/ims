@@ -32,7 +32,8 @@ $enuiry_data = $stmt->fetchAll();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>INDSAC SOFTECH  |Student Dashboard</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -53,6 +54,144 @@ $enuiry_data = $stmt->fetchAll();
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <style>
+     :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --light-text: #6c757d;
+            --white: #ffffff;
+            --success-color: #4bb543;
+        }
+     /* Compact Referral Section */
+        .referral-widget {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .referral-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--accent-color);
+        }
+        
+        .referral-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .referral-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .referral-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+        
+        .referral-link-container {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .referral-link {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 0.9rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .share-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .email-btn {
+            background-color: var(--light-text);
+        }
+        
+        .sms-btn {
+            background-color: var(--success-color);
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: rgba(75, 181, 67, 0.2);
+            color: var(--success-color);
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -85,11 +224,11 @@ $enuiry_data = $stmt->fetchAll();
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-12">
-  <div class="callout callout-success">
-    <h5> Welcome!</h5>
-    Hello <strong><?php echo htmlspecialchars($studentName); ?></strong>, we're glad to have you here. Explore your dashboard, and make the most of your learning journey. Let's achieve greatness together!
-  </div>
-</div>
+              <div class="callout callout-success">
+                  <h5> Welcome!</h5>
+                  Hello <strong><?php echo htmlspecialchars($studentName); ?></strong>, we're glad to have you here. Explore your dashboard, and make the most of your learning journey. Let's achieve greatness together!
+              </div>
+            </div>
 
 
 
@@ -158,7 +297,7 @@ $enuiry_data = $stmt->fetchAll();
 </div>
 <!-- ./col -->
   <!-- ./col -->
-          <div class="col-lg-3 col-6">
+  <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
@@ -171,61 +310,59 @@ $enuiry_data = $stmt->fetchAll();
               </div>
               <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
+  </div>
           <!-- ./col -->
         </div>
         <!-- /.row -->
          <div class="row">
-          <div class="dashboard-container">
-    <!-- Internship Status -->
-   <!-- <div class="card">
-      <h2>Internship Status</h2>
-      <p><strong>Position:</strong> Web Developer Intern</p>
-      <p><strong>Company:</strong> TechSoft Solutions</p>
-      <p><strong>Status:</strong> Selected</p>
-      <p><strong>Duration:</strong> 3 Months</p>
-    </div>-->
-
-    <!-- Applications Summary -->
-    <!--<div class="card">
-      <h2>Application Summary</h2>
-      <p>Applied: <strong>5</strong></p>
-      <p>Shortlisted: <strong>2</strong></p>
-      <p>Selected: <strong>1</strong></p>
-      <p>Rejected: <strong>2</strong></p>
-    </div>-->
-
-    <!-- Upcoming Events -->
-    <!--<div class="card">
-      <h2>Upcoming Interview</h2>
-      <p><strong>Date:</strong> July 28, 2025</p>
-      <p><strong>Time:</strong> 11:00 AM</p>
-      <p><strong>Company:</strong> FutureTech Inc</p>
-    </div>-->
-
-    <!-- Document Upload -->
-   <!-- <div class="card">
-      <h2>Documents</h2>
-      <p>Resume: ✅</p>
-      <p>NOC: ❌ <a href="#" class="btn">Upload</a></p>
-      <p>Offer Letter: ❌</p>
-    </div>-->
-
-    <!-- Mentor Info -->
-    <!--<div class="card">
-      <h2>Mentor Info</h2>
-      <p><strong>Name:</strong> Mr. Raj Malhotra</p>
-      <p><strong>Email:</strong> raj@example.com</p>
-      <p><strong>Status:</strong> Online 🟢</p>
-    </div>-->
-
-    <!-- Recommendations -->
-    <!--<div class="card">
-      <h2>Recommended Internships</h2>
-      <p><strong>Role:</strong> Data Analyst Intern</p>
-      <p><strong>Company:</strong> Insight Labs</p>
-      <a href="#" class="btn">Apply Now</a>
-    </div>-->
+         
+          <div class="col-12">
+ <!-- Compact Referral Widget -->
+            <div class="referral-widget">
+                <div class="referral-header">
+                    <span class="referral-title">Earn with Referrals</span>
+                    <i class="fas fa-gift" style="color: var(--accent-color);"></i>
+                </div>
+                
+                <div class="referral-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Referred</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Enrolled</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$150</div>
+                        <div class="stat-label">Earned</div>
+                    </div>
+                </div>
+                
+                <div class="referral-link-container">
+                    <div class="referral-link" id="referralLink">https://indsac.com/ims/referral/sarah456</div>
+                    <button class="copy-btn" id="copyBtn">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <div class="success-message" id="copySuccess">Link copied to clipboard!</div>
+                
+                <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 15px;">
+                    Share your link and earn $50 when friends enroll in programs
+                </p>
+                
+                <div class="share-buttons">
+                    <div class="share-btn email-btn" title="Send via Email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="share-btn sms-btn" title="Send via SMS">
+                        <i class="fas fa-sms"></i>
+                    </div>
+                    <div class="share-btn whatsapp-btn" title="Share on WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                </div>
+            </div>
   </div>
 
         </div>
@@ -279,5 +416,42 @@ $enuiry_data = $stmt->fetchAll();
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+  <script>
+        // Copy referral link functionality
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const referralLink = document.getElementById('referralLink');
+            const copySuccess = document.getElementById('copySuccess');
+            
+            navigator.clipboard.writeText(referralLink.textContent)
+                .then(() => {
+                    copySuccess.style.display = 'block';
+                    setTimeout(() => {
+                        copySuccess.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        });
+        
+        // Email button functionality
+        document.querySelector('.email-btn').addEventListener('click', function() {
+            const referralLink = document.getElementById('referralLink').textContent;
+            window.open(`mailto:?subject=Check out this internship opportunity&body=Hi! I thought you might be interested in this internship program. Use my referral link: ${encodeURIComponent(referralLink)}`);
+        });
+        
+        // SMS button functionality
+        document.querySelector('.sms-btn').addEventListener('click', function() {
+            const referralLink = document.getElementById('referralLink').textContent;
+            window.open(`sms:?&body=Check out this internship program! Use my referral link: ${encodeURIComponent(referralLink)}`);
+        });
+        
+        // WhatsApp button functionality
+        document.querySelector('.whatsapp-btn').addEventListener('click', function() {
+            const referralLink = document.getElementById('referralLink').textContent;
+            const message = `Check out this internship program! Use my referral link: ${referralLink}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
+        });
+    </script>
 </body>
 </html>
