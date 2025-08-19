@@ -6,10 +6,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
-  //echo "<pre>";print_r($applicationdata);die; 
+  //echo "<pre>";print_r($applicationdata);die;
+    // Fetch ticket comments for this ticket
+    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    $stmt->execute([$id]);
+    $ticketdata = $stmt->fetchAll(); 
    
 } 
 ?>
+<?php
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+ // Fetch ticket details
+ $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+ $stmt->execute([$id]);
+ $applicationdata = $stmt->fetchAll();
+
+  
+    // Fetch ticket comments for this ticket
+    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    $stmt->execute([$id]);
+    $ticketdata = $stmt->fetchAll();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -930,17 +953,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
                 <?php else: ?>
                   <em>No file</em>
                 <?php endif; ?>
-                                         </p>
+                <?php endforeach; ?> </p>
+
+
+                <?php foreach ($ticketdata as $ticket): ?>
+
+<div class="user-block">
+  <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
+  <span class="username">
+    <a href="#"><?php echo htmlspecialchars($ticket['createdby']); ?></a>
+  </span>
+  <span class="description"><?php echo htmlspecialchars($ticket['createdate']); ?></span>
+</div>
+<!-- /.user-block -->
+<p>
+<?php echo htmlspecialchars($ticket['message']); ?>
+</p>
+
+<p>
+<?php if (!empty($ticket['filename'])): ?>
+<a href="../uploads/tickets/<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
+<?php else: ?>
+<em>No file</em>
+<?php endif; ?>
+<?php endforeach; ?> </p>
+
+
+
+
                     </div>
-                    <?php endforeach; ?>
-                    <!-- Comment Form -->
-<form method="post" action="submit_comment.php">
-  <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applications['id']); ?>">
+                    
+                    <form method="post" action="ticketcommet.php">
+  <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
   <div class="form-group">
-    <textarea name="comment" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
+    <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
+  <div class="form-group">
+      <label for="file">Upload File</label>
+      <input type="file" class="form-control-file" id="file" name="file">
+    </div>
+
   <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 </form>
+
 
 
                      

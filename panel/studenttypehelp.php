@@ -11,6 +11,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
    
 } 
 ?>
+<?php
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+ // Fetch ticket details
+ $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+ $stmt->execute([$id]);
+ $applicationdata = $stmt->fetchAll();
+
+  
+    // Fetch ticket comments for this ticket
+    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    $stmt->execute([$id]);
+    $ticketdata = $stmt->fetchAll();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -935,12 +952,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
 </p>
 </div>
 <?php endforeach; ?>
-<!-- Comment Form -->
-<form method="post" action="submit_comment.php">
-  <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applications['id']); ?>">
+<form method="post" action="studentticket.php">
+  <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
   <div class="form-group">
-    <textarea name="comment" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
+    <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
+  <div class="form-group">
+      <label for="file">Upload File</label>
+      <input type="file" class="form-control-file" id="file" name="file">
+    </div>
+
   <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 </form>
 
