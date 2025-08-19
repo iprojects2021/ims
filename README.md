@@ -237,13 +237,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## 🆓 Free Software
-
-This is free software, released under the MIT license. You are welcome to use it for educational, personal, or commercial purposes.
 
 ## 🛟 Support
 
