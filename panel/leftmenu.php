@@ -308,6 +308,12 @@ $role = $_SESSION['user']['role'] ?? null;
       </a>
     </li>
     <li class="nav-item">
+      <a href="student-referral-dashboard.php" class="nav-link">
+        <i class="nav-icon fas fa-gift"></i>
+        <p>Referral</p>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="logout.php" class="nav-link">
         <i class="nav-icon fas fa-sign-out-alt"></i>
         <p>Logout</p>
