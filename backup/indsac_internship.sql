@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2025 at 06:54 AM
+-- Generation Time: Aug 20, 2025 at 12:26 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -467,6 +467,88 @@ CREATE TABLE `tasks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ticket`
+--
+
+CREATE TABLE `ticket` (
+  `id` int(11) NOT NULL,
+  `studentid` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` varchar(50) DEFAULT 'Open',
+  `assignedto` int(11) DEFAULT NULL,
+  `filename` varchar(255) DEFAULT NULL,
+  `createdate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdby` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ticket`
+--
+
+INSERT INTO `ticket` (`id`, `studentid`, `subject`, `message`, `status`, `assignedto`, `filename`, `createdate`, `createdby`) VALUES
+(15, 10, 'hello', 'system problem', 'New', NULL, '1755601154_test.pdf', '2025-08-19 16:29:14', 10),
+(16, 11, 'ok', 'ok', 'New', NULL, NULL, '2025-08-20 14:41:26', 11);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticketcomment`
+--
+
+CREATE TABLE `ticketcomment` (
+  `id` int(11) NOT NULL,
+  `ticketid` int(11) NOT NULL,
+  `message` text,
+  `filename` varchar(255) DEFAULT NULL,
+  `createdate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdby` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ticketcomment`
+--
+
+INSERT INTO `ticketcomment` (`id`, `ticketid`, `message`, `filename`, `createdate`, `createdby`) VALUES
+(46, 15, 'ok', NULL, '2025-08-19 16:29:59', '13'),
+(47, 15, 'check', NULL, '2025-08-19 16:31:31', '13'),
+(48, 15, 'solved', NULL, '2025-08-19 16:34:56', '13'),
+(49, 15, 'test', NULL, '2025-08-19 17:10:49', '13'),
+(50, 15, 'kkk', NULL, '2025-08-20 12:29:21', '13'),
+(51, 15, 'g', NULL, '2025-08-20 15:12:13', '13'),
+(52, 15, 'ok', NULL, '2025-08-20 15:14:09', '13'),
+(53, 15, 'lllllllllllllllllllllllll', NULL, '2025-08-20 15:14:32', '13'),
+(54, 15, 'yes', NULL, '2025-08-20 15:17:43', '13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticketstatushistory`
+--
+
+CREATE TABLE `ticketstatushistory` (
+  `id` int(11) NOT NULL,
+  `ticketid` int(11) NOT NULL,
+  `changed_by` int(11) NOT NULL,
+  `previous_status` varchar(50) NOT NULL,
+  `new_status` varchar(50) NOT NULL,
+  `comment` text,
+  `changed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ticketstatushistory`
+--
+
+INSERT INTO `ticketstatushistory` (`id`, `ticketid`, `changed_by`, `previous_status`, `new_status`, `comment`, `changed_at`) VALUES
+(61, 15, 13, '', 'New', 'g', '2025-08-20 09:42:26'),
+(62, 15, 13, '', 'New', 'ok', '2025-08-20 09:43:51'),
+(63, 15, 13, '', 'New', 'g', '2025-08-20 09:46:24'),
+(64, 15, 13, '', 'In-Progress', 'g', '2025-08-20 09:47:21');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -500,7 +582,9 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college
 (11, 'ram pawar', 'ram@gmail.com', '$2y$10$4HiCeUpDxnIwh8vPOmR0Z.wGHQIJ20Joh4UV6lcoAKt76w36fgcv6', '7896456781', 'coep', 'IT', NULL, NULL, NULL, NULL, NULL),
 (12, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (13, 'admin', 'admin@admin.com', '$2y$10$J8ZKwIpWSW5s8sC7Mgrd3.JOEf/zQvc/YHfHbUGK3wSK2haGVDWjC', '4512545785', 'c', 'c', 'admin', NULL, '', NULL, ''),
-(14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', NULL, NULL, NULL, NULL);
+(14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', '../upload/resume/1755582225.pdf', '', NULL, '1'),
+(15, 'rohit pawar', 'rohit@gmail.com', '$2y$10$dyIlq32PEOOHNNBIYiLUL.HYf8PqEUwSyamvEMHWEhxH90RJKbBr2', '45215685254', 'd', 'd', 'student', NULL, '', NULL, '3'),
+(16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -650,6 +734,26 @@ ALTER TABLE `tasks`
   ADD KEY `program_id` (`program_id`);
 
 --
+-- Indexes for table `ticket`
+--
+ALTER TABLE `ticket`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticketcomment`
+--
+ALTER TABLE `ticketcomment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticketstatushistory`
+--
+ALTER TABLE `ticketstatushistory`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ticket_id` (`ticketid`),
+  ADD KEY `changed_by` (`changed_by`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -775,10 +879,28 @@ ALTER TABLE `tasks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `ticket`
+--
+ALTER TABLE `ticket`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `ticketcomment`
+--
+ALTER TABLE `ticketcomment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT for table `ticketstatushistory`
+--
+ALTER TABLE `ticketstatushistory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
@@ -888,6 +1010,13 @@ ALTER TABLE `sample_projects`
 --
 ALTER TABLE `tasks`
   ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `programs1` (`id`);
+
+--
+-- Constraints for table `ticketstatushistory`
+--
+ALTER TABLE `ticketstatushistory`
+  ADD CONSTRAINT `ticketstatushistory_ibfk_1` FOREIGN KEY (`ticketid`) REFERENCES `ticket` (`id`),
+  ADD CONSTRAINT `ticketstatushistory_ibfk_2` FOREIGN KEY (`changed_by`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

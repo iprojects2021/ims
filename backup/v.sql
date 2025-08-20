@@ -17,3 +17,15 @@ CREATE TABLE TicketComment (
     createdate DATETIME DEFAULT CURRENT_TIMESTAMP,
     createdby VARCHAR(100)
 );
+CREATE TABLE ticketstatushistory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ticketid INT NOT NULL,
+    changed_by INT NOT NULL,
+    previous_status VARCHAR(50) NOT NULL,
+    new_status VARCHAR(50) NOT NULL,
+    comment TEXT,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (ticket_id) REFERENCES ticket(id),
+    FOREIGN KEY (changed_by) REFERENCES users(id)  
+);
