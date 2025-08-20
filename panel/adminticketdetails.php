@@ -1,7 +1,9 @@
 <?php
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
+session_start();
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
+{
   $id = $_POST['id'];
   $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
   $stmt->execute([$id]);
@@ -10,10 +12,83 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     // Fetch ticket comments for this ticket
     $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
     $stmt->execute([$id]);
-    $ticketdata = $stmt->fetchAll(); 
-   
+    $ticketdata = $stmt->fetchAll();
 } 
 ?>
+
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
+    $ticketid = $_POST['ticketid'];
+    $new_status = $_POST['new_status'];
+    $comment = $_POST['comment'];
+    $changed_by=$_SESSION['user']['id'];
+    $stmt = $db->prepare("INSERT INTO ticketstatushistory (ticketid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$ticketid, $new_status, $comment,$changed_by]);
+    if ($stmt->rowCount() > 0) {
+      // Success: Show alert and redirect
+      echo '
+    <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                z-index: 1050; width: 400px; max-width: 90%;">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            Status updated successfully.
+        </div>
+    </div>
+    <script type="text/javascript">
+        setTimeout(function() {
+            window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
+        }, 2000);
+    </script>';
+  } else {
+      // Error: Show error alert
+      echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h5><i class="icon fas fa-times"></i> Error!</h5>
+              There was an error updating the data.
+            </div>';
+  }
+  
+  // Auto-dismiss script
+  echo "<script>
+      setTimeout(function() {
+          var alert = document.getElementById('statusAlert');
+          if(alert) {
+              alert.classList.remove('show');
+              alert.classList.add('fade');
+              setTimeout(function() {
+                  alert.remove();
+              }, 500); // Wait for fade-out animation
+          }
+      }, 3000); // 3 seconds
+  </script>";
+  
+  
+  
+    
+}
+// Fetch ticket comments
+$stmt = $db->prepare("SELECT * FROM ticketstatushistory");
+$stmt->execute();
+$statushistorydata = $stmt->fetchAll();
+
+if (isset($_GET['id'])) {
+  $ticketid = $_GET['id'];
+
+  // Fetch ticket details
+  $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+  $stmt->execute([$ticketid]);
+  $applicationdata = $stmt->fetchAll();
+
+  // Fetch ticket comments
+  $stmt = $db->prepare("SELECT * FROM ticketstatushistory WHERE ticketid = ?");
+  $stmt->execute([$ticketid]);
+  $statushistorydata = $stmt->fetchAll();
+
+} 
+?>
+
 <?php
 
 if (isset($_GET['id'])) {
@@ -995,6 +1070,59 @@ if (isset($_GET['id'])) {
 
   <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 </form>
+<?php
+
+
+
+
+?>
+
+<!-- AdminLTE Card with Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Status History</h3>
+  </div>
+
+  <!-- /.card-header -->
+  <div class="card-body table-responsive">
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ticket Id</th>
+          <th>Changed By</th>
+          <th>Previous Status</th>
+          <th>New Status</th>
+          <th>Comment</th>
+          <th>Changed At</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <?php if ($statushistorydata): ?>
+          <?php foreach ($statushistorydata as $statusdata): ?>
+            <tr class="clickable-row" data-id="<?= $statusdata['id'] ?>">
+              <td><?= htmlspecialchars($statusdata['id']) ?></td>
+              <td><?php echo htmlspecialchars($statusdata['ticketid']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['changed_by']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['previous_status']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['new_status']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['comment']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['changed_at']); ?></td>
+              
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="8" class="text-center">No tickets found.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
 
 
 
@@ -1027,10 +1155,35 @@ if (isset($_GET['id'])) {
                 <p class="text-sm">Message
                   <b class="d-block"><?php echo htmlspecialchars($applications['message']); ?></b>
                 </p>-->
-                <p class="text-sm">Status
-                  <b class="d-block"><?php echo htmlspecialchars($applications['status']); ?></b>
-                </p>
-                <p class="text-sm">AssignedTo
+                <p class="text-sm mb-1">
+  Status
+  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status']); ?></b>
+</p>
+
+
+<form  method="post">
+  <div class="form-group">
+    <label for="statusSelect">Change Status</label>
+    <select class="form-control" id="statusSelect" name="new_status">
+      <option value="New">New</option>
+      <option value="Open">Open</option>
+      <option value="In-Progress">In-Progress</option>
+      <option value="ReOpen">ReOpen</option>
+      <option value="Close">Close</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="comment">Comment</label>
+    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."></textarea>
+  </div>
+
+  <!-- Include application ID as hidden input if needed -->
+  <input type="hidden" name="ticketid" value="<?php echo $applications['id']; ?>">
+
+  <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
+</form>
+  <p class="text-sm">AssignedTo
                   <b class="d-block"><?php echo htmlspecialchars($applications['assignedto']); ?></b>
                 </p>
                 <p class="text-sm">FileName
@@ -1101,11 +1254,97 @@ if (isset($_GET['id'])) {
 </style>
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
+<script src="dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="dist/js/pages/dashboard.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 </body>
 </html>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+<script>
+function showAlert(type, title, message, redirectUrl = null, delay = 2000) {
+    const alertBox = document.createElement("div");
+    alertBox.style.position = "fixed";
+    alertBox.style.top = "50%";
+    alertBox.style.left = "50%";
+    alertBox.style.transform = "translate(-50%, -50%)";
+    alertBox.style.zIndex = "1050";
+    alertBox.style.width = "400px";
+    alertBox.style.maxWidth = "90%";
+
+    let icon = (type === "success") ? "fas fa-check" : "fas fa-times";
+    alertBox.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon ${icon}"></i> ${title}</h5>
+            ${message}
+        </div>
+    `;
+
+    document.body.appendChild(alertBox);
+
+    if (redirectUrl) {
+        setTimeout(function() {
+            window.location.href = redirectUrl;
+        }, delay);
+    }
+}
+</script>
+
