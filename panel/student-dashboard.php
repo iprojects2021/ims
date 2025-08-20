@@ -1,4 +1,14 @@
 <?php
+include("../includes/log.php");
+$logger = new AdvancedLogger();
+$logger->log('INFO', 'Entered into student_dashboard');
+$manual_error = true;
+if($manual_error){
+  $logger->log('ERROR', 'This Manual Error');
+}
+?>
+
+<?php
 include("../includes/db.php");
 // Start the session
 session_start();

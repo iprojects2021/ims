@@ -3,11 +3,7 @@ $host = "localhost";
 $port = 3306; // or 3306
 $user = "root";
 $pass = "";
-<<<<<<< HEAD
-$dbname = "indsac_internship";
-=======
 $dbname = "internship_db";
->>>>>>> main
 $uploadFolder ="upload";
 
 try {
