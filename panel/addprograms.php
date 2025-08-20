@@ -365,7 +365,7 @@ $stmt->execute([
           <ul>
             <li><a href="#">About us</a></li>
             <li><a href="#">We're hiring</a></li>
-            <li><a href="#">Hire interns for your company</a></li>
+            <li><a href="referralworkflow.php">Referral Program</a></li>
           </ul>
         </div>
         <div class="footer-col">

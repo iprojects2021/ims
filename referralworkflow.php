@@ -218,48 +218,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </ul>
   </nav>
    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="form-container">
-                    <h2 class="form-title">Career & Interview Preparation Enquiry
-</h2>
-                    <form id="projectForm" method="post">
-                        <!-- Mobile Number -->
-                        <div class="mb-3">
-                            <label for="mobile" class="form-label">Mobile Number*</label>
-                            <input type="mobile"  name ="mobile"class="form-control" id="mobile" placeholder="e.g., +91 9876543210" required>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email*</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
-                        </div>
-
-                        <!-- Project Description -->
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Project Description/Idea*</label>
-                            <textarea class="form-control" name="project" id="description" rows="4" placeholder="Describe your project idea in detail..." required></textarea>
-                        </div>
-
-                        <!-- Expected Outcome -->
-                        <div class="mb-3">
-                            <label for="outcome" class="form-label">Expected Outcome*</label>
-                            <textarea class="form-control" name="outcome" id="outcome" rows="3" placeholder="What do you hope to achieve with this project?" required></textarea>
-                        </div>
-
-                        <!-- Due Date -->
-                        <div class="mb-3">
-                            <label for="duedate" class="form-label">Expected Due Date*</label>
-                            <input type="date" name="expected_due_date" class="form-control" id="duedate" required>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary btn-submit">Submit Enquiry</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <br>
+        <?php 
+include('pageinclude/referralworkflowprocess.php'); 
+?>
     </div>
 
     <!-- Bootstrap 5 JS (Optional, for form validation) -->
