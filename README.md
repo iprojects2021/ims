@@ -227,6 +227,11 @@ The system includes:
 - Docker containerization
 - Platform-as-a-Service (Heroku, Forge, etc.)
 
+## 🤝 Documentation
+
+ Please see our [Documentation](DOCUMENTATION.md) for details.
+
+
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
