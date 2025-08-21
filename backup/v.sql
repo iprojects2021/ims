@@ -29,3 +29,13 @@ CREATE TABLE ticketstatushistory (
     FOREIGN KEY (ticket_id) REFERENCES ticket(id),
     FOREIGN KEY (changed_by) REFERENCES users(id)  
 );
+CREATE TABLE documents (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    education_level VARCHAR(50) DEFAULT NULL,
+    file_path VARCHAR(255) DEFAULT NULL,
+    remark TEXT DEFAULT NULL,
+    uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    studentid INT(11) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+);
