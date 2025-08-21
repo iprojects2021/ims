@@ -9,6 +9,210 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
    <style>
+      :root {
+            --primary: #3498db;
+            --secondary: #2563eb;
+            --accent: #1d4ed8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+              --text: #334155;
+            --success: #27ae60;
+            --danger: #ff4d4d;
+        }
+       
+           
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0;
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: #777;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .service-content {
+            padding: 1.5rem;
+        }
+        
+        .service-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 0;
+            background-color: var(--light);
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 0 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
     * {
       margin: 0;
       padding: 0;
@@ -54,15 +258,7 @@
       font-weight: 500;
     }
 
-     :root {
-            --primary: #3b82f6;
-            --secondary: #2563eb;
-            --accent: #1d4ed8;
-            --light: #f8fafc;
-            --dark: #1e293b;
-            --text: #334155;
-            --danger: #ff4d4d;
-        }
+    
         
         * {
             margin: 0;
@@ -349,15 +545,80 @@
       <li><a href="student/login.php">Login</a></li>
     </ul>
   </nav>
+     <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Ethical Academic Project Guidance</h1>
+                <p>We help you succeed by providing expert guidance, not by doing the work for you. Gain the skills and confidence to excel in your academic projects.</p>
+                <a href="#contact" class="btn">Get Started Today</a>
+            </div>
+        </div>
+    </section>
  <div class="container">
-        <header>
+       
+       <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>We provide ethical guidance that helps you learn and succeed without compromising academic integrity</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Tutoring & Mentorship</h3>
+                        <p>Scheduled sessions to help you understand concepts, debug code, or review circuit designs. We explain, you do the work.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Code & Design Reviews</h3>
+                        <p>Get expert feedback on your project's structure, efficiency, and potential bugs to improve your work.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Report Assistance</h3>
+                        <p>Help with structuring your final report, editing for clarity, and ensuring professional formatting without writing content for you.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-presentation"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Presentation Coaching</h3>
+                        <p>Practice your demo and presentation with experts who prepare you for questions and help refine your delivery.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Component Sourcing Guidance</h3>
+                        <p>Get help finding the right sensors, microcontrollers, or mechanical parts within your budget and project requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+     <header>
             <h1>Final Year Project Development</h1>
             <p class="tagline">Get expert guidance and complete support for your engineering/CS final year projects from concept to completion</p>
             <a href="collegeprojectsform.php" class="cta-button1">Get Project Help Now</a>
         </header>
-       
-        
-    
           <div class="project-categories">
             <!-- Software & Coding Projects -->
             <div class="category-card">
@@ -488,6 +749,87 @@
             <p class="mb-0">Only <strong>5 projects</strong> left at ₹5,000. Next batch starts at ₹7,000.</p>
         </div>
     </div>
+      <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Our process is designed to empower you with knowledge while maintaining academic integrity</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Schedule Consultation</h3>
+                    <p>Book a session with an expert in your field of study</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Discuss Your Project</h3>
+                    <p>Share your project details, challenges, and goals</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Receive Guidance</h3>
+                    <p>Get expert advice, resources, and feedback</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Implement & Learn</h3>
+                    <p>Apply what you've learned to complete your project</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Student Success Stories</h2>
+                <p>Hear from students who achieved academic success through our ethical guidance approach</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The code review session helped me identify efficiency issues in my algorithm. I learned how to optimize it myself and ended up with an A grade!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div>
+                            <h4>Michael Chen</h4>
+                            <p>Computer Science Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "My presentation coaching session was invaluable. The practice questions prepared me for what the professors actually asked during my defense."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div>
+                            <h4>Sarah Johnson</h4>
+                            <p>Electrical Engineering Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The component sourcing guidance saved me both time and money. I found the right sensors within my budget that worked perfectly for my project."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">D</div>
+                        <div>
+                            <h4>David Martinez</h4>
+                            <p>Mechanical Engineering Student</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
    <!-- Testimonials -->
         <h3 class="text-center my-5"><i class="fas fa-quote-left"></i> Trusted by 1,000+ Students</h3>
         <div class="row mb-5">
@@ -544,7 +886,14 @@
             <p class="text-muted mt-3"><i class="fas fa-lock"></i> Secure payment options available</p>
         </div>
     </div>
-
+ <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="text-center container">
+            <h2>Ready to Excel in Your Academic Project?</h2>
+            <p>Get the guidance you need to succeed while maintaining academic integrity. Schedule a consultation with one of our experts today.</p>
+            
+        </div>
+    </section>
 
 
   <!-- 🔻 Footer -->
