@@ -2,3 +2,5 @@
 
 Database schema for Programs and Categories:
 https://github.com/iprojects2021/ims/issues/18
+
+Application Status: https://github.com/iprojects2021/ims/issues/8
