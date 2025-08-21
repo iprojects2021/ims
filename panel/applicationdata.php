@@ -1,15 +1,18 @@
 <?php
-
-
-
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 session_start();
 $email = $_SESSION['user']['email'];
-$stmt = $db->prepare("SELECT * FROM application WHERE email = :email");
+try{
+$sql="SELECT * FROM application WHERE email = :email";
+$stmt = $db->prepare($sql);
 $stmt->execute(['email' => $email]);
 $applicationdata = $stmt->fetchAll();
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 
 ?>
 

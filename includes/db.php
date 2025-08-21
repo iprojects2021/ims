@@ -1,9 +1,11 @@
 <?php
+include("log.php");
+$logger = new AdvancedLogger();
 $host = "localhost";
 $port = 3306; // or 3306
 $user = "root";
 $pass = "";
-$dbname = "internship_db";
+$dbname = "indsac_internship";
 $uploadFolder ="upload";
 
 try {

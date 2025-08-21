@@ -11,19 +11,32 @@ if (!isset($_SESSION["user"]["name"]) || trim($_SESSION["user"]["name"]) === '')
 
 $studentName = $_SESSION["user"]["name"];
 $email = $_SESSION['user']['email'] ?? null;
-
+try{
 // Fetch user data (if needed)
-$stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+$sql="SELECT * FROM users WHERE email = :email";
+$stmt = $db->prepare($sql);
 $stmt->execute(['email' => $email]);
 $userData = $stmt->fetch();
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 
+}
 // Fetch application by ID if posted
 $applicationData = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
     $id = $_POST['id'];
-    $stmt = $db->prepare("SELECT * FROM application WHERE id = ?");
+    try{
+    $sql="SELECT * FROM application WHERE id = ?";  
+    $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $applicationData = $stmt->fetch(); // Only one record expected
+    }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
 }
 ?>
 <!DOCTYPE html>

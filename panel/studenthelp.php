@@ -38,13 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
         }
     }
-
+     try{
     // Prepare SQL statement
-    $stmt = $db->prepare("INSERT INTO ticket 
-        (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-        VALUES
-        (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
-    ");
+    $sql="INSERT INTO ticket 
+    (studentid, subject, message, status, assignedto, filename, createdate, createdby)
+    VALUES
+    (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
+";
+    $stmt = $db->prepare($sql);
 
     $result = $stmt->execute([
         ':studentid' => $studentId,
@@ -55,6 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ':filename' => $filename,
         ':createdby' => $createdBy
     ]);
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
 
     if ($result) {
       echo '<div class="alert alert-success alert-dismissible">
@@ -175,11 +181,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 
-
+try{
 // Fetch ticket data
-$stmt = $db->prepare("SELECT * FROM ticket ORDER BY createdate DESC");
+$sql="SELECT * FROM ticket ORDER BY createdate DESC";
+$stmt = $db->prepare($sql);
 $stmt->execute();
 $tickets = $stmt->fetchAll();
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 ?>
 
 <!-- AdminLTE Card with Table -->

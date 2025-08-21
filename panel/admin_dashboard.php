@@ -14,23 +14,43 @@ if (
 $studentName = htmlspecialchars($_SESSION["user"]["name"]);
 $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];
-
+try
+{
 // Fetch user data securely
-$stmt = $db->prepare("SELECT * FROM users WHERE email = :email LIMIT 1");
+$sql="SELECT * FROM users WHERE email = :email LIMIT 1";
+$stmt = $db->prepare($sql);
 $stmt->execute(['email' => $email]);
 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 // Fetch application data filtered by user email or ID (depending on your schema)
-$stmt = $db->prepare("SELECT * FROM application");
+try
+{
+$sql="SELECT * FROM application";
+$stmt = $db->prepare($sql);
+
 $stmt->execute(['email' => $email]);
 $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 include("../panel/util/statuscolour.php");
-
+try{
 // Fetch current user data by ID securely
-$stmt = $db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+$sql="SELECT * FROM users WHERE id = :id LIMIT 1";
+$stmt = $db->prepare($sql);
 $stmt->execute(['id' => $userId]);
 $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
