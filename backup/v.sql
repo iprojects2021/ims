@@ -29,3 +29,10 @@ CREATE TABLE ticketstatushistory (
     FOREIGN KEY (ticket_id) REFERENCES ticket(id),
     FOREIGN KEY (changed_by) REFERENCES users(id)  
 );
+ALTER TABLE users
+ADD COLUMN referredby INT,       
+ADD COLUMN refercode VARCHAR(50);  
+
+ALTER TABLE users
+MODIFY COLUMN referredby VARCHAR(50);
+

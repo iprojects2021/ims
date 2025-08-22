@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2025 at 12:26 PM
+-- Generation Time: Aug 22, 2025 at 12:17 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `indsac_internship`
+-- Database: `internship_db`
 --
 
 -- --------------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE `application` (
 --
 
 INSERT INTO `application` (`id`, `mobile`, `email`, `project`, `outcome`, `expected_start_date`, `expected_due_date`, `type`, `status`, `notes`, `createddate`) VALUES
-(19, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Professional Training Program\r\n  ', 'Approved', NULL, '2025-08-13 13:07:45'),
+(19, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Professional Training Program\r\n  ', 'Completed', NULL, '2025-08-22 08:45:36'),
 (23, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Internship & Live Project Support\r\n  ', 'Waitlisted', NULL, '2025-08-14 04:43:22'),
 (24, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Interview & Career Preparation\r\n  ', 'Submitted', NULL, '2025-08-13 13:51:22');
 
@@ -96,6 +96,29 @@ INSERT INTO `daily_schedules` (`schedule_id`, `program_id`, `time`, `activity`, 
 (2, 1, '10 AM - 12 PM', 'Project development time', 2),
 (3, 1, '2 PM - 3 PM', 'Mentor session/code review', 3),
 (4, 1, '3 PM - 5 PM', 'Independent work/learning', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documents`
+--
+
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL,
+  `education_level` varchar(50) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `remark` text,
+  `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `studentid` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `documents`
+--
+
+INSERT INTO `documents` (`id`, `education_level`, `file_path`, `remark`, `uploaded_at`, `studentid`, `status`) VALUES
+(86, '10th', 'uploads/1755852356_test.pdf', 'test', '2025-08-22 08:45:56', 10, 'uploaded');
 
 -- --------------------------------------------------------
 
@@ -488,7 +511,9 @@ CREATE TABLE `ticket` (
 
 INSERT INTO `ticket` (`id`, `studentid`, `subject`, `message`, `status`, `assignedto`, `filename`, `createdate`, `createdby`) VALUES
 (15, 10, 'hello', 'system problem', 'New', NULL, '1755601154_test.pdf', '2025-08-19 16:29:14', 10),
-(16, 11, 'ok', 'ok', 'New', NULL, NULL, '2025-08-20 14:41:26', 11);
+(16, 11, 'ok', 'ok', 'New', NULL, NULL, '2025-08-20 14:41:26', 11),
+(17, 10, 'ff', 'ff', 'New', NULL, '1755767616_test.pdf', '2025-08-21 14:43:36', 10),
+(18, 10, 'fffffffffffffffffffffffff', 'kkkkkkkkkkkkkk', 'New', NULL, NULL, '2025-08-21 14:44:07', 10);
 
 -- --------------------------------------------------------
 
@@ -518,7 +543,15 @@ INSERT INTO `ticketcomment` (`id`, `ticketid`, `message`, `filename`, `createdat
 (51, 15, 'g', NULL, '2025-08-20 15:12:13', '13'),
 (52, 15, 'ok', NULL, '2025-08-20 15:14:09', '13'),
 (53, 15, 'lllllllllllllllllllllllll', NULL, '2025-08-20 15:14:32', '13'),
-(54, 15, 'yes', NULL, '2025-08-20 15:17:43', '13');
+(54, 15, 'yes', NULL, '2025-08-20 15:17:43', '13'),
+(55, 15, 'f', NULL, '2025-08-20 18:00:46', '13'),
+(56, 15, 'h', NULL, '2025-08-21 13:09:22', '13'),
+(57, 15, 'j', NULL, '2025-08-21 13:22:24', '13'),
+(58, 16, 'j', NULL, '2025-08-21 13:23:10', '13'),
+(59, 15, 'h', NULL, '2025-08-21 14:49:03', '10'),
+(60, 15, 'new', NULL, '2025-08-21 14:53:06', '10'),
+(61, 15, 'g', NULL, '2025-08-21 15:02:30', '10'),
+(62, 15, 'h', NULL, '2025-08-21 15:03:23', '10');
 
 -- --------------------------------------------------------
 
@@ -544,7 +577,15 @@ INSERT INTO `ticketstatushistory` (`id`, `ticketid`, `changed_by`, `previous_sta
 (61, 15, 13, '', 'New', 'g', '2025-08-20 09:42:26'),
 (62, 15, 13, '', 'New', 'ok', '2025-08-20 09:43:51'),
 (63, 15, 13, '', 'New', 'g', '2025-08-20 09:46:24'),
-(64, 15, 13, '', 'In-Progress', 'g', '2025-08-20 09:47:21');
+(64, 15, 13, '', 'In-Progress', 'g', '2025-08-20 09:47:21'),
+(65, 15, 13, '', 'New', 'h', '2025-08-20 12:29:41'),
+(66, 15, 13, '', 'New', 'g', '2025-08-20 12:30:52'),
+(67, 15, 13, '', 'In-Progress', 'h', '2025-08-21 07:39:36'),
+(68, 15, 13, '', 'New', 'h', '2025-08-21 07:45:47'),
+(69, 15, 13, '', 'Close', 'j', '2025-08-21 07:46:40'),
+(70, 16, 13, '', 'New', 'j', '2025-08-21 07:47:17'),
+(71, 15, 13, '', 'New', 'k', '2025-08-21 07:52:17'),
+(72, 16, 13, '', 'New', 'g', '2025-08-21 07:52:57');
 
 -- --------------------------------------------------------
 
@@ -564,27 +605,29 @@ CREATE TABLE `users` (
   `resumepath` varchar(45) DEFAULT NULL,
   `skills` varchar(300) DEFAULT NULL,
   `image_path` varchar(100) DEFAULT NULL,
-  `experience` varchar(20) DEFAULT NULL
+  `experience` varchar(20) DEFAULT NULL,
+  `referredby` varchar(50) DEFAULT NULL,
+  `refercode` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college`, `course`, `role`, `resumepath`, `skills`, `image_path`, `experience`) VALUES
-(4, 'Nandini Ahire', 'ahirenandini3354@gmail.com', '$2y$10$7qIg0SNAWAV/un5./XkqkedjEKCm/yfkurZQqOviQSdcNywgP.YGm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 'xyz', 'xyz@gmail.com', '$2y$10$sFCRCTa07xJcAWa4sjIdz.795/2JDw8drgtlWvWVm76gTP9g4dSte', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(6, 'Nandini Ahire', 'ahirenandini354@gmail.com', '$2y$10$OAxVYvyyq0sBrE2OrbyXh.emTtRVgarxanorHvIF4jhPzbqxK/sKm', '1234567891', 'DAVV', 'B.E/IT', NULL, NULL, NULL, NULL, NULL),
-(7, 'asf', 'asdf@gmail.com', '$2y$10$k6a8ARnBrb.PVNFu453fVOIibO/g7N/4Vl.cLPFVxZ0eIlQ87cS1.', '123123123123', '123', '123', NULL, NULL, NULL, NULL, NULL),
-(8, '123', '123@gmail.com', '$2y$10$UAvh2HCujDHi/e6VEIF7xecgb.PQB1VfbOZWxlbZUOiA13ZxoiWzW', '123', '123', '123', 'admin', NULL, NULL, NULL, NULL),
-(9, 'Sachin Choudhary', 'sachinchoudhary2129@gmail.com', '$2y$10$pkRCj4Rd6Q6PUwKiRPY/eOChatlgfat/GMK4dNRAeD.ulfbE9Q5t2', '123123123123', 'Mumbai University', 'BE', NULL, '../upload/resume/1753720757.pdf', NULL, NULL, NULL),
-(10, 'om sharma ', 'om@gmail.com', '$2y$10$0ztwhIZSffUAsVYX/9CaOuFCo/z.cmfdmqwsyZ1L3w/gnnzsGZG0.', '9845162500', 'Pune university', 'BE CSE', 'student', '../upload/resume/1754644039.pdf', 'HTML, CSS,JAVA', '', '9years experience'),
-(11, 'ram pawar', 'ram@gmail.com', '$2y$10$4HiCeUpDxnIwh8vPOmR0Z.wGHQIJ20Joh4UV6lcoAKt76w36fgcv6', '7896456781', 'coep', 'IT', NULL, NULL, NULL, NULL, NULL),
-(12, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(13, 'admin', 'admin@admin.com', '$2y$10$J8ZKwIpWSW5s8sC7Mgrd3.JOEf/zQvc/YHfHbUGK3wSK2haGVDWjC', '4512545785', 'c', 'c', 'admin', NULL, '', NULL, ''),
-(14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', '../upload/resume/1755582225.pdf', '', NULL, '1'),
-(15, 'rohit pawar', 'rohit@gmail.com', '$2y$10$dyIlq32PEOOHNNBIYiLUL.HYf8PqEUwSyamvEMHWEhxH90RJKbBr2', '45215685254', 'd', 'd', 'student', NULL, '', NULL, '3'),
-(16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college`, `course`, `role`, `resumepath`, `skills`, `image_path`, `experience`, `referredby`, `refercode`) VALUES
+(4, 'Nandini Ahire', 'ahirenandini3354@gmail.com', '$2y$10$7qIg0SNAWAV/un5./XkqkedjEKCm/yfkurZQqOviQSdcNywgP.YGm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'xyz', 'xyz@gmail.com', '$2y$10$sFCRCTa07xJcAWa4sjIdz.795/2JDw8drgtlWvWVm76gTP9g4dSte', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 'Nandini Ahire', 'ahirenandini354@gmail.com', '$2y$10$OAxVYvyyq0sBrE2OrbyXh.emTtRVgarxanorHvIF4jhPzbqxK/sKm', '1234567891', 'DAVV', 'B.E/IT', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 'asf', 'asdf@gmail.com', '$2y$10$k6a8ARnBrb.PVNFu453fVOIibO/g7N/4Vl.cLPFVxZ0eIlQ87cS1.', '123123123123', '123', '123', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, '123', '123@gmail.com', '$2y$10$UAvh2HCujDHi/e6VEIF7xecgb.PQB1VfbOZWxlbZUOiA13ZxoiWzW', '123', '123', '123', 'admin', NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 'Sachin Choudhary', 'sachinchoudhary2129@gmail.com', '$2y$10$pkRCj4Rd6Q6PUwKiRPY/eOChatlgfat/GMK4dNRAeD.ulfbE9Q5t2', '123123123123', 'Mumbai University', 'BE', NULL, '../upload/resume/1753720757.pdf', NULL, NULL, NULL, NULL, NULL),
+(10, 'om sharma ', 'om@gmail.com', '$2y$10$0ztwhIZSffUAsVYX/9CaOuFCo/z.cmfdmqwsyZ1L3w/gnnzsGZG0.', '9845162500', 'Pune university', 'BE CSE', 'student', '../upload/resume/1754644039.pdf', 'HTML, CSS,JAVA', '', '4years experience', NULL, NULL),
+(11, 'ram pawar', 'ram@gmail.com', '$2y$10$4HiCeUpDxnIwh8vPOmR0Z.wGHQIJ20Joh4UV6lcoAKt76w36fgcv6', '7896456781', 'coep', 'IT', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 'admin', 'admin@admin.com', '$2y$10$J8ZKwIpWSW5s8sC7Mgrd3.JOEf/zQvc/YHfHbUGK3wSK2haGVDWjC', '4512545785', 'c', 'c', 'admin', NULL, '', NULL, '1', NULL, NULL),
+(14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', '../upload/resume/1755582225.pdf', '', NULL, '1', NULL, NULL),
+(15, 'rohit pawar', 'rohit@gmail.com', '$2y$10$dyIlq32PEOOHNNBIYiLUL.HYf8PqEUwSyamvEMHWEhxH90RJKbBr2', '45215685254', 'd', 'd', 'student', NULL, '', NULL, '3', NULL, NULL),
+(16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -609,6 +652,12 @@ ALTER TABLE `application_steps`
 ALTER TABLE `daily_schedules`
   ADD PRIMARY KEY (`schedule_id`),
   ADD KEY `program_id` (`program_id`,`sort_order`);
+
+--
+-- Indexes for table `documents`
+--
+ALTER TABLE `documents`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `eligibility_requirements`
@@ -783,6 +832,12 @@ ALTER TABLE `daily_schedules`
   MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `documents`
+--
+ALTER TABLE `documents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+
+--
 -- AUTO_INCREMENT for table `eligibility_requirements`
 --
 ALTER TABLE `eligibility_requirements`
@@ -882,19 +937,19 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `ticketcomment`
 --
 ALTER TABLE `ticketcomment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `ticketstatushistory`
 --
 ALTER TABLE `ticketstatushistory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `users`
