@@ -1,12 +1,17 @@
 <?php
 include("../includes/db.php");
+include("../panel/util/alerts.php");
 session_start();
+
+$useriddata=$_SESSION['user']['id'];
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $education = $_POST['education'];
     $remark = $_POST['remark'];
-
+    $studentid=$useriddata;
+    
+ 
     if (isset($_FILES['document']) && $_FILES['document']['error'] === 0) {
         $targetDir = "uploads/";
         if (!file_exists($targetDir)) {
@@ -18,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES["document"]["tmp_name"], $targetFilePath);
 
        
-        $stmt = $db->prepare("INSERT INTO documents (education_level, file_path, remark) VALUES (?, ?, ?)");
-        $stmt->execute([$education, $targetFilePath, $remark]);
+        $stmt = $db->prepare("INSERT INTO documents (education_level, file_path, remark,studentid,status) VALUES (?, ?, ?, ?, 'uploaded')");
+        $stmt->execute([$education, $targetFilePath, $remark, $studentid]);
 
-       
-        echo "<div class='alert alert-success'>File uploaded and data saved!</div>";
+        $showAlert = true;
+       // echo "<div class='alert alert-success'>File uploaded and data saved!</div>";
     } else {
         echo "<div class='alert alert-danger'>Error uploading file.</div>";
     }
@@ -30,10 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php
-//$useriddata=$_SESSION['user']['id'];
-//print_r($useriddata);die;
+
 try{
-$sql="SELECT * FROM ticket";
+$sql="SELECT * FROM documents where studentid=$useriddata";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $documentlist = $stmt->fetchAll();
@@ -42,6 +46,16 @@ catch(Exception $e)
 {
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
+try{
+  $sql="SELECT * FROM application";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();
+  $checkstatus = $stmt->fetchAll();
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
 ?>
 
 
@@ -127,15 +141,26 @@ catch(Exception $e)
                     </div>
                     <div class="form-group">
                         <label for="remark">Remark</label>
-                        <textarea class="form-control" name="remark" id="remark" rows="3" placeholder="Enter remark" required></textarea>
+                        <textarea class="form-control" name="remark" id="remark" rows="3" placeholder="Enter remark" ></textarea>
                     </div>
                 </div>
             </div>
+            <?php 
+$allowedStatuses = ['Approved', 'Offer Sent', 'Confirmed', 'Ongoing', 'Completed'];
 
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary" id="uploadBtn" style="display:none;">Upload</button>
-            </div>
-        </form>
+foreach ($checkstatus as $checkstatusdata): 
+    if (in_array($checkstatusdata['status'], $allowedStatuses)): ?>
+    
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary" id="uploadBtn">Upload</button>
+        </div>
+
+<?php 
+    endif;
+endforeach; 
+?>
+
+             </form>
     </div>
 </div>
 <!-- AdminLTE Card with Table -->
@@ -163,26 +188,19 @@ catch(Exception $e)
           <?php foreach ($documentlist as $documentdata): ?>
             <tr class="clickable-row" data-id="<?= $documentdata['id'] ?>">
               <td><?= htmlspecialchars($documentdata['id']) ?></td>
-              <td><?= htmlspecialchars($documentdata['subject']) ?></td>
-              <td><?= nl2br(htmlspecialchars($documentdata['message'])) ?></td>
-              <td>
-                <?php if ($documentdata['status'] == 'Open'): ?>
-                  <span class="badge badge-success">Open</span>
-                <?php elseif ($documentdata['status'] == 'In Progress'): ?>
-                  <span class="badge badge-warning">In Progress</span>
-                <?php else: ?>
-                  <span class="badge badge-secondary"><?= htmlspecialchars($documentdata['status']) ?></span>
-                <?php endif; ?>
-              </td>
-              <td><?= $documentdata['assignedto'] ?? '<em>Not assigned</em>' ?></td>
-              <td>
-                <?php if (!empty($documentdata['filename'])): ?>
-                  <a href="../uploads/documentdata/<?= urlencode($documentdata['filename']) ?>" target="_blank">View</a>
+              <td><?= htmlspecialchars($documentdata['studentid']) ?></td>
+              <td><?= htmlspecialchars($documentdata['education_level']) ?></td>
+              <td> <?php if (!empty($documentdata['file_path'])): ?>
+                  <a href="<?= htmlspecialchars($documentdata['file_path']) ?>" target="_blank">View</a>
                 <?php else: ?>
                   <em>No file</em>
                 <?php endif; ?>
-              </td>
-              <td><?= date("Y-m-d H:i", strtotime($documentdata['createdate'])) ?></td>
+             
+                  </td>
+              <td><?= htmlspecialchars($documentdata['remark']) ?></td>
+              <td><?= htmlspecialchars($documentdata['status']) ?>
+                </td>
+              <td><?= date("Y-m-d H:i", strtotime($documentdata['uploaded_at'])) ?></td>
               
             </tr>
           <?php endforeach; ?>
@@ -217,6 +235,8 @@ catch(Exception $e)
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -300,3 +320,15 @@ document.getElementById('education').addEventListener('change', function () {
   });
 </script>
 
+<?php if ($showAlert): ?>
+<script>
+Swal.fire({
+    title: 'Success!',
+    text: 'Record inserted successfully.',
+    icon: 'success',
+    confirmButtonText: 'OK'
+});
+</script>
+<?php else: ?>
+
+<?php endif; ?>

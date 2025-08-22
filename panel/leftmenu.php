@@ -254,7 +254,7 @@ $role = $_SESSION['user']['role'] ?? null;
     </li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="uploaddocuments.php" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
         <p>Documents</p>
       </a>
