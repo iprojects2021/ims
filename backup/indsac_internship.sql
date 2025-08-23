@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 22, 2025 at 12:17 PM
+-- Generation Time: Aug 23, 2025 at 10:58 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -147,6 +147,20 @@ INSERT INTO `eligibility_requirements` (`requirement_id`, `program_id`, `descrip
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `enrollments`
+--
+
+CREATE TABLE `enrollments` (
+  `id` int(11) NOT NULL,
+  `referralid` int(11) DEFAULT NULL,
+  `program` varchar(100) DEFAULT NULL,
+  `enrollmentdate` date DEFAULT NULL,
+  `fee_paid` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `interns`
 --
 
@@ -231,6 +245,20 @@ CREATE TABLE `messages` (
   `receiver_id` int(11) DEFAULT NULL,
   `message` text,
   `sent_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` int(11) NOT NULL,
+  `referralid` int(11) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `status` enum('Pending','Completed','Failed') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -428,6 +456,21 @@ INSERT INTO `program_responsibilities` (`responsibility_id`, `program_id`, `desc
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `referrals`
+--
+
+CREATE TABLE `referrals` (
+  `id` int(11) NOT NULL,
+  `userid` int(11) DEFAULT NULL,
+  `referred_email` varchar(150) DEFAULT NULL,
+  `referred_phone` varchar(20) DEFAULT NULL,
+  `status` enum('Pending','Enrolled','Paid') NOT NULL DEFAULT 'Pending',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `required_documents`
 --
 
@@ -471,6 +514,21 @@ CREATE TABLE `sample_projects` (
 INSERT INTO `sample_projects` (`project_id`, `program_id`, `title`, `description`, `technologies`, `sort_order`) VALUES
 (1, 1, 'Hotel Booking System', 'Build a full-stack reservation system with user authentication', 'PHP, Laravel, MySQL', 1),
 (2, 1, 'API Migration', 'Convert legacy SOAP API to RESTful endpoints', 'PHP, Postman', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `referral_code` varchar(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -627,7 +685,16 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college
 (13, 'admin', 'admin@admin.com', '$2y$10$J8ZKwIpWSW5s8sC7Mgrd3.JOEf/zQvc/YHfHbUGK3wSK2haGVDWjC', '4512545785', 'c', 'c', 'admin', NULL, '', NULL, '1', NULL, NULL),
 (14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', '../upload/resume/1755582225.pdf', '', NULL, '1', NULL, NULL),
 (15, 'rohit pawar', 'rohit@gmail.com', '$2y$10$dyIlq32PEOOHNNBIYiLUL.HYf8PqEUwSyamvEMHWEhxH90RJKbBr2', '45215685254', 'd', 'd', 'student', NULL, '', NULL, '3', NULL, NULL),
-(16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL, NULL, NULL);
+(16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL, NULL, NULL),
+(20, 'sanket pawar', 'sanket@gmail.com', '$2y$10$qikfH75Gxk1Vg00Ctou8u.SAoLWUD9cq9/dhVQyHgkBZGSSDfUk5G', '4565245654', 'f', 'f', 'student', NULL, NULL, NULL, NULL, 'ddddddddddddddddddddddddddddd', 'SANKET-6H5I01'),
+(21, 'raj sharama', 'raj1@gmail.com', '$2y$10$rHcXQFNxINuxu.sQ/doyfO/a6xaTLthfQq4Bes15TQQWGSZNKUz.G', '4565245654', 'd', 'd', 'student', NULL, NULL, NULL, NULL, 'd', 'RAJ-ON8URC'),
+(22, 'ss verma', 'ss@gmail.com', '$2y$10$9L.i3msdr6dT5UPe5ebdp.ZEgM.rKBqVgUW84lxNiOBtooKy75fjy', '4565245654', 'ttttttt', 'tttttttttttt', 'student', NULL, NULL, NULL, NULL, '', 'SS-62OMWH'),
+(23, 'kk', 'kk@gmail.com', '$2y$10$wbPa1L46mPKNYL7t8Tmst.blCWY8FRCPEK4OUox4OLUq0dazlURKS', '4565245654', 'd', 'd', 'student', NULL, NULL, NULL, NULL, 'SS-62OMWH', 'KK-GOAFWX'),
+(24, 'k k', 'k@gmail.com', '$2y$10$9d0UBDT2ZZ7Y/0uSOwvQLe.XcQtbQ8lTYQ36BakE/JT04VL810M5i', '4545145125', 'k', 'k', 'student', NULL, NULL, NULL, NULL, 'k', 'K-QP3JMO'),
+(25, 'ggg gg', 'g@gmail.com', '$2y$10$I4APLvqGlm4WXmLSNoNPFOa2BguhdgintWzfSM/dd6KbqDPHtijeu', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'GGG-14UQ6F'),
+(26, 'f f', 'f@gmail.com', '$2y$10$F1vGc2RTaLuWSQqvMNPUI.BKUBYIH65lQWGvMvgLiecas9jxxvDXq', '4545145125', 'g', 'g', 'student', NULL, NULL, NULL, NULL, '', 'F-6N9FSD'),
+(27, 'll ll', 'll@gmail.com', '$2y$10$1o/Qs/7OwGppxB0MgIETVufFuYd31DG372rUA6KrKgB.dXYsn0fSu', '4545145125', 'f', 'f', 'student', NULL, NULL, NULL, NULL, '', 'LL-3IY4XD'),
+(28, 'gg', 'gg@gmail.com', '$2y$10$0acQYkFy8DpF2Hx1i1FpF.24yYg8te7BFiljjCzuSxcVQCLAMss6K', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'GG-O681FG');
 
 --
 -- Indexes for dumped tables
@@ -667,6 +734,13 @@ ALTER TABLE `eligibility_requirements`
   ADD KEY `program_id` (`program_id`,`sort_order`);
 
 --
+-- Indexes for table `enrollments`
+--
+ALTER TABLE `enrollments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `referralid` (`referralid`);
+
+--
 -- Indexes for table `interns`
 --
 ALTER TABLE `interns`
@@ -702,6 +776,13 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
   ADD KEY `sender_id` (`sender_id`),
   ADD KEY `receiver_id` (`receiver_id`);
+
+--
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `referralid` (`referralid`);
 
 --
 -- Indexes for table `programs`
@@ -762,6 +843,13 @@ ALTER TABLE `program_responsibilities`
   ADD KEY `program_id` (`program_id`,`sort_order`);
 
 --
+-- Indexes for table `referrals`
+--
+ALTER TABLE `referrals`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
+
+--
 -- Indexes for table `required_documents`
 --
 ALTER TABLE `required_documents`
@@ -774,6 +862,14 @@ ALTER TABLE `required_documents`
 ALTER TABLE `sample_projects`
   ADD PRIMARY KEY (`project_id`),
   ADD KEY `program_id` (`program_id`,`sort_order`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `referral_code` (`referral_code`);
 
 --
 -- Indexes for table `tasks`
@@ -844,6 +940,12 @@ ALTER TABLE `eligibility_requirements`
   MODIFY `requirement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `enrollments`
+--
+ALTER TABLE `enrollments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `interns`
 --
 ALTER TABLE `interns`
@@ -871,6 +973,12 @@ ALTER TABLE `mentorship_details`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -916,6 +1024,12 @@ ALTER TABLE `program_responsibilities`
   MODIFY `responsibility_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `referrals`
+--
+ALTER TABLE `referrals`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `required_documents`
 --
 ALTER TABLE `required_documents`
@@ -926,6 +1040,12 @@ ALTER TABLE `required_documents`
 --
 ALTER TABLE `sample_projects`
   MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tasks`
@@ -955,7 +1075,7 @@ ALTER TABLE `ticketstatushistory`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
@@ -978,6 +1098,12 @@ ALTER TABLE `daily_schedules`
 --
 ALTER TABLE `eligibility_requirements`
   ADD CONSTRAINT `eligibility_requirements_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `enrollments`
+--
+ALTER TABLE `enrollments`
+  ADD CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`referralid`) REFERENCES `referrals` (`id`);
 
 --
 -- Constraints for table `interns`
@@ -1010,6 +1136,12 @@ ALTER TABLE `mentorship_details`
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`referralid`) REFERENCES `referrals` (`id`);
 
 --
 -- Constraints for table `programs1`
@@ -1047,6 +1179,12 @@ ALTER TABLE `program_perks`
 --
 ALTER TABLE `program_responsibilities`
   ADD CONSTRAINT `program_responsibilities_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `referrals`
+--
+ALTER TABLE `referrals`
+  ADD CONSTRAINT `referrals_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `required_documents`
