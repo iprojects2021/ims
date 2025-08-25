@@ -24,7 +24,52 @@ $stmt->execute(['email' => $email]);
 $enuiry_data = $stmt->fetchAll();
 
 ?>
+ <?php
+      $useriddata = $_SESSION['user']['id'];
+      $stmt = $db->prepare("SELECT * FROM users WHERE id = :id");
+      $stmt->execute(['id' => $useriddata]);
+      $referdata = $stmt->fetchAll();
+      
+      ?>
 
+<?php
+$userid = $_SESSION['user']['id'];
+
+// Get count of all statuses
+$stmt = $db->prepare("
+    SELECT status, COUNT(*) AS status_count 
+    FROM referrals 
+    WHERE userid = :id  
+    GROUP BY status
+");
+$stmt->execute(['id' => $userid]);
+$referralCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Initialize variables
+$pendingCount = 0;
+$paidCount = 0;
+$enrolledCount = 0;
+$totalCount = 0;
+
+// Map results
+foreach ($referralCounts as $row) {
+    $status = $row['status'];
+    $count = $row['status_count'];
+    $totalCount += $count;
+
+    switch ($status) {
+        case 'Pending':
+            $pendingCount = $count;
+            break;
+        case 'Paid':
+            $paidCount = $count;
+            break;
+        case 'Enrolled':
+            $enrolledCount = $count;
+            break;
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -434,32 +479,34 @@ $enuiry_data = $stmt->fetchAll();
         
         <section class="referral-card">
             
-            
+        
             <div class="referral-stats">
                 <div class="stat-item">
-                    <div class="stat-number">12</div>
+                    <div class="stat-number"><?php echo $totalCount; ?></div>
                     <div class="stat-label">Referred</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">5</div>
+                    <div class="stat-number"><?php echo $enrolledCount; ?></div>
                     <div class="stat-label">Enrolled</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">$250</div>
+                    <div class="stat-number"><?php echo $paidCount; ?></div>
                     <div class="stat-label">Earned</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">3</div>
+                    <div class="stat-number"><?php echo $pendingCount; ?></div>
                     <div class="stat-label">Pending</div>
                 </div>
             </div>
-            
+        
             <div class="referral-link-container">
                 <h5>Your Unique Referral Link</h5>
+                <?php foreach ($referdata as $info): ?>
                 <div class="referral-link-box">
-                    <div class="referral-link" id="referralLink">https://internconnect.com/ref/alex123</div>
+                    <div class="referral-link" id="referralLink"><?php echo htmlspecialchars($url . $info['refercode']); ?></div>
                     <button class="copy-btn" id="copyBtn">Copy</button>
                 </div>
+                <?php endforeach; ?>
                 <div class="success-message" id="copySuccess">Link copied to clipboard!</div>
             </div>
             
@@ -616,6 +663,74 @@ $enuiry_data = $stmt->fetchAll();
             const referralLink = document.getElementById('referralLink').textContent;
             const message = `Check out this internship program! Use my referral link: ${referralLink}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
+        });
+    </script>
+    
+    <script>
+        // Copy Referral Link to Clipboard
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const referralLink = document.getElementById('referralLink').innerText;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                document.getElementById('copySuccess').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('copySuccess').style.display = 'none';
+                }, 2000);
+            });
+        });
+
+        // Send Referral Data to Backend (PHP) when sharing via email or SMS
+        function sendReferralData(email, phone) {
+            fetch('saveReferral.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'referred_email': email,
+                    'referred_phone': phone,
+                }),
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      console.log('Referral saved successfully:', data.referral_id);
+                  } else {
+                      console.log('Error saving referral:', data.message);
+                  }
+              }).catch(error => {
+                  console.error('Error:', error);
+              });
+        }
+
+        // Send Referral Link via Email
+        document.getElementById('sendEmailBtn').addEventListener('click', function() {
+            const email = document.getElementById('emailInput').value;
+            const referralLink = document.getElementById('referralLink').innerText;
+
+            if (email) {
+                sendReferralData(email, null); // Send only email for now
+                document.getElementById('emailSuccess').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('emailSuccess').style.display = 'none';
+                }, 2000);
+            } else {
+                alert('Please enter a valid email address');
+            }
+        });
+
+        // Send Referral Link via SMS
+        document.getElementById('sendSmsBtn').addEventListener('click', function() {
+            const phone = document.getElementById('phoneInput').value;
+            const referralLink = document.getElementById('referralLink').innerText;
+
+            if (phone) {
+                sendReferralData(null, phone); // Send only phone number
+                document.getElementById('smsSuccess').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('smsSuccess').style.display = 'none';
+                }, 2000);
+            } else {
+                alert('Please enter a valid phone number');
+            }
         });
     </script>
 </body>
