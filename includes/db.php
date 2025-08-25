@@ -1,4 +1,5 @@
 <?php
+$url="http://localhost/ims/student/register.php?referral=";
 $host = "localhost";
 $port = 3306; // or 3306
 $user = "root";

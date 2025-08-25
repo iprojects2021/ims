@@ -348,13 +348,14 @@ $enuiry_data = $stmt->fetchAll();
                         <div class="stat-label">Earned</div>
                     </div>
                 </div>
-                
+                <?php foreach ($clients as $client): ?>
                 <div class="referral-link-container">
-                    <div class="referral-link" id="referralLink">https://indsac.com/ims/referral/sarah456</div>
+                    <div class="referral-link" id="referralLink"><?php echo htmlspecialchars($url . $client['refercode']); ?></div>
                     <button class="copy-btn" id="copyBtn">
                         <i class="fas fa-copy"></i>
                     </button>
-                </div>
+                </div><?php endforeach; ?>
+
                 <div class="success-message" id="copySuccess">Link copied to clipboard!</div>
                 
                 <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 15px;">
