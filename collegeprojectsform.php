@@ -1,5 +1,8 @@
-<?php session_start();
-include(__DIR__ . '/includes/db.php'); // if db.php is in ims/includes/
+<?php 
+session_start();
+include(__DIR__ . '/includes/db.php');
+$email = $_SESSION['user']['email'] ?? null;
+$role = $_SESSION['user']['role'] ?? null;
 ?>
 
 
@@ -212,12 +215,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="">Home</a></li>
-      <li><a href="student/register.php">Register</a></li>
-      <li><a href="student/login.php">Login</a></li>
+        <?php if ($role === 'admin'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/admin_dashboard.php">Dashboard</a></li>
+            <li><a href="/ims/panel/adminlogout.php">Logout</a></li>
+
+        <?php elseif ($role === 'student'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/student-dashboard.php">Dashboard</a></li>
+            <li><a href="student/logout.php">Logout</a></li>
+
+        <?php else: ?>
+<li><a href="index.php">Home</a></li>
+            <li><a href="student/register.php">Register</a></li>
+            <li><a href="student/login.php">Login</a></li>
+                    <?php endif; ?>
     </ul>
-  </nav>
-   <div class="container">
+</nav> <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="form-container">
@@ -231,9 +245,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Email -->
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email*</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
-                        </div>
+    <label for="email" class="form-label">Email*</label>
+    <?php if (!empty($email)) : ?>
+        <input type="email" name="email" class="form-control" id="email" value="<?php echo $email; ?>" placeholder="e.g., student@example.com" readonly required>
+    <?php else : ?>
+        <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
+    <?php endif; ?>
+</div>
 
                         <!-- Project Description -->
                         <div class="mb-3">

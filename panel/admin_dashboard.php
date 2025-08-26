@@ -1,16 +1,6 @@
 <?php
 include("../includes/db.php");
-session_start();
-
-if (
-    !isset($_SESSION["user"]) || 
-    !isset($_SESSION["user"]["name"]) || 
-    trim($_SESSION["user"]["name"]) === ''
-) {
-    header("Location: ../student/login.php");
-    exit();
-}
-
+include("../panel/util/session.php");
 $studentName = htmlspecialchars($_SESSION["user"]["name"]);
 $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];

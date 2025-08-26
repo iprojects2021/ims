@@ -1,7 +1,7 @@
 <?php
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
 {
   $id = $_POST['id'];

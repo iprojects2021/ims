@@ -4,7 +4,7 @@
 
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
 $email = $_SESSION['user']['email'];
 $stmt = $db->prepare("SELECT * FROM application WHERE email = :email");
 $stmt->execute(['email' => $email]);

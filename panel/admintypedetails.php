@@ -1,14 +1,7 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/statuscolour.php");
-session_start();
-
-// Check user session
-if (!isset($_SESSION["user"]["name"]) || trim($_SESSION["user"]["name"]) === '') {
-    header("Location: ../student/login.php");
-    exit();
-}
-
+include("../panel/util/session.php");
 $studentName = $_SESSION["user"]["name"];
 $email = $_SESSION['user']['email'] ?? null;
 
