@@ -1,6 +1,7 @@
 <?php 
 session_start();
 include(__DIR__ . '/includes/db.php');
+include(__DIR__ . '/panel/util/checkemailandmobile.php');
 $email = $_SESSION['user']['email'] ?? null;
 $role = $_SESSION['user']['role'] ?? null;
 ?>
@@ -174,44 +175,78 @@ $role = $_SESSION['user']['role'] ?? null;
   </style>
 </head>
 <body>
-  <?php
+<?php
+// Make sure database connection ($db) is already established here
+// Example: $db = new PDO('mysql:host=localhost;dbname=yourdbname', 'username', 'password');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $mobile = $_POST['mobile'];
-  $email = $_POST['email'];
-  $project = $_POST['project'];
-  $expected_due_date = $_POST['expected_due_date'];
-  $outcome = $_POST['outcome'];
-  $stmt = $db->prepare("INSERT INTO application(mobile, email,project,expected_due_date,outcome,status,type) VALUES (?, ?, ?, ?,?,?,?)");
-  $stmt->execute([$mobile, $email, $project, $expected_due_date,$outcome,"Submited","Interview & Career Preparation
-  "]);
-  // Check if the query was successful
- if ($stmt->rowCount() > 0) {
-  // Success: Show alert and redirect
-  echo '<div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-check"></i> Alert!</h5>
-          Data saved successfully
-        </div>';
+    // Collect form data
+    $mobile = $_POST['mobile'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $project = $_POST['project'] ?? '';
+    $expected_due_date = $_POST['expected_due_date'] ?? '';
+    $outcome = $_POST['outcome'] ?? '';
 
-  // Redirect using JavaScript after displaying the success message
-  echo '<script type="text/javascript">
-          setTimeout(function() {
-              window.location.href = "collegeprojectsform.php"; 
-          }, 2000); // Redirect after 2 seconds
-        </script>';
-} else {
-  // Error: Show error alert
-  echo '<div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-times"></i> Error!</h5>
-          There was an error updating the data.
-        </div>';
+    try {
+        // Start transaction
+        $db->beginTransaction();
+
+        // 1. Insert into application table
+        $stmt = $db->prepare("INSERT INTO application (mobile, email, project, expected_due_date, outcome, status, type) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $mobile,
+            $email,
+            $project,
+            $expected_due_date,
+            $outcome,
+            "Submited",
+            "Interview & Career Preparation"
+        ]);
+
+        // 2. Check if email or mobile exists in referrals table
+        $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
+
+        // 3. If a referral match is found
+        if ($referral) {
+            $referralid = $referral['id'];
+
+            // 4. Insert into enrollments
+            $enrollStmt = $db->prepare("INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
+                                        VALUES (?, ?, NOW(), ?)");
+            $enrollStmt->execute([$referralid, $project, 0.00]);
+
+            // 5. Update referral status to 'Enrolled'
+            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
+            $updateReferralStmt->execute([$referralid]);
+        }
+
+        // Commit transaction
+        $db->commit();
+
+        // Success Message
+        echo '<div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                Data saved successfully.
+              </div>';
+        echo '<script type="text/javascript">
+                setTimeout(function() {
+                    window.location.href = "interviewpreprationpage.php"; 
+                }, 2000);
+              </script>';
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        $db->rollBack();
+        echo '<div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-times"></i> Error!</h5>
+                Failed to save data: ' . htmlspecialchars($e->getMessage()) . '
+              </div>';
+    }
 }
+?>
 
-  //header('Location: collegeprojectsform.php');
-  //exit();
-}?>
   <!-- ✅ Navbar -->
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
