@@ -3,11 +3,17 @@ include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
-  $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+  try{
+  $sql="SELECT * FROM ticket WHERE id = ?";  
+  $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
-  //echo "<pre>";print_r($applicationdata);die; 
-  
+   
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
    
 } 
 ?>
@@ -16,15 +22,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
  // Fetch ticket details
- $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+ try{
+ $sql="SELECT * FROM ticket WHERE id = ?";  
+ $stmt = $db->prepare($sql);
  $stmt->execute([$id]);
  $applicationdata = $stmt->fetchAll();
+ }
+ catch(Exception $e){
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 
-  
+ }
+  try{
     // Fetch ticket comments for this ticket
-    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
+    $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $ticketdata = $stmt->fetchAll();
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
 }
 
 ?>

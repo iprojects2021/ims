@@ -3,11 +3,17 @@ include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
-  $stmt = $db->prepare("SELECT * FROM application WHERE id = ?");
+  try{
+  $sql="SELECT * FROM application WHERE id = ?";  
+  $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
-  //echo "<pre>";print_r($applicationdata);die; 
    
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
 } 
 ?>
 <!DOCTYPE html>

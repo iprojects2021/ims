@@ -3,11 +3,17 @@
 include("../includes/db.php");
 session_start();
 $useriddata=$_SESSION['user']['id'];
-$stmt = $db->prepare("SELECT * FROM users where id=$useriddata");
+try
+{$sql="SELECT * FROM users where id=$useriddata";
+$stmt = $db->prepare($sql);
 $stmt->execute();
 $clients = $stmt->fetchAll();
 //echo "<pre>";print_r($clients);die;
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 
 // update form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -18,9 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $experience = $_POST['experience'];
   $course = $_POST['course'];
   $college = $_POST['college'];
-  $stmt = $db->prepare("UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=?,course=?,college=? WHERE id =$useriddata");
+  try{
+  $sql="UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=?,course=?,college=? WHERE id =$useriddata";
+  $stmt = $db->prepare($sql);
   $stmt->execute([$full_name, $email, $contact, $skills,$experience,$course,$college]);
-  
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+
+  }
 
   
  // Check if the query was successful

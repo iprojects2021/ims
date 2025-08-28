@@ -5,14 +5,28 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
 {
   $id = $_POST['id'];
-  $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+  try{
+    $sql="SELECT * FROM ticket WHERE id = ?";
+  $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
   //echo "<pre>";print_r($applicationdata);die;
     // Fetch ticket comments for this ticket
-    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    try{
+    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
+    $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $ticketdata = $stmt->fetchAll();
+    }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
 } 
 ?>
 
@@ -23,8 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $new_status = $_POST['new_status'];
     $comment = $_POST['comment'];
     $changed_by=$_SESSION['user']['id'];
-    $stmt = $db->prepare("INSERT INTO ticketstatushistory (ticketid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)");
+    try{
+    $sql="INSERT INTO ticketstatushistory (ticketid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)";   
+    $stmt = $db->prepare($sql);
     $stmt->execute([$ticketid, $new_status, $comment,$changed_by]);
+    }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
     if ($stmt->rowCount() > 0) {
       // Success: Show alert and redirect
       echo '
@@ -69,23 +90,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     
 }
 // Fetch ticket comments
-$stmt = $db->prepare("SELECT * FROM ticketstatushistory");
+try{
+$sql="SELECT * FROM ticketstatushistory";  
+$stmt = $db->prepare($sql);
 $stmt->execute();
 $statushistorydata = $stmt->fetchAll();
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 if (isset($_GET['id'])) {
   $ticketid = $_GET['id'];
-
+   try
+   {
   // Fetch ticket details
-  $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+  $sql="SELECT * FROM ticket WHERE id = ?";
+  $stmt = $db->prepare($sql);
   $stmt->execute([$ticketid]);
   $applicationdata = $stmt->fetchAll();
-
+   }
+   catch(Exception $e)
+   {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+   }
   // Fetch ticket comments
-  $stmt = $db->prepare("SELECT * FROM ticketstatushistory WHERE ticketid = ?");
+  try{
+  $sql="SELECT * FROM ticketstatushistory WHERE ticketid = ?";  
+  $stmt = $db->prepare($sql);
   $stmt->execute([$ticketid]);
   $statushistorydata = $stmt->fetchAll();
-
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
 } 
 ?>
 
@@ -94,15 +133,27 @@ if (isset($_GET['id'])) {
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
  // Fetch ticket details
- $stmt = $db->prepare("SELECT * FROM ticket WHERE id = ?");
+ try{
+ $sql="SELECT * FROM ticket WHERE id = ?";  
+ $stmt = $db->prepare($sql);
  $stmt->execute([$id]);
  $applicationdata = $stmt->fetchAll();
-
-  
+ }
+ catch(Exception $e)
+ {
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+ }
+    try{
     // Fetch ticket comments for this ticket
-    $stmt = $db->prepare("SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC");
+    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
+    $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $ticketdata = $stmt->fetchAll();
+    }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
 }
 
 ?>
