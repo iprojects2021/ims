@@ -1,17 +1,6 @@
 <?php
 include("../includes/db.php");
-// Start the session
-session_start();
-// Check if user session exists and name is not empty
-if (
-    !isset($_SESSION["user"]) || 
-    !isset($_SESSION["user"]["name"]) || 
-    trim($_SESSION["user"]["name"]) === ''
-) {
-    // Redirect to login page
-    header("Location: ../student/login.php"); // Update this path as needed
-    exit();
-}
+include("../panel/util/session.php");
 // Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
 ?>
@@ -342,13 +331,14 @@ catch(Exception $e)
                         <div class="stat-label">Earned</div>
                     </div>
                 </div>
-                
+                <?php foreach ($clients as $client): ?>
                 <div class="referral-link-container">
-                    <div class="referral-link" id="referralLink">https://indsac.com/ims/referral/sarah456</div>
+                    <div class="referral-link" id="referralLink"><?php echo htmlspecialchars($url . $client['refercode']); ?></div>
                     <button class="copy-btn" id="copyBtn">
                         <i class="fas fa-copy"></i>
                     </button>
-                </div>
+                </div><?php endforeach; ?>
+
                 <div class="success-message" id="copySuccess">Link copied to clipboard!</div>
                 
                 <p style="font-size: 0.9rem; color: var(--light-text); margin-bottom: 15px;">

@@ -1,17 +1,7 @@
 <?php 
-    session_start();
+   
     include("../includes/db.php");
-    
-  // Check if user session exists and name is not empty
-if (
-    !isset($_SESSION["user"]) || 
-    !isset($_SESSION["user"]["name"]) || 
-    trim($_SESSION["user"]["name"]) === ''
-) {
-    // Redirect to login page
-    header("Location: ../student/login.php"); // Update this path as needed
-    exit();
-}
+    include("../panel/util/session.php");    
 
   try {
        

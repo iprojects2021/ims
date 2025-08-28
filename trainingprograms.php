@@ -1,3 +1,10 @@
+<?php 
+session_start();
+include(__DIR__ . '/includes/db.php');
+$email = $_SESSION['user']['email'] ?? null;
+$role = $_SESSION['user']['role'] ?? null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
@@ -457,11 +464,23 @@
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="">Home</a></li>
-      <li><a href="student/register.php">Register</a></li>
-      <li><a href="student/login.php">Login</a></li>
+        <?php if ($role === 'admin'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/admin_dashboard.php">Dashboard</a></li>
+            <li><a href="/ims/panel/adminlogout.php">Logout</a></li>
+
+        <?php elseif ($role === 'student'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/student-dashboard.php">Dashboard</a></li>
+            <li><a href="student/logout.php">Logout</a></li>
+
+        <?php else: ?>
+<li><a href="index.php">Home</a></li>
+            <li><a href="student/register.php">Register</a></li>
+            <li><a href="student/login.php">Login</a></li>
+                    <?php endif; ?>
     </ul>
-  </nav>
+</nav>
   <div class="container">
         <header>
             <h1>Professional Online IT Training Programs</h1>

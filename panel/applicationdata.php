@@ -1,7 +1,7 @@
 <?php
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
 $email = $_SESSION['user']['email'];
 try{
 $sql="SELECT * FROM application WHERE email = :email";

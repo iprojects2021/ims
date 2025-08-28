@@ -4,6 +4,25 @@ include("../includes/db.php"); // PDO $db is used
 
 $message = "";
 
+// Get referral from URL if available
+$referral_code_from_url = isset($_GET['referral']) ? trim($_GET['referral']) : '';
+
+// Utility function to generate referral code
+function generaterefercode($full_name, $db) {
+    $first_name = strtoupper(explode(" ", trim($full_name))[0]);
+
+    do {
+        $random_code = strtoupper(substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6));
+        $refercode = $first_name . "-" . $random_code;
+
+        // Check if referral code already exists
+        $stmt = $db->prepare("SELECT id FROM users WHERE refercode = ?");
+        $stmt->execute([$refercode]);
+    } while ($stmt->rowCount() > 0);
+
+    return $refercode;
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $full_name = trim($_POST["full_name"]);
     $email = trim($_POST["email"]);
@@ -12,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $contact = trim($_POST["contact"]);
     $college = trim($_POST["college"]);
     $course = trim($_POST["course"]);
+
+    // Use the form value if filled, otherwise fallback to referral from URL
+    $referredby = !empty($_POST["referredby"]) ? trim($_POST["referredby"]) : $referral_code_from_url;
 
     if ($password !== $confirm_password) {
         $message = "Passwords do not match.";
@@ -26,12 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+            // Generate unique referral code
+            $refercode = generaterefercode($full_name, $db);
+
             // Insert new user
-            $insert_query = "INSERT INTO users (full_name, email, password, contact, college, course ,role)
-                             VALUES (?, ?, ?, ?, ?, ?, 'student')";
+            $insert_query = "INSERT INTO users (full_name, email, password, contact, college, course, role, referredby, refercode)
+                             VALUES (?, ?, ?, ?, ?, ?, 'student', ?, ?)";
             $stmt = $db->prepare($insert_query);
 
-            if ($stmt->execute([$full_name, $email, $hashed_password, $contact, $college, $course])) {
+            if ($stmt->execute([$full_name, $email, $hashed_password, $contact, $college, $course, $referredby, $refercode])) {
                 $message = "Registered successfully! <a href='login.php'>Click here to login</a>";
             } else {
                 $message = "Error occurred. Please try again.";
@@ -159,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
   <?php endif; ?>
 
-  <form action="register.php" method="POST">
+  <form action="register.php<?php echo isset($_GET['referral']) ? '?referral=' . urlencode($_GET['referral']) : ''; ?>" method="POST">
     <label for="name">Full Name</label>
     <input type="text" id="name" name="full_name" required>
 
@@ -181,10 +206,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <label for="course">Course / Branch</label>
     <input type="text" id="course" name="course" required>
 
+    <label for="referredby">Referral Code</label>
+    <input type="text" id="code" name="referredby" value="<?php echo htmlspecialchars($referral_code_from_url); ?>">
+
     <button type="submit">Register</button>
   </form>
 </div>
-
 
 <div class="footer">
   &copy; 2025 INDSAC Softech | Email: internships@indsac.com | <a style="color: #bbb;" href="https://indsac.com" target="_blank">indsac.com</a>

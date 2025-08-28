@@ -29,6 +29,15 @@ CREATE TABLE ticketstatushistory (
     FOREIGN KEY (ticket_id) REFERENCES ticket(id),
     FOREIGN KEY (changed_by) REFERENCES users(id)  
 );
+<<<<<<< HEAD
+ALTER TABLE users
+ADD COLUMN referredby INT,       
+ADD COLUMN refercode VARCHAR(50);  
+
+ALTER TABLE users
+MODIFY COLUMN referredby VARCHAR(50);
+
+=======
 CREATE TABLE documents (
     id INT(11) NOT NULL AUTO_INCREMENT,
     education_level VARCHAR(50) DEFAULT NULL,
@@ -39,3 +48,4 @@ CREATE TABLE documents (
     status VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
+>>>>>>> main

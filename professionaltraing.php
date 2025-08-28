@@ -1,5 +1,16 @@
-<?php session_start();
-include(__DIR__ . '/includes/db.php'); // if db.php is in ims/includes/
+<?php 
+session_start();
+include(__DIR__ . '/includes/db.php');
+include(__DIR__ . '/panel/util/checkemailandmobile.php');
+$email = $_SESSION['user']['email'] ?? null;
+$role = $_SESSION['user']['role'] ?? null;
+$stmt = $db->prepare("SELECT contact FROM users WHERE email = ?");
+$stmt->execute([$email]);
+$clients = $stmt->fetchAll();
+foreach ($clients as $client) {
+    $mobilenumber=$client['contact'];
+}
+
 ?>
 
 
@@ -170,71 +181,112 @@ include(__DIR__ . '/includes/db.php'); // if db.php is in ims/includes/
   </style>
 </head>
 <body>
-  <?php
+<?php
+// Make sure database connection ($db) is already established here
+// Example: $db = new PDO('mysql:host=localhost;dbname=yourdbname', 'username', 'password');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $mobile = $_POST['mobile'];
-  $email = $_POST['email'];
-  $project = $_POST['project'];
-  $expected_due_date = $_POST['expected_due_date'];
-  $outcome = $_POST['outcome'];
-  $stmt = $db->prepare("INSERT INTO application(mobile, email,project,expected_due_date,outcome,status,type) VALUES (?, ?, ?, ?,?,?,?)");
-  $stmt->execute([$mobile, $email, $project, $expected_due_date,$outcome,"Submited","Professional Training Program
-  "]);
-   // Check if the query was successful
- if ($stmt->rowCount() > 0) {
-  // Success: Show alert and redirect
-  echo '<div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-check"></i> Alert!</h5>
-          Data saved successfully
-        </div>';
+    // Collect form data
+    $mobile = $_POST['mobile'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $project = $_POST['project'] ?? '';
+    $expected_due_date = $_POST['expected_due_date'] ?? '';
+    $outcome = $_POST['outcome'] ?? '';
 
-  // Redirect using JavaScript after displaying the success message
-  echo '<script type="text/javascript">
-          setTimeout(function() {
-              window.location.href = "collegeprojectsform.php"; 
-          }, 2000); // Redirect after 2 seconds
-        </script>';
-} else {
-  // Error: Show error alert
-  echo '<div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-times"></i> Error!</h5>
-          There was an error updating the data.
-        </div>';
+    try {
+        // Start transaction
+        $db->beginTransaction();
+
+        // 1. Insert into application table
+        $stmt = $db->prepare("INSERT INTO application (mobile, email, project, expected_due_date, outcome, status, type) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $mobile,
+            $email,
+            $project,
+            $expected_due_date,
+            $outcome,
+            "Submited",
+            "Professional Training Program"
+        ]);
+
+        // 2. Check if email or mobile exists in referrals table
+        $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
+
+        // 3. If a referral match is found
+        if ($referral) {
+            $referralid = $referral['id'];
+
+            // 4. Insert into enrollments
+            $enrollStmt = $db->prepare("INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
+                                        VALUES (?, ?, NOW(), ?)");
+            $enrollStmt->execute([$referralid, $project, 0.00]);
+
+            // 5. Update referral status to 'Enrolled'
+            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
+            $updateReferralStmt->execute([$referralid]);
+        }
+
+        // Commit transaction
+        $db->commit();
+
+        // Success Message
+        $showAlert = 'success';
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        $db->rollBack();
+        $showAlert = 'error';
+    }
 }
+?>
 
-  //header('Location: collegeprojectsform.php');
-  //exit();
-}?>
   <!-- ✅ Navbar -->
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="">Home</a></li>
-      <li><a href="student/register.php">Register</a></li>
-      <li><a href="student/login.php">Login</a></li>
+        <?php if ($role === 'admin'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/admin_dashboard.php">Dashboard</a></li>
+            <li><a href="/ims/panel/adminlogout.php">Logout</a></li>
+
+        <?php elseif ($role === 'student'): ?>
+            <li><a href="/ims/index.php">Home</a></li>
+            <li><a href="/ims/panel/student-dashboard.php">Dashboard</a></li>
+            <li><a href="student/logout.php">Logout</a></li>
+
+        <?php else: ?>
+<li><a href="index.php">Home</a></li>
+            <li><a href="student/register.php">Register</a></li>
+            <li><a href="student/login.php">Login</a></li>
+                    <?php endif; ?>
     </ul>
-  </nav>
-   <div class="container">
+</nav>
+ <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="form-container">
                     <h2 class="form-title">Professional IT Training Programs
 Enquiry</h2>
                     <form id="projectForm" method="post">
-                        <!-- Mobile Number -->
-                        <div class="mb-3">
-                            <label for="mobile" class="form-label">Mobile Number*</label>
-                            <input type="mobile"  name ="mobile"class="form-control" id="mobile" placeholder="e.g., +91 9876543210" required>
-                        </div>
+                       <!-- Mobile Number -->
+                       <div class="mb-3">
+    <label for="mobile" class="form-label">Mobile Number*</label>
+    <?php if (empty($mobilenumber)) { ?>
+        <input type="text" name="mobile" class="form-control" id="mobile" placeholder="e.g., +91 9876543210" required>
+    <?php } else { ?>
+        <input type="text" name="mobile" class="form-control" id="mobile" value="<?php echo $mobilenumber; ?>" required readonly>
+    <?php } ?>
+</div>
 
                         <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email*</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
-                        </div>
+<div class="mb-3">
+    <label for="email" class="form-label">Email*</label>
+    <?php if (!empty($email)) : ?>
+        <input type="email" name="email" class="form-control" id="email" value="<?php echo $email; ?>" placeholder="e.g., student@example.com" readonly required>
+    <?php else : ?>
+        <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
+    <?php endif; ?>
+</div>
 
                         <!-- Project Description -->
                         <div class="mb-3">
@@ -322,6 +374,6 @@ Enquiry</h2>
       </p>
     </div>
   </div>
-
+  <?php include("../IMS/panel/util/alert.php");?>
 </body>
 </html>

@@ -1,13 +1,7 @@
 <?php
 include("../includes/db.php");
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION["user"])) {
-    header("Location: ../student/login.php");
-    exit();
-}
-
+include("../panel/util/encryptdecrypt.php");
+include("../panel/util/session.php");
 // Get current student/user ID
 $iddata = $_SESSION["user"]["id"];
 $createdBy = $iddata; // Assuming student created the ticket
@@ -15,6 +9,8 @@ $createdBy = $iddata; // Assuming student created the ticket
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $ticketid = trim($_POST["ticketid"]);
+    $key = bin2hex(random_bytes(32));  // 32 bytes = 256 bits
+    $encrypted_ticketid = encrypt($ticketid, $key);
     $message = trim($_POST["message"]);
     
     $filename = null;
@@ -58,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>';
     echo '<script type="text/javascript">
     setTimeout(function() {
-        window.location.href = "adminticketdetails.php?id=' . $ticketid . '"; 
+        window.location.href = "adminticketdetails.php?id=' . $encrypted_ticketid . '"; 
     }, 2000); // Redirect after 2 seconds
 </script>';
 

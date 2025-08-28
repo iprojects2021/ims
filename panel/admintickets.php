@@ -2,14 +2,7 @@
 
 <?php
 include("../includes/db.php");
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION["user"])) {
-    header("Location: ../student/login.php");
-    exit();
-}
-
+include("../panel/util/session.php");
 // Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket

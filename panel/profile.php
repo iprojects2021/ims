@@ -1,7 +1,7 @@
 <?php
 
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
 $useriddata=$_SESSION['user']['id'];
 try
 {$sql="SELECT * FROM users where id=$useriddata";
