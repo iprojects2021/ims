@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 23, 2025 at 10:58 AM
+-- Generation Time: Aug 28, 2025 at 08:05 AM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -49,7 +49,30 @@ CREATE TABLE `application` (
 INSERT INTO `application` (`id`, `mobile`, `email`, `project`, `outcome`, `expected_start_date`, `expected_due_date`, `type`, `status`, `notes`, `createddate`) VALUES
 (19, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Professional Training Program\r\n  ', 'Completed', NULL, '2025-08-22 08:45:36'),
 (23, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Internship & Live Project Support\r\n  ', 'Waitlisted', NULL, '2025-08-14 04:43:22'),
-(24, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Interview & Career Preparation\r\n  ', 'Submitted', NULL, '2025-08-13 13:51:22');
+(24, '7635476543', 'om@gmail.com', 'test', 'test', NULL, '2025-08-12', 'Interview & Career Preparation\r\n  ', 'Submitted', NULL, '2025-08-13 13:51:22'),
+(34, '45415254152', 'om@gmail.com', 'TEST', 'H', NULL, '2025-08-26', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-26 12:53:01'),
+(35, '45415254152', 'rohit@gmail.com', 'TFFFFFFFF', 'G', NULL, '2025-08-26', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-26 12:54:09'),
+(36, '45415254152', 'rohit@gmail.com', 'F', 'G', NULL, '2025-08-26', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-26 12:55:08'),
+(37, '45415254152', 's@gmail.com', 'TEST', 'TEST', NULL, '2025-08-26', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-26 12:56:49'),
+(38, '45415254152', 's@gmail.com', 'TEST', 'TEST', NULL, '2025-08-26', 'Professional Training Program', 'Submited', NULL, '2025-08-26 12:57:18'),
+(39, '45415254152', 's@gmail.com', 'TEST', 'TEST', NULL, '2025-08-26', 'Internship & Live Project Support', 'Submited', NULL, '2025-08-26 12:57:45'),
+(40, '45415254152', 's@gmail.com', 'F', 'F', NULL, '2025-08-26', 'Interview & Career Preparation', 'Submited', NULL, '2025-08-26 12:58:23'),
+(41, '45415254152', 'k1@gmail.com', 'test', 'test', NULL, '2025-08-26', 'Interview & Career Preparation', 'Submited', NULL, '2025-08-26 13:00:59'),
+(42, '45415254152', 'k1@gmail.com', 'test', 'h', NULL, '2025-08-26', 'Interview & Career Preparation', 'Submited', NULL, '2025-08-26 13:02:14'),
+(43, '65854365265', 'a@gmail.com', 'test', 'test', NULL, '2025-08-26', 'Interview & Career Preparation', 'Submited', NULL, '2025-08-26 13:03:40'),
+(44, '45415254152', 'o@gmail.com', 'f', 'f', NULL, '2025-08-26', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-26 13:08:43'),
+(45, '65854365265', 'new@gmail.com', 'test', 'test', NULL, '2025-08-26', 'Professional Training Program', 'Submited', NULL, '2025-08-26 13:16:22'),
+(46, '65854365265', 'sanket@gmail.com', 'h', 'g', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:21:55'),
+(47, '65854365265', 'sanket@gmail.com', 'h', 'g', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:24:23'),
+(48, '65854365265', 'sanket@gmail.com', 'h', 'g', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:24:31'),
+(49, '65854365265', 'sanket@gmail.com', 'h', 'g', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:24:40'),
+(50, '65854365265', 'sanket@gmail.com', 'h', 'g', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:26:04'),
+(51, '45415254152', 'sanket@gmail.com', 'h', 'h', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:27:37'),
+(52, '45415254152', 'sanket@gmail.com', 'h', 'h', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:27:51'),
+(53, '45415254152', 'om@gmail.com', 't', 't', NULL, '2025-08-28', 'College Final Year Projects Development', 'Submited', NULL, '2025-08-28 05:30:10'),
+(54, '45415254152', 'sanket@gmail.com', 'h', 'h', NULL, '2025-08-28', 'Interview & Career Preparation', 'Submited', NULL, '2025-08-28 05:35:52'),
+(55, '45415254152', 'k1@gmail.com', 'test', 'test', NULL, '2025-08-28', 'Internship & Live Project Support', 'Submited', NULL, '2025-08-28 05:37:54'),
+(56, '4565245654', 'sanket@gmail.com', 'h', 'h', NULL, '2025-08-28', 'Professional Training Program', 'Submited', NULL, '2025-08-28 05:39:35');
 
 -- --------------------------------------------------------
 
@@ -157,6 +180,18 @@ CREATE TABLE `enrollments` (
   `enrollmentdate` date DEFAULT NULL,
   `fee_paid` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `enrollments`
+--
+
+INSERT INTO `enrollments` (`id`, `referralid`, `program`, `enrollmentdate`, `fee_paid`) VALUES
+(4, 8, 'TFFFFFFFF', '2025-08-26', '0.00'),
+(5, 8, 'F', '2025-08-26', '0.00'),
+(6, 12, 'test', '2025-08-26', '0.00'),
+(7, 12, 'test', '2025-08-26', '0.00'),
+(8, 16, 'f', '2025-08-26', '0.00'),
+(9, 12, 'test', '2025-08-28', '0.00');
 
 -- --------------------------------------------------------
 
@@ -304,7 +339,8 @@ INSERT INTO `programs` (`program_id`, `title`, `slug`, `short_description`, `det
 (10, 'css', 'css', 'css', 'css', '3 MONTS', '2025-08-14', '2025-08-14', 1, 'MUMBAI', 'IST', '50000.00', 'INR', 1, '2025-08-14 00:00:00', 20, 1, '2025-08-14 08:38:53', '2025-08-14 08:38:53'),
 (11, 'java', 'java', 'java', 'java', '3 MONTS', '2025-08-14', '2025-08-14', 1, 'pune', 'IST', '5000.00', 'INR', 1, '2025-08-14 00:00:00', 100, 1, '2025-08-14 12:46:26', '2025-08-14 12:46:26'),
 (12, 'javascript', 'javascript', 'javascript', 'javascript', '3 MONTS', '2025-08-14', '2025-08-14', 1, 'pune', 'IST', '5000.00', 'INR', 1, '2025-08-14 00:00:00', 70, 1, '2025-08-14 12:54:34', '2025-08-14 12:54:34'),
-(13, 'web development', 'web development', 'test', 'test', '3 MONTS', '2025-08-14', '2025-08-14', 1, 'pune', 'IST', '10000.00', 'INR', 1, '2025-08-14 00:00:00', 10, 1, '2025-08-14 13:02:15', '2025-08-14 13:02:15');
+(13, 'web development', 'web development', 'test', 'test', '3 MONTS', '2025-08-14', '2025-08-14', 1, 'pune', 'IST', '10000.00', 'INR', 1, '2025-08-14 00:00:00', 10, 1, '2025-08-14 13:02:15', '2025-08-14 13:02:15'),
+(14, 'f', 'f', 'f', 'f', '5', '2025-08-26', '2025-08-27', 1, 'pune', 'IST', '5000.00', 'INR', 1, '2025-08-26 00:00:00', 1, 1, '2025-08-26 05:44:04', '2025-08-26 05:44:04');
 
 -- --------------------------------------------------------
 
@@ -468,6 +504,15 @@ CREATE TABLE `referrals` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `referrals`
+--
+
+INSERT INTO `referrals` (`id`, `userid`, `referred_email`, `referred_phone`, `status`, `created_at`) VALUES
+(8, 20, 'rohit@gmail.com', 'null', 'Enrolled', '2025-08-25 11:53:17'),
+(12, 20, 'k1@gmail.com', 'null', 'Enrolled', '2025-08-25 12:37:18'),
+(16, 20, 'o@gmail.com', 'null', 'Enrolled', '2025-08-26 13:06:45');
+
 -- --------------------------------------------------------
 
 --
@@ -609,7 +654,22 @@ INSERT INTO `ticketcomment` (`id`, `ticketid`, `message`, `filename`, `createdat
 (59, 15, 'h', NULL, '2025-08-21 14:49:03', '10'),
 (60, 15, 'new', NULL, '2025-08-21 14:53:06', '10'),
 (61, 15, 'g', NULL, '2025-08-21 15:02:30', '10'),
-(62, 15, 'h', NULL, '2025-08-21 15:03:23', '10');
+(62, 15, 'h', NULL, '2025-08-21 15:03:23', '10'),
+(63, 15, 'f', NULL, '2025-08-25 10:19:43', '13'),
+(64, 0, 'ggggggggg', NULL, '2025-08-25 10:34:33', '13'),
+(65, 0, 'f', NULL, '2025-08-25 10:35:32', '13'),
+(66, 0, 'f', NULL, '2025-08-25 10:36:09', '13'),
+(67, 0, 'f', NULL, '2025-08-25 10:41:09', '13'),
+(68, 0, 'fff', NULL, '2025-08-25 10:43:18', '13'),
+(69, 0, 'f', NULL, '2025-08-25 10:47:07', '13'),
+(70, 17, 'j', NULL, '2025-08-25 10:48:07', '13'),
+(71, 17, 'f', NULL, '2025-08-25 11:01:54', '13'),
+(72, 17, 'y', NULL, '2025-08-25 11:10:43', '13'),
+(73, 0, 'kk', NULL, '2025-08-25 11:14:37', '13'),
+(74, 15, 'kkkkkkkkkkkkkkkkkk', NULL, '2025-08-25 11:15:17', '13'),
+(75, 17, 'best', NULL, '2025-08-25 11:30:21', '13'),
+(76, 17, 'f', NULL, '2025-08-25 11:31:04', '13'),
+(77, 15, 'test', NULL, '2025-08-26 11:11:44', '13');
 
 -- --------------------------------------------------------
 
@@ -643,7 +703,8 @@ INSERT INTO `ticketstatushistory` (`id`, `ticketid`, `changed_by`, `previous_sta
 (69, 15, 13, '', 'Close', 'j', '2025-08-21 07:46:40'),
 (70, 16, 13, '', 'New', 'j', '2025-08-21 07:47:17'),
 (71, 15, 13, '', 'New', 'k', '2025-08-21 07:52:17'),
-(72, 16, 13, '', 'New', 'g', '2025-08-21 07:52:57');
+(72, 16, 13, '', 'New', 'g', '2025-08-21 07:52:57'),
+(73, 15, 13, '', 'In-Progress', '', '2025-08-26 05:41:29');
 
 -- --------------------------------------------------------
 
@@ -686,7 +747,7 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college
 (14, 'raj sharama', 'raj@gmail.com', '$2y$10$/fLX.0EtVjbTxmHvS6v7MuoVAPwOBmNeWM1B4HQd4pT4C7Se.fg52', '45215685254', 'c', 'c', 'student', '../upload/resume/1755582225.pdf', '', NULL, '1', NULL, NULL),
 (15, 'rohit pawar', 'rohit@gmail.com', '$2y$10$dyIlq32PEOOHNNBIYiLUL.HYf8PqEUwSyamvEMHWEhxH90RJKbBr2', '45215685254', 'd', 'd', 'student', NULL, '', NULL, '3', NULL, NULL),
 (16, 'admin', 'admin@gmail.com', '$2y$10$HhPC.r4bTvnCS.NfpbiIgOYnQcwr33VvFS5s2n3zsLaKuK2gGZ3sS', '4444515512', 'v', 'v', 'admin', NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 'sanket pawar', 'sanket@gmail.com', '$2y$10$qikfH75Gxk1Vg00Ctou8u.SAoLWUD9cq9/dhVQyHgkBZGSSDfUk5G', '4565245654', 'f', 'f', 'student', NULL, NULL, NULL, NULL, 'ddddddddddddddddddddddddddddd', 'SANKET-6H5I01'),
+(20, 'sanket pawar', 'sanket@gmail.com', '$2y$10$qikfH75Gxk1Vg00Ctou8u.SAoLWUD9cq9/dhVQyHgkBZGSSDfUk5G', '4565245654', 'f', 'f', 'student', NULL, '', NULL, '', 'ddddddddddddddddddddddddddddd', 'SANKET-6H5I01'),
 (21, 'raj sharama', 'raj1@gmail.com', '$2y$10$rHcXQFNxINuxu.sQ/doyfO/a6xaTLthfQq4Bes15TQQWGSZNKUz.G', '4565245654', 'd', 'd', 'student', NULL, NULL, NULL, NULL, 'd', 'RAJ-ON8URC'),
 (22, 'ss verma', 'ss@gmail.com', '$2y$10$9L.i3msdr6dT5UPe5ebdp.ZEgM.rKBqVgUW84lxNiOBtooKy75fjy', '4565245654', 'ttttttt', 'tttttttttttt', 'student', NULL, NULL, NULL, NULL, '', 'SS-62OMWH'),
 (23, 'kk', 'kk@gmail.com', '$2y$10$wbPa1L46mPKNYL7t8Tmst.blCWY8FRCPEK4OUox4OLUq0dazlURKS', '4565245654', 'd', 'd', 'student', NULL, NULL, NULL, NULL, 'SS-62OMWH', 'KK-GOAFWX'),
@@ -694,7 +755,10 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `contact`, `college
 (25, 'ggg gg', 'g@gmail.com', '$2y$10$I4APLvqGlm4WXmLSNoNPFOa2BguhdgintWzfSM/dd6KbqDPHtijeu', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'GGG-14UQ6F'),
 (26, 'f f', 'f@gmail.com', '$2y$10$F1vGc2RTaLuWSQqvMNPUI.BKUBYIH65lQWGvMvgLiecas9jxxvDXq', '4545145125', 'g', 'g', 'student', NULL, NULL, NULL, NULL, '', 'F-6N9FSD'),
 (27, 'll ll', 'll@gmail.com', '$2y$10$1o/Qs/7OwGppxB0MgIETVufFuYd31DG372rUA6KrKgB.dXYsn0fSu', '4545145125', 'f', 'f', 'student', NULL, NULL, NULL, NULL, '', 'LL-3IY4XD'),
-(28, 'gg', 'gg@gmail.com', '$2y$10$0acQYkFy8DpF2Hx1i1FpF.24yYg8te7BFiljjCzuSxcVQCLAMss6K', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'GG-O681FG');
+(28, 'gg', 'gg@gmail.com', '$2y$10$0acQYkFy8DpF2Hx1i1FpF.24yYg8te7BFiljjCzuSxcVQCLAMss6K', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'GG-O681FG'),
+(29, 'sd gg', 'd@gmail.com', '$2y$10$CFzHD6FizT5xkbe7o91mM.DMf7saSNehrIC4rncouqfycG5ngRBYS', '4545145125', 's', 'd', 'student', NULL, NULL, NULL, NULL, '', 'SD-KGOSY3'),
+(30, 'p s', 'p@gmail.com', '$2y$10$2HC0Kujdxy43S6kENKU3JO7pEhQ0HmCQAoif7eyeM8K77A51slICy', '4545145125', 'k', 'l', 'student', NULL, NULL, NULL, NULL, 'l', 'P-F74XBY'),
+(31, 'mm m', 'm@gmail.com', '$2y$10$wKhdmRQJwt2Mq.o0i6y/3ukubsdllXo5WDDIxjlu1r5MH3aFrcY8S', '4545145125', 'd', 'd', 'student', NULL, NULL, NULL, NULL, '', 'MM-HBQNZV');
 
 --
 -- Indexes for dumped tables
@@ -913,7 +977,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `application`
 --
 ALTER TABLE `application`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `application_steps`
@@ -943,7 +1007,7 @@ ALTER TABLE `eligibility_requirements`
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `interns`
@@ -985,7 +1049,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `programs`
 --
 ALTER TABLE `programs`
-  MODIFY `program_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `program_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `programs1`
@@ -1027,7 +1091,7 @@ ALTER TABLE `program_responsibilities`
 -- AUTO_INCREMENT for table `referrals`
 --
 ALTER TABLE `referrals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `required_documents`
@@ -1063,19 +1127,19 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT for table `ticketcomment`
 --
 ALTER TABLE `ticketcomment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `ticketstatushistory`
 --
 ALTER TABLE `ticketstatushistory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables
