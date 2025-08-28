@@ -5,14 +5,14 @@
         <?php if ($showAlert === 'success'): ?>
             Swal.fire({
                 title: 'Success!',
-                text: 'User inserted successfully.',
+                text: 'Success.',
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
         <?php elseif ($showAlert === 'error'): ?>
             Swal.fire({
                 title: 'Error!',
-                text: 'Failed to insert user.',
+                text: 'Failed.',
                 icon: 'error',
                 confirmButtonText: 'Retry'
             });

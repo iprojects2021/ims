@@ -4,6 +4,13 @@ include(__DIR__ . '/includes/db.php');
 include(__DIR__ . '/panel/util/checkemailandmobile.php');
 $email = $_SESSION['user']['email'] ?? null;
 $role = $_SESSION['user']['role'] ?? null;
+$stmt = $db->prepare("SELECT contact FROM users WHERE email = ?");
+$stmt->execute([$email]);
+$clients = $stmt->fetchAll();
+foreach ($clients as $client) {
+    $mobilenumber=$client['contact'];
+}
+
 ?>
 
 
@@ -225,24 +232,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $db->commit();
 
         // Success Message
-        echo '<div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-check"></i> Success!</h5>
-                Data saved successfully.
-              </div>';
-        echo '<script type="text/javascript">
-                setTimeout(function() {
-                    window.location.href = "interviewpreprationpage.php"; 
-                }, 2000);
-              </script>';
-    } catch (Exception $e) {
+        $showAlert = 'success';
+         } catch (Exception $e) {
         // Rollback transaction on error
         $db->rollBack();
-        echo '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-times"></i> Error!</h5>
-                Failed to save data: ' . htmlspecialchars($e->getMessage()) . '
-              </div>';
+        $showAlert = 'error';
     }
 }
 ?>
@@ -275,11 +269,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h2 class="form-title">Career & Interview Preparation Enquiry
 </h2>
                     <form id="projectForm" method="post">
-                        <!-- Mobile Number -->
-                        <div class="mb-3">
-                            <label for="mobile" class="form-label">Mobile Number*</label>
-                            <input type="mobile"  name ="mobile"class="form-control" id="mobile" placeholder="e.g., +91 9876543210" required>
-                        </div>
+                      <!-- Mobile Number -->
+                      <div class="mb-3">
+    <label for="mobile" class="form-label">Mobile Number*</label>
+    <?php if (empty($mobilenumber)) { ?>
+        <input type="text" name="mobile" class="form-control" id="mobile" placeholder="e.g., +91 9876543210" required>
+    <?php } else { ?>
+        <input type="text" name="mobile" class="form-control" id="mobile" value="<?php echo $mobilenumber; ?>" required readonly>
+    <?php } ?>
+</div>
 
                         <!-- Email -->
                         <div class="mb-3">
@@ -376,6 +374,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </p>
     </div>
   </div>
-
+  <?php include("../IMS/panel/util/alert.php");?>
 </body>
 </html>
