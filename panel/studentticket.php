@@ -28,13 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
         }
     }
-
+      try{
     // Prepare SQL statement
-    $stmt = $db->prepare("INSERT INTO ticketcomment 
-        (ticketid, message, filename, createdate, createdby)
-        VALUES
-        (:ticketid, :message , :filename, NOW(), :createdby)
-    ");
+    $sql="INSERT INTO ticketcomment 
+    (ticketid, message, filename, createdate, createdby)
+    VALUES
+    (:ticketid, :message , :filename, NOW(), :createdby)
+";
+    $stmt = $db->prepare($sql);
       
     $result = $stmt->execute([
         ':ticketid' => $ticketid,
@@ -42,7 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ':filename' => $filename,
         ':createdby' => $createdBy
     ]);
-
+     }
+     catch(Exception $e)
+     {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+     }
     if ($result) {
       echo '<div class="alert alert-success alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

@@ -1,14 +1,4 @@
 <?php
-include("../includes/log.php");
-$logger = new AdvancedLogger();
-$logger->log('INFO', 'Entered into student_dashboard');
-$manual_error = true;
-if($manual_error){
-  $logger->log('ERROR', 'This Manual Error');
-}
-?>
-
-<?php
 include("../includes/db.php");
 include("../panel/util/session.php");
 // Fetch the name from session
@@ -16,12 +6,16 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
 ?>
 <?php
 $email = $_SESSION['user']['email'];
-$stmt = $db->prepare("SELECT *FROM application WHERE email = :email ORDER BY createddate DESC 
-LIMIT 1;
-");
+try{$sql="SELECT *FROM application WHERE email = :email ORDER BY createddate DESC LIMIT 1";
+  
+$stmt = $db->prepare($sql);
 $stmt->execute(['email' => $email]);
 $enuiry_data = $stmt->fetchAll();
-
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
 ?>
 
 

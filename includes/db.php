@@ -1,10 +1,15 @@
 <?php
+<<<<<<< HEAD
 $url="http://localhost/ims/student/register.php?referral=";
+=======
+include("log.php");
+$logger = new AdvancedLogger();
+>>>>>>> main
 $host = "localhost";
 $port = 3306; // or 3306
 $user = "root";
 $pass = "";
-$dbname = "internship_db";
+$dbname = "indsac_internship";
 $uploadFolder ="upload";
 
 try {
