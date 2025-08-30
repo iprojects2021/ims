@@ -388,13 +388,13 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-server"></i>
                     </div>
-                    <h3 class="track-title">Backend Development</h3>
+                    <h3 class="track-title">Java Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
-                    <span class="tech-pill">PHP</span>
+                    <span class="tech-pill">Core Java</span>
                     <span class="tech-pill">Java</span>
-                    <span class="tech-pill">Python</span>
-                    <span class="tech-pill">Node.js</span>
+                    <span class="tech-pill">Multithreading</span>
+                    <span class="tech-pill">Collection Framework</span>
                 </div>
                 <p>Build scalable server-side applications and APIs</p>
                 <ul class="benefits-list">
@@ -403,7 +403,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> Authentication systems</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Performance tuning</li>
                 </ul>
-                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php?internship=JavaDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
             
             <!-- Frontend Development -->
@@ -412,13 +412,13 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-laptop"></i>
                     </div>
-                    <h3 class="track-title">Frontend Development</h3>
+                    <h3 class="track-title">Spring-Boot Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
-                    <span class="tech-pill">HTML5</span>
-                    <span class="tech-pill">CSS3</span>
-                    <span class="tech-pill">JavaScript</span>
-                    <span class="tech-pill">ReactJS</span>
+                    <span class="tech-pill">Spring</span>
+                    <span class="tech-pill">Hibernate</span>
+                    <span class="tech-pill">JPA</span>
+                    <span class="tech-pill">API Development</span>
                 </div>
                 <p>Create responsive and interactive user interfaces</p>
                 <ul class="benefits-list">
@@ -427,7 +427,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> Responsive design principles</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> API integration</li>
                 </ul>
-                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php?internship=SpringBootDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
             
             <!-- DevOps -->
@@ -436,12 +436,12 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-cloud"></i>
                     </div>
-                    <h3 class="track-title">PHP Internship Training</h3>
+                    <h3 class="track-title">Java Full Stack Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
-                    <span class="tech-pill">HTML</span>
-                    <span class="tech-pill">PHP</span>
-                    <span class="tech-pill">MYSQL</span>
+                    <span class="tech-pill">ReactJS</span>
+                    <span class="tech-pill">Spring-Boot</span>
+                    <span class="tech-pill">Database</span>
                     <span class="tech-pill">CI/CD</span>
                 </div>
                 <p>Master development automation and cloud infrastructure</p>
@@ -451,7 +451,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> Monitoring & logging</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Web Development</li>
                 </ul>
-                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php?internship=JavaFullStackDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
 
                 <!-- Software Testing -->
@@ -460,12 +460,12 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-bug"></i>
                     </div>
-                    <h3 class="track-title">Software Testing</h3>
+                    <h3 class="track-title">Python Backend Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
-                    <span class="tech-pill">Selenium</span>
-                    <span class="tech-pill">JMeter</span>
-                    <span class="tech-pill">JUnit</span>
+                    <span class="tech-pill">Python</span>
+                    <span class="tech-pill">Database</span>
+                    <span class="tech-pill">API Development</span>
                     <span class="tech-pill">Postman</span>
                 </div>
                 <p>Ensure software quality through systematic testing</p>
@@ -475,7 +475,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> API testing</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Test case management</li>
                 </ul>
-                <a hhref="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a hhref="internshipprogram/internship.php?internship=PythonBackendDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
             
             <!-- Software Testing -->
@@ -484,7 +484,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-bug"></i>
                     </div>
-                    <h3 class="track-title">Software Testing</h3>
+                    <h3 class="track-title">Python Full Stack Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
                     <span class="tech-pill">Selenium</span>
@@ -499,7 +499,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> API testing</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Test case management</li>
                 </ul>
-                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php?internship=PythonFullStackDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
             
             <!-- Systems Programming -->
@@ -508,7 +508,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-microchip"></i>
                     </div>
-                    <h3 class="track-title">Systems Programming</h3>
+                    <h3 class="track-title">PHP Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
                     <span class="tech-pill">C</span>
@@ -523,7 +523,381 @@ $role = $_SESSION['user']['role'] ?? null;
                     <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
                     <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
                 </ul>
-                <a href="internshipprogram/internship.php" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Apply Now</a>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+
+
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Front End Developer Basic(HTML, CSS, Javascript) Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=FrontEndDeveloperBasicIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Front End ReactJS Developer Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Front End ReactJS Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=FrontEndReactJSDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Software Testing Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Software Testing Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=SoftwareTestingIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+
+
+            <!-- Cloud Devops Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Cloud & Devops Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=CloudDevopsIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- AI Developer Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">AI Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=AIDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+
+            <!-- Machine Learning Developre Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">MachineLearningDevelopreIntern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=MachineLearningDevelopreIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+
+            <!-- Database Backend Developer Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Database Backend Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=DatabaseBackendDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            <!-- Systems Programming -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">PHP Developer Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">C</span>
+                    <span class="tech-pill">C++</span>
+                    <span class="tech-pill">Rust</span>
+                    <span class="tech-pill">Algorithms</span>
+                </div>
+                <p>Develop high-performance system-level software</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Memory management</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Multithreading</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Network programming</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Data structures</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=PHPDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
         </div>
         

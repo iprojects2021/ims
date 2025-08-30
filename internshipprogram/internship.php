@@ -207,7 +207,56 @@
   </nav>
   
 <?php 
-include('internshiptrainingprogram.php'); // if db.php is in ims/includes/
+if (isset($_GET['internship'])) {
+    $internship = $_GET['internship'];
+     switch ($internship) {
+        case 'JavaDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'SpringBootDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'JavaFullStackDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'PythonBackendDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'PythonFullStackDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'PHPDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'FrontEndDeveloperBasicIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'FrontEndReactJSDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'SoftwareTestingIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'CloudDevopsIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'AIDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'MachineLearningDevelopreIntern':
+            include('internshiptrainingprogram.php');
+            break;
+        case 'DatabaseBackendDeveloperIntern':
+            include('internshiptrainingprogram.php');
+            break;
+
+    }
+    include('../pageinclude/chooseplan.php'); 
+}
+ // if db.php is in ims/includes/
+
+
+
 ?>
 
 
