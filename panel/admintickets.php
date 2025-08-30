@@ -197,12 +197,12 @@ catch(Exception $e)
               </td>
               <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
               <td>
-                <?php if (!empty($ticket['filename'])): ?>
-                  <a href="../uploads/tickets/<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
-                <?php else: ?>
-                  <em>No file</em>
-                <?php endif; ?>
-              </td>
+              <?php if (!empty($ticket['filename'])): ?>
+  <!-- Update link to redirect to download.php instead of the direct file path -->
+  <a href="../uploads/download.php?file=<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
+<?php else: ?>
+  <em>No file</em>
+<?php endif; ?>  </td>
               <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
               <td><?= htmlspecialchars($ticket['createdby']) ?></td>
             </tr>

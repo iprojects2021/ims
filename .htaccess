@@ -1,0 +1,13 @@
+# Prevent directory listing
+Options -Indexes
+
+# Block direct access to files (e.g., .pdf, .jpg, .png, .txt, .mp4)
+<FilesMatch "\.(pdf|jpg|png|txt|mp4)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Redirect file requests to download.php (to handle downloads)
+RewriteEngine On
+RewriteCond %{REQUEST_URI} \.(pdf|jpg|png|txt|mp4)$ [NC]
+RewriteRule ^(.*)$ /download.php?file=$1 [L]
