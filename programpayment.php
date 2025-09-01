@@ -1,3 +1,111 @@
+<?php
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+include(__DIR__ . '/includes/db.php');
+include(__DIR__ . '/panel/util/checkemailandmobile.php');
+
+// Fetch user info from session
+$email = $_SESSION['user']['email'] ?? null;
+$role = $_SESSION['user']['role'] ?? null;
+
+// Initialize mobile number
+$mobilenumber = '';
+
+if ($email) {
+    $stmt = $db->prepare("SELECT contact FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $clients = $stmt->fetchAll();
+    foreach ($clients as $client) {
+        $mobilenumber = $client['contact'];
+    }
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // Collect and sanitize form data
+    $mobile = trim($_POST['mobile'] ?? '');
+    $fullname = trim($_POST['fullname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $project = trim($_POST['project'] ?? 'Internship & Live Project Support');
+    $expected_start_date = $_POST['expected_start_date'] ?? null;
+    $outcome = trim($_POST['outcome'] ?? '');
+    $github = trim($_POST['github'] ?? '');
+    $type = trim($_POST['type'] ?? '');
+    $amount = $_POST['amount'] ?? 0;
+    $duration = $_POST['duration'] ?? '';
+
+    // Store posted data in session variables
+    $_SESSION['application_data'] = [
+        'mobile' => $mobile,
+        'fullname' => $fullname,
+        'email' => $email,
+        'project' => $project,
+        'expected_start_date' => $expected_start_date,
+        'outcome' => $outcome,
+        'github' => $github,
+        'type' => $type,
+        'amount' => $amount,
+        'duration' => $duration,
+    ];
+
+    try {
+        // Start transaction
+        $db->beginTransaction();
+
+        // Insert into 'application' table
+        $stmt = $db->prepare("
+            INSERT INTO application 
+            (mobile, fullname, email, project, expected_start_date, outcome, status, github, type, amount, duration) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([
+            $mobile,
+            $fullname,
+            $email,
+            $project,
+            $expected_start_date,
+            $outcome,
+            'Submitted',
+            $github,
+            $type,
+            $amount,
+            $duration
+        ]);
+
+        // Check for referral
+        $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
+
+        if ($referral) {
+            $referralid = $referral['id'];
+
+            // Enroll user
+            $enrollStmt = $db->prepare("
+                INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
+                VALUES (?, ?, NOW(), ?)
+            ");
+            $enrollStmt->execute([$referralid, $project, 0.00]);
+
+            // Update referral status
+            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
+            $updateReferralStmt->execute([$referralid]);
+        }
+
+        // Commit all changes
+        $db->commit();
+        $showAlert = 'success';
+
+    } catch (Exception $e) {
+        $db->rollBack();
+        $showAlert = 'error';
+        error_log("Application submission failed: " . $e->getMessage());
+    }
+}
+?>
+
 
 
 
@@ -450,58 +558,65 @@
                 <h2>Program Details</h2>
                 
                 <form id="payment-form">
-                    <div class="form-group">
-                        <label for="card-name">Name</label>
-                        <input type="text" id="card-name" placeholder="Name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="card-number">Email</label>
-                        <input type="text" id="card-number" placeholder="Email" required>
-                    </div>
-                    
-                    
-                    
-                    <div class="form-group">
-                        <label for="billing-address">Mobile</label>
-                        <input type="text" id="billing-address" placeholder="Mobile" required>
-                    </div>
-                      <div class="row">
-                        <div class="form-group">
-                            <label for="city">Program</label>
-                            <input type="text" id="city" placeholder="Program" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="zip">Duration</label>
-                            <input type="text" id="zip" placeholder="Duration" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="expiry">Program Start Date</label>
-                            <input type="text" id="expiry" placeholder="MM/YY" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="cvv">College Passing Month</label>
-                            <input type="text" id="expiry" placeholder="MM/YY" required>
-                        </div>
-                    </div>
-                  
-                    
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <select id="country" required>
-                            <option value="">Select Country</option>
-                            <option value="usa">United States</option>
-                            <option value="uk">United Kingdom</option>
-                            <option value="canada">Canada</option>
-                            <option value="australia">Australia</option>
-                            <option value="india">India</option>
-                        </select>
-                    </div>
-                </form>
+    <div class="form-group">
+        <label for="card-name">Name</label>
+        <input type="text" id="card-name" name="fullname" placeholder="Name" required 
+               value="<?php echo htmlspecialchars($_SESSION['application_data']['fullname'] ?? '', ENT_QUOTES); ?>">
+    </div>
+    
+    <div class="form-group">
+        <label for="card-number">Email</label>
+        <input type="email" id="card-number" name="email" placeholder="Email" required 
+               value="<?php echo htmlspecialchars($_SESSION['application_data']['email'] ?? '', ENT_QUOTES); ?>">
+    </div>
+    
+    <div class="form-group">
+        <label for="billing-address">Mobile</label>
+        <input type="text" id="billing-address" name="mobile" placeholder="Mobile" required
+               value="<?php echo htmlspecialchars($_SESSION['application_data']['mobile'] ?? '', ENT_QUOTES); ?>">
+    </div>
+    
+    <div class="row">
+        <div class="form-group">
+            <label for="city">Program</label>
+            <input type="text" id="city" name="project" placeholder="Program" required
+                   value="<?php echo htmlspecialchars($_SESSION['application_data']['type'] ?? '', ENT_QUOTES); ?>">
+        </div>
+        
+        <div class="form-group">
+            <label for="zip">Duration</label>
+            <input type="text" id="zip" name="duration" placeholder="Duration" required
+                   value="<?php echo htmlspecialchars($_SESSION['application_data']['duration'] ?? '', ENT_QUOTES); ?>">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="form-group">
+            <label for="expiry">Program Start Date</label>
+            <input type="text" id="expiry" name="expected_start_date" placeholder="MM/YY" required
+                   value="<?php echo htmlspecialchars($_SESSION['application_data']['expected_start_date'] ?? '', ENT_QUOTES); ?>">
+        </div>
+        
+        <!-- <div class="form-group">
+            <label for="cvv">College Passing Month</label>
+            <input type="text" id="cvv" name="college_passing_month" placeholder="MM/YY" required
+                   value="<?php echo htmlspecialchars($_SESSION['application_data']['college_passing_month'] ?? '', ENT_QUOTES); ?>">
+        </div> -->
+    </div>
+    
+    <!-- <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" name="country" required>
+            <option value="">Select Country</option>
+            <option value="usa" <?php if(($_SESSION['application_data']['country'] ?? '') === 'usa') echo 'selected'; ?>>United States</option>
+            <option value="uk" <?php if(($_SESSION['application_data']['country'] ?? '') === 'uk') echo 'selected'; ?>>United Kingdom</option>
+            <option value="canada" <?php if(($_SESSION['application_data']['country'] ?? '') === 'canada') echo 'selected'; ?>>Canada</option>
+            <option value="australia" <?php if(($_SESSION['application_data']['country'] ?? '') === 'australia') echo 'selected'; ?>>Australia</option>
+            <option value="india" <?php if(($_SESSION['application_data']['country'] ?? '') === 'india') echo 'selected'; ?>>India</option>
+        </select>
+    </div> -->
+</form>
+
             </div>
             
             <div class="payment-summary">

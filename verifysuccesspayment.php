@@ -1,3 +1,44 @@
+<?php
+
+include(__DIR__ . '/includes/db.php');
+session_start();
+
+
+//echo "<pre>";print_r($userid);die;
+$id = $_POST['id'] ?? null;  // Usually auto-increment, so you may skip this
+// Check if user is logged in and get user ID if available
+$userid = $_SESSION['user']['id'] ?? null;
+$paymentid = $_GET['payment_id']?? null;
+//print_r($paymentid);die;
+$email = $_POST['email'] ?? null;
+$phone = $_POST['phone'] ?? null;
+$amountpaid = $_POST['amountpaid'] ?? 0;
+$status = $_POST['status'] ?? null;
+$verificationstatus = $_POST['verificationstatus'] ?? null;
+
+try {
+    $sql = "INSERT INTO PaymentVerification 
+            (UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
+            VALUES (:userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->execute([
+        ':userid' => $userid,
+        ':paymentid' => $paymentid,
+        ':email' => $email,
+        ':phone' => $phone,
+        ':amountpaid' => $amountpaid,
+        ':status' => $status,
+        ':verificationstatus' => $verificationstatus,
+    ]);
+
+    echo "Payment verification inserted successfully.";
+} catch (PDOException $e) {
+    echo "Error inserting record: " . $e->getMessage();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -222,7 +263,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Payment Successful!</h1>
+            <h1>Payment Verification</h1>
             <p>Thank you for your purchase. Please verify your transaction details below.</p>
         </div>
 
@@ -261,7 +302,19 @@
                     <label for="transaction-status">Transaction Status</label>
                     <input type="text" id="transaction-status" readonly>
                 </div>
+                 <!-- Hidden fields -->
+    <input type="hidden" id="id" name="id">
+    <input type="hidden" id="userid" name="userid">
+    <input type="hidden" id="paymentid" name="paymentid">
+    <input type="hidden" id="email" name="email">
+    <input type="hidden" id="phone" name="phone">
+    <input type="hidden" id="amountpaid" name="amountpaid">
+    <input type="hidden" id="status" name="status">
+    <input type="hidden" id="verificationstatus" name="verificationstatus">
 
+                <button type="submit" class="btn">
+                    <i class="fas fa-check-circle"></i> Verify Transaction
+                </button>
                 <div class="instructions">
                     <h3>Next Steps:</h3>
                     <ol>
@@ -273,9 +326,7 @@
                     </ol>
                 </div>
 
-                <button type="submit" class="btn">
-                    <i class="fas fa-check-circle"></i> Verify Transaction
-                </button>
+                
             </form>
         </div>
 
