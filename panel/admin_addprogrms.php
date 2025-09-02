@@ -22,7 +22,7 @@ include("../panel/util/statuscolour.php");
 
 
 $stmt = $db->prepare("SELECT * FROM application");
-$stmt->execute(['email' => $email]);
+$stmt->execute();
 $applicationdata = $stmt->fetchAll();
 
 

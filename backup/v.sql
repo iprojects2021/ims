@@ -49,3 +49,23 @@ CREATE TABLE documents (
     PRIMARY KEY (id)
 );
 >>>>>>> main
+CREATE TABLE PaymentVerification (
+    PaymentVerificationID INT PRIMARY KEY AUTO_INCREMENT,  -- Assuming this is the unique ID for verification records
+    UserID INT NOT NULL,
+    PaymentID VARCHAR(50) NOT NULL,
+    BankRRN VARCHAR(50),
+    OrderID VARCHAR(50),
+    InvoiceID VARCHAR(50),
+    PaymentMethod VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(20),
+    AmountPaid DECIMAL(15, 2),
+    Status VARCHAR(50),
+    Notes TEXT,
+    Refund DECIMAL(15, 2) DEFAULT 0,
+    VerifiedBy VARCHAR(100),
+    VerificationStatus VARCHAR(50),
+    CreateDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    VerificationDate DATETIME,
+    VerifyNotes TEXT
+);
