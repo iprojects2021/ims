@@ -8,12 +8,31 @@ session_start();
 $id = $_POST['id'] ?? null;  // Usually auto-increment, so you may skip this
 // Check if user is logged in and get user ID if available
 $userid = $_SESSION['user']['id'] ?? null;
-$paymentid = $_GET['payment_id']?? null;
+$transaction = $_GET['transaction']?? null;
+$parts = explode('?', $transaction);
+$queryString = $parts[1] ?? '';
+parse_str($queryString, $params);
+$payment_id = $params['payment_id'] ?? null;
+$paymentid = $payment_id;
 //print_r($paymentid);die;
 $email = $_POST['email'] ?? null;
 $phone = $_POST['phone'] ?? null;
-$amountpaid = $_POST['amountpaid'] ?? 0;
-$status = $_POST['status'] ?? null;
+$amount_paid=$_GET['amount'];
+$amountpaid = $amount_paid;
+$transaction = $_GET['transaction'] ?? null;
+$status = null;
+if ($transaction) 
+{
+    $parts = explode('?', $transaction);
+    $status = $parts[0];
+}
+if ($status === 'success') {
+    $status ="Success";
+} else {
+    $status="Failed";
+}
+
+
 $verificationstatus = $_POST['verificationstatus'] ?? null;
 
 try {
@@ -30,10 +49,10 @@ try {
         ':phone' => $phone,
         ':amountpaid' => $amountpaid,
         ':status' => $status,
-        ':verificationstatus' => $verificationstatus,
+        ':verificationstatus' => 'Pending',
     ]);
 
-    echo "Payment verification inserted successfully.";
+//    echo "Payment verification inserted successfully.";
 } catch (PDOException $e) {
     echo "Error inserting record: " . $e->getMessage();
 }
@@ -290,7 +309,7 @@ try {
             <form id="transaction-form">
                 <div class="form-group">
                     <label for="transaction-id">Transaction ID (from your email)</label>
-                    <input type="text" id="transaction-id" placeholder="Enter transaction ID sent to your email" required>
+                    <input type="text" id="transaction-id" placeholder="Enter transaction ID sent to your email" value="<?php echo $payment_id; ?>" readonly required>
                 </div>
 
                 <div class="form-group">
@@ -312,10 +331,10 @@ try {
     <input type="hidden" id="status" name="status">
     <input type="hidden" id="verificationstatus" name="verificationstatus">
 
-                <button type="submit" class="btn">
+                <!-- <button type="submit" class="btn">
                     <i class="fas fa-check-circle"></i> Verify Transaction
-                </button>
-                <div class="instructions">
+                </button> -->
+                <!-- <div class="instructions">
                     <h3>Next Steps:</h3>
                     <ol>
                         <li>Check your email for the transaction confirmation message</li>
@@ -324,7 +343,7 @@ try {
                         <li>Verify that the amount and status match your records</li>
                         <li>Click the submit button to complete the verification process</li>
                     </ol>
-                </div>
+                </div> -->
 
                 
             </form>
@@ -360,11 +379,22 @@ try {
                 document.getElementById('transaction-amount').value = formattedAmount;
             }
             
+            // if (urlParams.transaction) {
+            //     const status = urlParams.transaction.charAt(0).toUpperCase() + urlParams.transaction.slice(1);
+            //     document.getElementById('status-display').textContent = status;
+            //     document.getElementById('transaction-status').value = status;
+            // }
             if (urlParams.transaction) {
-                const status = urlParams.transaction.charAt(0).toUpperCase() + urlParams.transaction.slice(1);
-                document.getElementById('status-display').textContent = status;
-                document.getElementById('transaction-status').value = status;
-            }
+    let status = urlParams.transaction.toLowerCase();
+    if (status.includes('success')) {
+        status = 'Success';
+    } else {
+        status = urlParams.transaction.charAt(0).toUpperCase() + urlParams.transaction.slice(1);
+    }
+    document.getElementById('status-display').textContent = status;
+    document.getElementById('transaction-status').value = status;
+}
+
             
             // Form submission handler
             document.getElementById('transaction-form').addEventListener('submit', function(e) {
