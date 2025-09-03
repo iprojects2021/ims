@@ -1,11 +1,11 @@
 <?php
 include("../includes/db.php");
+include("../panel/util/statuscolour.php");
 include("../panel/util/session.php");
 $studentName = htmlspecialchars($_SESSION["user"]["name"]);
 $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];
 
-// Fetch application data filtered by user email or ID (depending on your schema)
 try
 {
 $stmt = $db->prepare("SELECT COUNT(*) AS pending_count FROM paymentverification WHERE VerificationStatus = 'Pending'");
@@ -21,18 +21,7 @@ catch(Exception $e)
 {
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
-include("../panel/util/statuscolour.php");
-try{
-// Fetch current user data by ID securely
-$sql="SELECT * FROM users WHERE id = :id LIMIT 1";
-$stmt = $db->prepare($sql);
-$stmt->execute(['id' => $userId]);
-$currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -133,13 +122,9 @@ catch(Exception $e)
           <div class="col-lg-3 col-6">
             <div class="small-box bg-warning">
               <div class="inner">
-                <?php if ($currentUser): ?>
-                  <h3><?= htmlspecialchars($currentUser['id']) ?></h3>
-                  <p><?= htmlspecialchars($currentUser['full_name']) ?></p>
-                <?php else: ?>
                   <h3>--</h3>
-                  <p>User not found</p>
-                <?php endif; ?>
+                  <p>test</p>
+                
               </div>
               <div class="icon"><i class="ion ion-person-add"></i></div>
               <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>

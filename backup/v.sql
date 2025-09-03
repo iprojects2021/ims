@@ -69,3 +69,28 @@ CREATE TABLE PaymentVerification (
     VerificationDate DATETIME,
     VerifyNotes TEXT
 );
+CREATE TABLE userattendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    logintime DATETIME,
+    logouttime DATETIME,
+    notes TEXT,
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id)  -- Assuming there is a 'users' table with 'id' as primary key
+);
+CREATE TABLE userhourlytracker (
+    it INT PRIMARY KEY,
+    userid INT,
+    start_time VARCHAR(255),
+    end_time VARCHAR(255),
+    notes TEXT,
+    createdat TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id)  -- assuming there's a "users" table with a "userid" field
+);
+CREATE TABLE userdaytracker (
+    it INT PRIMARY KEY,
+    userid INT,
+    notes TEXT,
+    createdat TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id) -- Assuming there is a 'users' table with 'userid' as its PK
+);
