@@ -206,6 +206,16 @@ $role = $_SESSION['user']['role'] ?? null;
         <i class="nav-icon fas fa-th"></i>
         <p>
         Referral Dashboard
+     
+         <!-- <span class="right badge badge-danger">New</span>-->
+        </p>
+      </a>
+    </li>
+   <li class="nav-item">
+       <a href="verificationpage.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          PaymentVerification
          <!-- <span class="right badge badge-danger">New</span>-->
         </p>
       </a>

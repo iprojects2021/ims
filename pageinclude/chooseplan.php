@@ -223,8 +223,8 @@
         <div class="pricing-plans" >
             <!-- Basic Plan -->
             <div class="plan">
-                <h3><i class="fas fa-star"></i> Basic</h3>
-                <div class="price">₹3,000 <span>/ 3 months</span></div>
+                <h3><i class="fas fa-star"></i> Advanced</h3>
+                <div class="price">₹3,000 <span>/ 1 Month</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Downloadable resources</li>
@@ -232,42 +232,37 @@
                     <li><i class="fas fa-check"></i> Email support</li>
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
-                <button class="btn btn-light btn-lg apply-btn" data-bs-toggle="modal" data-bs-target="#enrollModal">
-                            <i class="fas fa-arrow-right me-2"></i> Enroll Now
-                        </button>
+                
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹3,000/-','Advanced','1 Month')">Apply Now</button>
                 
             </div>
             
             <!-- Premium Plan -->
             <div class="plan">
-                <h3><i class="fas fa-rocket"></i> Premium</h3>
-                <div class="price">₹12,000 <span>/ 3 months</span></div>
+                <h3><i class="fas fa-rocket"></i> Professional</h3>
+                <div class="price">₹5,000 <span>/ 3 months</span></div>
                 <ul class="features">
-                    <li><i class="fas fa-check"></i> Live weekly classes</li>
+                    <li><i class="fas fa-check"></i> Live  classes</li>
                     <li><i class="fas fa-check"></i> 5+ mentor-guided projects</li>
                     <li><i class="fas fa-check"></i> 24/7 doubt-solving</li>
                     <li><i class="fas fa-check"></i> Resume & LinkedIn review</li>
                     <li><i class="fas fa-check"></i> Job assistance</li>
                 </ul>
-                <button class="btn btn-light btn-lg apply-btn" data-bs-toggle="modal" data-bs-target="#enrollModal">
-                            <i class="fas fa-arrow-right me-2"></i> Enroll Now
-                        </button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹5,000/-','Professional','3 Months')">Apply Now</button>
             </div>
             
             <!-- Pro Plan (Most Popular) -->
             <div class="plan pro">
-                <h3><i class="fas fa-crown"></i> Pro</h3>
-                <div class="price">₹25,000 <span>/ 6 months</span></div>
+                <h3><i class="fas fa-crown"></i> Elite</h3>
+                <div class="price">₹8,000 <span>/ 6 months</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> 1:1 mentorship</li>
                     <li><i class="fas fa-check"></i> Real-world industry projects</li>
                     <li><i class="fas fa-check"></i> Mock interviews & resume prep</li>
-                    <li><i class="fas fa-check"></i> Guaranteed internship</li>
+                    <li><i class="fas fa-check"></i> Real Time AI Project</li>
                     <li><i class="fas fa-check"></i> Placement assistance</li>
                 </ul>
-                <button class="btn btn-light btn-lg apply-btn" data-bs-toggle="modal" data-bs-target="#enrollModal">
-                            <i class="fas fa-arrow-right me-2"></i> Get Started Today!
-                        </button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
                 
             </div>
         </div>

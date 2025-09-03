@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,6 +63,21 @@
         .nav-tabs .nav-link {
             color: #495057;
         }
+        .plan-details {
+            background-color: #f0f5ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        .plan-details h6 {
+            color: #2575fc;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -78,7 +94,7 @@
                         <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">3 months</span></span>
                         <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
                         <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Stipend: <span id="program-stipend">₹10,000/month</span></span>
-                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow()">Apply Now</button>
+                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
                     </div>
                 </div>
             </div>
@@ -199,11 +215,11 @@
                                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i> Application Deadline</h5>
                             </div>
                             <div class="card-body text-center">
-                                <h4 id="program-deadline">June 30, 2024</h4>
+                                <h4 id="program-deadline">Nov 03, 2025</h4>
                                 <div class="progress mt-3">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 65%">65% seats filled</div>
                                 </div>
-                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow()">
+                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow('₹ 8000/-','Elite','6 Months')">
                                     <i class="fas fa-paper-plane me-2"></i> Apply Now
                                 </button>
                             </div>
@@ -354,35 +370,60 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="applicationForm">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="resume" class="form-label">Resume (PDF)</label>
-                            <input class="form-control" type="file" id="resume" accept=".pdf" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="github" class="form-label">GitHub Profile (Optional)</label>
-                            <input type="url" class="form-control" id="github" placeholder="https://github.com/yourusername">
-                        </div>
-                        <div class="mb-3">
-                            <label for="coverLetter" class="form-label">Why are you interested in this internship? (Max 300 words)</label>
-                            <textarea class="form-control" id="coverLetter" rows="4" required></textarea>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn apply-btn px-5">
-                                <i class="fas fa-paper-plane me-2"></i> Submit Application
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Plan details section -->
+                    <form id="applicationForm" action="../programpayment.php" method="post">
+    <div class="plan-details">
+        <h6>Program Details</h6>
+        <div class="row">
+            <div class="col-md-4">
+                <p><strong>Program Type:</strong> <span id="modal-plan-type">Not specified</span></p>
+                <input type="hidden" name="type" id="hidden-plan-type" value="">
+
+            </div>
+            <div class="col-md-4">
+                <p><strong>Amount:</strong> <span id="modal-amount">0</span></p>
+                <input type="hidden" name="amount" id="hidden-amount" value="">
+            </div>
+            <div class="col-md-4">
+                <p><strong>Duration:</strong> <span id="modal-duration">0</span></p>
+                <input type="hidden" name="duration" id="hidden-duration" value="">
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullname" required>
+        </div>
+        <div class="col-md-6">
+            <label for="mobile" class="form-label">Mobile</label>
+            <input type="text" class="form-control" id="mobile" name="mobile" required>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input class="form-control" type="email" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="expected_start_date" class="form-label">Expected Start Date</label>
+        <input class="form-control" type="date" id="expected_start_date" name="expected_start_date" required>
+    </div>
+    <div class="mb-3">
+        <label for="github" class="form-label">GitHub Profile (Optional)</label>
+        <input type="url" class="form-control" id="github" name="github" >
+    </div>
+    <div class="mb-3">
+        <label for="coverLetter" class="form-label">Why are you interested in this internship? (Max 300 words)</label>
+        <textarea class="form-control" id="coverLetter" name="outcome" rows="4" required></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn apply-btn px-5">
+            <i class="fas fa-paper-plane me-2"></i> Next
+        </button>
+    </div>
+</form>
+
                 </div>
             </div>
         </div>
@@ -397,11 +438,11 @@
                 title: "PHP Development Internship",
                 shortDesc: "3-month remote internship to build real PHP projects with mentorship",
                 description: "This intensive program provides hands-on experience with PHP, Laravel, and MySQL while working on live projects. Perfect for aspiring backend developers looking to gain real-world experience.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
-                duration: "3 months",
-                startDate: "July 15, 2024",
-                stipend: "₹10,000/month",
+                duration: "1 - 6 months",
+                startDate: "Nov 7, 2025",
+                stipend: "₹3000/- to ₹8000/-",
                 format: "Remote",
-                deadline: "June 30, 2024",
+                deadline: "Nov 3, 2025",
                 responsibilities: [
                     { title: "Develop and maintain PHP-based web applications", desc: "Build scalable backend systems using modern PHP practices." },
                     { title: "Debug and optimize existing Laravel codebases", desc: "Learn to identify performance bottlenecks and security issues." },
@@ -460,20 +501,28 @@
             // You would continue populating other sections similarly...
         }
 
-        function applyNow() {
-            const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
-            applicationModal.show();
-        }
+        function applyNow(amount, planType, duration) {
+    // Set the values in the modal text
+    document.getElementById('modal-program-title').textContent = planType;
+    document.getElementById('modal-plan-type').textContent = planType;
+    document.getElementById('modal-amount').textContent = amount;
+    document.getElementById('modal-duration').textContent = duration;
 
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Application submitted successfully!');
-            const applicationModal = bootstrap.Modal.getInstance(document.getElementById('applicationModal'));
-            applicationModal.hide();
-        });
+    // Also update the hidden input values (for form submission)
+    document.getElementById('hidden-plan-type').value = planType;
+    document.getElementById('hidden-amount').value = amount;
+    document.getElementById('hidden-duration').value = duration;
+
+    // Show the modal
+    const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
+    applicationModal.show();
+}
+
+       
 
         // Load program data when page loads
         window.addEventListener('DOMContentLoaded', loadProgramData);
     </script>
+    
 </body>
 </html>
