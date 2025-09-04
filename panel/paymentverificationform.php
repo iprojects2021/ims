@@ -217,8 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updatedata'])) {
   <div class="form-group col-md-4">
   <label for="Refund" class="mb-1">Refund</label>
   <select class="form-control form-control-sm" id="Refund" name="Refund">
-    <option value="Yes" <?php if ($row['Refund'] == 'Yes') echo 'selected'; ?>>No</option>
-    <option value="No" <?php if ($row['Refund'] == 'No') echo 'selected'; ?>>Yes</option>
+    <option value="No" <?php if ($row['Refund'] == 'No') echo 'selected'; ?>>No</option>
+    <option value="Yes" <?php if ($row['Refund'] == 'Yes') echo 'selected'; ?>>Yes</option>
   </select>
 </div>
         <div class="form-group col-md-4">

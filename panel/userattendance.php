@@ -3,12 +3,13 @@ include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
 $email = $_SESSION['user']['email'];
+
 // Get input data (assumes POST method)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     $notes = trim($_POST['notes'] ?? '');
     $userid = $_SESSION['user']['id'];
     // Prepare the insert statement
-    $stmt = $db->prepare("INSERT INTO userdaytracker (userid, notes, createdat) VALUES (:userid, :notes, NOW())");
+    $stmt = $db->prepare("INSERT INTO userdaytracker (userid, notes, createdate) VALUES (:userid, :notes, NOW())");
     // Execute the statement
     if ($stmt->execute([
         ':userid' => $userid,
@@ -46,12 +47,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['savenew'])) {
       echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
   }
 }
+//hour history
+// 1. Get the user ID from the session
+$useriddata = $_SESSION['user']['id'];
 
-$stmt = $db->prepare("SELECT * FROM userhourlytracker");
+// Prepare and execute the query
+$sql = "SELECT * FROM userhourlytracker WHERE userid = $useriddata AND DATE(createdate) = CURDATE()";
+$stmt = $db->prepare($sql);
 $stmt->execute();
 $hourtrackerhistory = $stmt->fetchAll();
-//echo "<pre>";print_r($clients);die;
 
+//day history
+
+// $stmt = $db->prepare("SELECT * FROM userdaytracker where userid=$useriddata");
+// $stmt->execute();
+// $daytrackerhistory = $stmt->fetchAll();
+// Prepare the JOIN query safely using a bound parameter
+// $stmt = $db->prepare("
+//     SELECT *
+//     FROM userdaytracker udt
+//     JOIN userattendance ua ON udt.userid = ua.userid
+//     WHERE udt.userid = :userid
+// ");
+ $stmt = $db->prepare("SELECT * FROM userattendance where userid=$useriddata");
+ $stmt->bindParam(':userid', $useriddata, PDO::PARAM_INT);
+ $stmt->execute();
+ $daytrackerhistory = $stmt->fetchAll();
+
+
+
+
+//today work hour
+
+$stmt = $db->prepare("SELECT 
+ROUND(SUM(TIMESTAMPDIFF(SECOND, logintime, logouttime)) / 3600, 2) AS total_hours_today
+FROM 
+userattendance
+WHERE userid=$useriddata AND 
+DATE(logintime) = CURDATE()
+AND logouttime IS NOT NULL;
+");
+$stmt->execute();
+$totalworkhour = $stmt->fetchAll();
+$workhour=$totalworkhour['0']['total_hours_today'];
+
+//logged count
+$sql = "SELECT COUNT(*) FROM userhourlytracker WHERE userid = :userid AND DATE(createdate) = CURDATE()";
+$stmt = $db->prepare($sql);
+$stmt->bindParam(':userid', $useriddata, PDO::PARAM_INT);
+$stmt->execute();
+$loggedcount = $stmt->fetchColumn();
+//print_r($count);die;
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +126,11 @@ $hourtrackerhistory = $stmt->fetchAll();
   <!-- Daterange picker -->
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
+
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -116,6 +166,27 @@ $hourtrackerhistory = $stmt->fetchAll();
                 <h3 class="card-title">Applications</h3>
               </div>
               <!-- /.card-header -->
+              <style>
+        .status-card {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f8f9fa;
+        }
+        .time-display {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .date-display {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .action-buttons button {
+            margin: 5px;
+        }
+    </style>
               <style>
         * {
             margin: 0;
@@ -389,7 +460,7 @@ $hourtrackerhistory = $stmt->fetchAll();
             border-radius: 5px;
         }
 
-        .notification {
+        /* .notification {
             position: fixed;
             top: 20px;
             right: 20px;
@@ -405,39 +476,41 @@ $hourtrackerhistory = $stmt->fetchAll();
 
         .notification.show {
             transform: translateX(0);
-        }
+        } */
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-clock"></i> Intern Attendance Tracker</h1>
+            <h1><i class="fas fa-clock"></i>  Attendance Tracker</h1>
             <p>Track your working hours and activities efficiently</p>
         </header>
 
         <div class="dashboard">
-            <div class="card status-card">
-                <h2>Current Status</h2>
-                <div class="time-display" id="current-time">00:00:00</div>
-                <div class="date-display" id="current-date">Loading...</div>
-                <div id="status-indicator">
-                    <p>You are currently <span id="status-text">not logged in</span></p>
-                </div>
-                <div class="action-buttons">
-                    <button class="btn btn-success" id="clock-in-btn"><i class="fas fa-sign-in-alt"></i> Work Login</button>
-                    <button class="btn btn-danger" id="clock-out-btn" disabled><i class="fas fa-sign-out-alt"></i> Work Logout</button>
-                </div>
-            </div>
+        <div class="card status-card">
+        <h2 class="text-center">Current Status</h2>
+        <div class="text-center">
+            <div class="time-display" id="current-time">00:00:00</div>
+            <div class="date-display" id="current-date">Loading...</div>
+        </div>
+        <div id="status-indicator" class="text-center mb-3">
+            <p><span id="status-text" class="font-weight-bold"></span></p>
+        </div>
+        <div class="action-buttons text-center">
+            <button class="btn btn-success" id="clock-in-btn"><i class="fas fa-sign-in-alt"></i> Work Login</button>
+            <button class="btn btn-danger" id="clock-out-btn" disabled><i class="fas fa-sign-out-alt"></i> Work Logout</button>
+        </div>
+    </div>
 
             <div class="card">
                 <h2>Today's Summary</h2>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="hours-worked">0h 0m</div>
+                        <div class="stat-value" id="hours-worked"><?php echo $workhour;?></div>
                         <div class="stat-label">Hours Worked</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="activities-logged">0</div>
+                        <div class="stat-value" id="activities-logged"><?php echo $loggedcount;?></div>
                         <div class="stat-label">Activities Logged</div>
                     </div>
                 </div>
@@ -513,7 +586,7 @@ $hourtrackerhistory = $stmt->fetchAll();
                   </tfoot>
                 </table>
            
-                        <p id="no-activities">No activities logged yet. Add your first activity above.</p>
+                        <!-- <p id="no-activities">No activities logged yet. Add your first activity above.</p> -->
                     </div>
                 </div>
             </div>
@@ -523,19 +596,56 @@ $hourtrackerhistory = $stmt->fetchAll();
             <div class="card">
                 <h2>Attendance History</h2>
                 <div class="history-list" id="history-container">
-                    <!-- History items will be added here dynamically -->
-                    <p>No attendance history available yet.</p>
+                <table id="dayhistory" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>User Id</th>
+                    <!-- <th>Notes</th> -->
+                    <th>Login Time</th>
+                    <th>Logout Time</th>
+                    <th>Total Duration</th>
+                    <th>Create Date</th>
+                    </tr>
+                  </thead>
+                  <tbody><?php foreach ($daytrackerhistory as $row): ?>
+                  
+                    <tr class="clickable-row" data-id="<?= (int)$row['userid'] ?>">
+
+                    
+                  <td><?php echo htmlspecialchars($row['id']); ?></td>
+                    <td><?php echo htmlspecialchars($row['userid']); ?></td>
+                    <!-- <td><?php echo htmlspecialchars($row['notes']); ?></td> -->
+                    <td><?php echo htmlspecialchars($row['logintime']); ?></td>
+                    <td><?php echo htmlspecialchars($row['logouttime']); ?></td>
+                    <td><?php echo $workhour;?></td>
+  <td><?php echo htmlspecialchars($row['createdat']); ?></td>   
+                  </tr>
+                   <?php endforeach; ?>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                  <th>Id</th>
+                    <th>User Id</th>
+                    <th>Notes</th>
+                    <th>Login Time</th>
+                    <th>Logout Time</th>
+                    <th>Total Duration</th>
+                    <th>Create Date</th>
+                    
+                       </tr>
+                  </tfoot>
+                </table>
+           
+                    <p></p>
                 </div>
             </div>
         </div>
 
-        <footer>
-            <p>Intern Attendance Tracker &copy; 2023 | Designed for Internship Program</p>
-        </footer>
-    </div>
+            </div>
 
     <div class="notification" id="notification">
-        <span id="notification-text">Activity logged successfully!</span>
+        <!-- <span id="notification-text">Activity logged successfully!</span> -->
     </div>
 
     <script>
@@ -890,9 +1000,26 @@ $hourtrackerhistory = $stmt->fetchAll();
     });
   });
 </script>
+<script>
+  $(document).ready(function () {
+    var table = $('#dayhistory').DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+      order: [[0, "desc"]],
+      pageLength: 10,
+      lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+    table.buttons().container()
+      .appendTo('#dayhistory_wrapper .col-md-6:eq(0)');
+  });
+</script>
+
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="typedetails.php" style="display:none;">
-    <input type="hidden" name="id" id="hiddenId">
+<form id="postForm" method="POST" action="attendanceallhistory.php" style="display:none;">
+    <input type="hidden" name="userid" id="hiddenId">
 </form>
 <script>
   
@@ -910,5 +1037,125 @@ $hourtrackerhistory = $stmt->fetchAll();
     color: #fff;
 }
 </style>
+<!-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginBtn = document.getElementById("clock-in-btn");
+            const logoutBtn = document.getElementById("clock-out-btn");
+            const statusText = document.getElementById("status-text");
+
+            function updateStatus() {
+                fetch('check_status.php')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.loggedIn) {
+                            statusText.textContent = "logged in";
+                            loginBtn.disabled = true;
+                            logoutBtn.disabled = false;
+                        } else {
+                            statusText.textContent = "not logged in";
+                            loginBtn.disabled = false;
+                            logoutBtn.disabled = true;
+                        }
+                    });
+            }
+
+            loginBtn.addEventListener("click", function () {
+                fetch('clock_in.php', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        updateStatus();
+                    });
+            });
+
+            logoutBtn.addEventListener("click", function () {
+                fetch('clock_out.php', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        updateStatus();
+                    });
+            });
+
+            // Real-time clock
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById("current-time").textContent = now.toLocaleTimeString();
+                document.getElementById("current-date").textContent = now.toDateString();
+            }, 1000);
+
+            updateStatus();
+        });
+    </script> -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginBtn = document.getElementById("clock-in-btn");
+        const logoutBtn = document.getElementById("clock-out-btn");
+        const statusText = document.getElementById("status-text");
+
+        function updateStatus() {
+            fetch('check_status.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.clockedInToday && data.clockedOutToday) {
+                        statusText.textContent = "You have already clocked in and out today.";
+                        loginBtn.disabled = true;
+                        logoutBtn.disabled = true;
+                    } else if (data.clockedInToday) {
+                        statusText.textContent = "You are clocked in.";
+                        loginBtn.disabled = true;
+                        logoutBtn.disabled = false;
+                    } else {
+                        statusText.textContent = "You have not clocked in today.";
+                        loginBtn.disabled = false;
+                        logoutBtn.disabled = true;
+                    }
+                });
+        }
+
+        loginBtn.addEventListener("click", function () {
+            fetch('clock_in.php', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    updateStatus();
+                });
+        });
+
+        logoutBtn.addEventListener("click", function () {
+            fetch('clock_out.php', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    updateStatus();
+                });
+        });
+
+        // Real-time clock
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById("current-time").textContent = now.toLocaleTimeString();
+            document.getElementById("current-date").textContent = now.toDateString();
+        }, 1000);
+
+        updateStatus();
+    });
+</script>
+       <!-- Hidden form to send POST -->
+       <form id="postForm" method="POST" action="attendanceallhistory.PHP" style="display:none;">
+    <input type="hidden" name="userid" id="hiddenId">
+</form>
+<script>
+  
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            document.getElementById('hiddenId').value = id;
+            document.getElementById('postForm').submit();
+        });
+    });
+</script>
+
 </body>
 </html>
