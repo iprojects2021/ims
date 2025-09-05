@@ -211,7 +211,8 @@ if (isset($_GET['internship'])) {
     $internship = $_GET['internship'];
      switch ($internship) {
         case 'JavaDeveloperIntern':
-            include('internshiptrainingprogram.php');
+         
+            include('JavaDeveloperIntern.php');
             break;
         case 'SpringBootDeveloperIntern':
             include('internshiptrainingprogram.php');
