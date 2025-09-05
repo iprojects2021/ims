@@ -17,7 +17,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     ])) {
         // If insert successful
         //echo "<p style='color: green;'>Notes saved successfully!</p>";
-        $showAlert = 'success';
+       // $showAlert = 'success';
+       echo '
+<div id="statusContainer" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1050; width: 400px; max-width: 90%;">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> Success!</h5>
+        Notes Saved Successfully
+    </div>
+</div>
+<script type="text/javascript">
+    setTimeout(function() {
+        var alert = document.getElementById("statusAlert");
+        if (alert) {
+            // Use Bootstrap\'s jQuery method to close the alert
+            $(alert).alert("close");
+        }
+    }, 2000);
+</script>';
+
     } else {
         // If insert failed
         //echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
@@ -44,7 +63,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['savenew'])) {
   ])) {
       // If insert successful
     //  echo "<p style='color: green;'>Notes saved successfully!</p>";
-    $showAlert = 'success';
+    //$showAlert = 'success';
+    echo '
+<div id="statusContainer" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1050; width: 400px; max-width: 90%;">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> Success!</h5>
+        Notes Saved Successfully
+    </div>
+</div>
+<script type="text/javascript">
+    setTimeout(function() {
+        var alert = document.getElementById("statusAlert");
+        if (alert) {
+            // Use Bootstrap\'s jQuery method to close the alert
+            $(alert).alert("close");
+        }
+    }, 2000);
+</script>';
+
   } else {
       // If insert failed
      // echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
@@ -1128,7 +1166,7 @@ $workhourdata = $interval->format('%h hours %i minutes')?><?php echo $workhourda
             fetch('clock_in.php', { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
+                   // alert(data.message);
                     updateStatus();
                 });
         });
@@ -1137,7 +1175,7 @@ $workhourdata = $interval->format('%h hours %i minutes')?><?php echo $workhourda
             fetch('clock_out.php', { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
+                   // alert(data.message);
                     updateStatus();
                 });
         });
