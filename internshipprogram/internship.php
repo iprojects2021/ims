@@ -215,7 +215,8 @@ if (isset($_GET['internship'])) {
             include('JavaDeveloperIntern.php');
             break;
         case 'SpringBootDeveloperIntern':
-            include('internshiptrainingprogram.php');
+          
+            include('SpringBootDeveloperIntern.php');
             break;
         case 'JavaFullStackDeveloperIntern':
             include('internshiptrainingprogram.php');

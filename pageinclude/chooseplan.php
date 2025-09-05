@@ -212,7 +212,8 @@
 </head>
 <body>
     <div class="container" id="chooseplan">
-        <h1>🚀 Master Spring Boot & ReactJS</h1>
+        
+        <h1 id="program-title">🚀 Java Development Internship</h1>
         <h2>Choose Your Plan & Start Your Coding Journey Today!</h2>
         
         <!-- Urgency Banner -->
@@ -224,7 +225,7 @@
             <!-- Basic Plan -->
             <div class="plan">
                 <h3><i class="fas fa-star"></i> Advanced</h3>
-                <div class="price">₹3,000 <span>/ 1 Month</span></div>
+                <div class="price">₹2,000 <span>/ 1 Month</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Downloadable resources</li>
@@ -233,7 +234,7 @@
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
                 
-                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹3,000/-','Advanced','1 Month')">Apply Now</button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹2,000/-','Advanced','1 Month')">Apply Now</button>
                 
             </div>
             
