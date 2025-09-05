@@ -4,9 +4,7 @@ include("../panel/util/session.php");
 // Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
 ?>
-
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID'])) 
 {
   $id = $_POST['PaymentVerificationID'];
@@ -15,15 +13,66 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
   $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $paymentdata = $stmt->fetchAll();
-  //print_r($paymentdata);die;
+ 
   }
   catch(Exception $e)
   {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
 }
+?>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updatedata'])) {
+    // Prepare SQL query
+    $sql = "UPDATE paymentverification SET
+                UserID = :UserID,
+                PaymentID = :PaymentID,
+                BankRRN = :BankRRN,
+                OrderID = :OrderID,
+                InvoiceID = :InvoiceID,
+                PaymentMethod = :PaymentMethod,
+                AmountPaid = :AmountPaid,
+                Email = :Email,
+                Phone = :Phone,
+                Status = :Status,
+                Refund = :Refund,
+                Notes = :Notes,
+                VerifiedBy = :VerifiedBy,
+                VerificationStatus = :VerificationStatus,
+                CreateDate = :CreateDate,
+                VerificationDate = :VerificationDate,
+                VerifyNotes = :VerifyNotes
+            WHERE PaymentVerificationID = :PaymentVerificationID";
 
+    $stmt = $db->prepare($sql);
 
+    // Bind parameters
+    $stmt->bindParam(':UserID', $_POST['UserID']);
+    $stmt->bindParam(':PaymentID', $_POST['PaymentID']);
+    $stmt->bindParam(':BankRRN', $_POST['BankRRN']);
+    $stmt->bindParam(':OrderID', $_POST['OrderID']);
+    $stmt->bindParam(':InvoiceID', $_POST['InvoiceID']);
+    $stmt->bindParam(':PaymentMethod', $_POST['PaymentMethod']);
+    $stmt->bindParam(':AmountPaid', $_POST['AmountPaid']);
+    $stmt->bindParam(':Email', $_POST['Email']);
+    $stmt->bindParam(':Phone', $_POST['Phone']);
+    $stmt->bindParam(':Status', $_POST['Status']);
+    $stmt->bindParam(':Refund', $_POST['Refund']);
+    $stmt->bindParam(':Notes', $_POST['Notes']);
+    $stmt->bindParam(':VerifiedBy', $_POST['VerifiedBy']);
+    $stmt->bindParam(':VerificationStatus', $_POST['VerificationStatus']);
+    $stmt->bindParam(':CreateDate', $_POST['CreatedDate']);
+    $stmt->bindParam(':VerificationDate', $_POST['VerificationDate']);
+    $stmt->bindParam(':VerifyNotes', $_POST['VerifyNotes']);
+    $stmt->bindParam(':PaymentVerificationID', $_POST['PaymentVerificationID']); // Unique identifier
+
+    // Execute and check
+    if ($stmt->execute()) {
+      $showAlert = 'success';
+    } else {
+      $showAlert = 'error';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -138,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
         </div>
       </div>
     </div>
-  </div>
+  
 
   <!-- Part 2: Contact & Status Info -->
     <div class="card-body py-2">
@@ -154,31 +203,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
       </div>
 
       <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="Status" class="mb-1">Status</label>
-          <select class="form-control form-control-sm" id="Status" name="Status" value="<?php echo htmlspecialchars($row['Status']); ?>">
-            <option value="pending">Pending</option>
-            <option value="success">Success</option>
-            <option value="failed">Failed</option>
-            <option value="refunded">Refunded</option>
-          </select>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="Refund" class="mb-1">Refund</label>
-          <select class="form-control form-control-sm" id="Refund" name="Refund" value="<?php echo htmlspecialchars($row['Refund']); ?>">
-            <option value="0">No</option>
-            <option value="1">Yes</option>
-          </select>
-        </div>
+      <div class="form-group col-md-4">
+    <label for="Status" class="mb-1">Status</label>
+    <select class="form-control form-control-sm" id="Status" name="Status">
+      <option value="">-- Select Status --</option>
+      <option value="Pending" <?php if ($row['Status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+      <option value="Success" <?php if ($row['Status'] == 'Success') echo 'selected'; ?>>Success</option>
+      <option value="Failed" <?php if ($row['Status'] == 'Failed') echo 'selected'; ?>>Failed</option>
+      <option value="Refunded" <?php if ($row['Status'] == 'Refunded') echo 'selected'; ?>>Refunded</option>
+    </select>
+  </div>
+
+  <div class="form-group col-md-4">
+  <label for="Refund" class="mb-1">Refund</label>
+  <select class="form-control form-control-sm" id="Refund" name="Refund">
+    <option value="No" <?php if ($row['Refund'] == 'No') echo 'selected'; ?>>No</option>
+    <option value="Yes" <?php if ($row['Refund'] == 'Yes') echo 'selected'; ?>>Yes</option>
+  </select>
+</div>
         <div class="form-group col-md-4">
           <label for="Notes" class="mb-1">Notes</label>
           <input type="text" value="<?php echo htmlspecialchars($row['Notes']); ?>" class="form-control form-control-sm" id="Notes" name="Notes">
         </div>
-        <div class="form-group col-md-4">
-  <label for="VerifiedBy" class="mb-1">Verified By</label>
-  <input type="text" value="<?php echo htmlspecialchars($row['VerifiedBy']); ?>" class="form-control form-control-sm" id="VerifiedBy" name="VerifiedBy">
-</div>
-
+        
 <div class="form-group col-md-4">
   <label for="VerificationStatus" class="mb-1">Verification Status</label>
   <select class="form-control form-control-sm" id="VerificationStatus" name="VerificationStatus">
@@ -190,13 +237,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
 </div>
 <div class="form-group col-md-4">
   <label for="VerifiedBy" class="mb-1">Verified By</label>
-  <select class="form-control form-control-sm" id="VerifiedBy" name="VerifiedBy">
-    <option value="">-- Select --</option>
-    <option value="Admin" <?php if ($row['VerifiedBy'] == 'Admin') echo 'selected'; ?>>Admin</option>
-    <option value="Supervisor" <?php if ($row['VerifiedBy'] == 'Supervisor') echo 'selected'; ?>>Supervisor</option>
-    <option value="Manager" <?php if ($row['VerifiedBy'] == 'Manager') echo 'selected'; ?>>Manager</option>
-  </select>
-</div>
+  <input type="text" value="<?php echo htmlspecialchars($row['VerifiedBy']); ?>" class="form-control form-control-sm" id="VerifiedBy" name="VerifiedBy">
+  </div>
 
 <div class="form-group col-md-4">
   <label for="CreatedDate" class="mb-1">Created Date</label>
@@ -209,7 +251,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
 
 <div class="form-group col-md-4">
   <label for="VerificationDate" class="mb-1">Verification Date</label>
-  <input type="date" value="<?php echo htmlspecialchars($row['VerificationDate']); ?>" class="form-control form-control-sm" id="VerificationDate" name="VerificationDate">
+  <input type="date"
+  value="<?php echo htmlspecialchars(date('Y-m-d', strtotime($row['VerificationDate']))); ?>" 
+         class="form-control form-control-sm"
+         id="VerificationDate"
+         name="VerificationDate">
 </div>
 
 <div class="form-group col-md-4">
@@ -224,7 +270,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
 
   <!-- Submit Button -->
   <div class="text-right mb-4">
-    <button type="submit" class="btn btn-sm btn-primary">Submit Payment Info</button>
+    <button type="submit" class="btn btn-sm btn-primary" name="updatedata">Submit Payment Info</button>
   </div>
   <?php endforeach; ?>
 
@@ -282,5 +328,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['PaymentVerificationID
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+<?php include("../panel/util/alert.php");?>
 </body>
 </html>

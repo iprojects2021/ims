@@ -257,6 +257,12 @@ $role = $_SESSION['user']['role'] ?? null;
         <p>My Applications</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="userattendance.php" class="nav-link">
+        <i class="nav-icon fas fa-copy"></i>
+        <p>Attendance</p>
+      </a>
+    </li>
 
     <li class="nav-item">
       <a href="#" class="nav-link">
