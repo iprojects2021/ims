@@ -16,10 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
         ':notes'  => $notes,
     ])) {
         // If insert successful
-        echo "<p style='color: green;'>Notes saved successfully!</p>";
+        //echo "<p style='color: green;'>Notes saved successfully!</p>";
+        $showAlert = 'success';
     } else {
         // If insert failed
-        echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
+        //echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
+        $showAlert = 'error';
     }
 }
 
@@ -41,10 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['savenew'])) {
       ':notes' => $notes,
   ])) {
       // If insert successful
-      echo "<p style='color: green;'>Notes saved successfully!</p>";
+    //  echo "<p style='color: green;'>Notes saved successfully!</p>";
+    $showAlert = 'success';
   } else {
       // If insert failed
-      echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
+     // echo "<p style='color: red;'>Failed to save notes. Please try again.</p>";
+     $showAlert = 'error';
   }
 }
 //hour history
@@ -69,7 +73,13 @@ $hourtrackerhistory = $stmt->fetchAll();
 //     JOIN userattendance ua ON udt.userid = ua.userid
 //     WHERE udt.userid = :userid
 // ");
- $stmt = $db->prepare("SELECT * FROM userattendance where userid=$useriddata");
+
+
+ $stmt = $db->prepare("SELECT *
+ FROM userattendance ua
+ JOIN userdaytracker udt ON ua.userid = udt.userid
+ WHERE ua.userid = :userid
+");
  $stmt->bindParam(':userid', $useriddata, PDO::PARAM_INT);
  $stmt->execute();
  $daytrackerhistory = $stmt->fetchAll();
@@ -600,39 +610,39 @@ $loggedcount = $stmt->fetchColumn();
                   <thead>
                   <tr>
                     <th>Id</th>
-                    <th>User Id</th>
-                    <!-- <th>Notes</th> -->
+                    <th>Date</th>
                     <th>Login Time</th>
                     <th>Logout Time</th>
                     <th>Total Duration</th>
-                    <th>Create Date</th>
+                    <th>Notes</th>
                     </tr>
                   </thead>
                   <tbody><?php foreach ($daytrackerhistory as $row): ?>
                   
                     <tr class="clickable-row" data-id="<?= (int)$row['userid'] ?>">
-
-                    
-                  <td><?php echo htmlspecialchars($row['id']); ?></td>
-                    <td><?php echo htmlspecialchars($row['userid']); ?></td>
-                    <!-- <td><?php echo htmlspecialchars($row['notes']); ?></td> -->
+                  
+                    <td><?php echo htmlspecialchars($row['id']); ?></td>
+                    <td><?php echo htmlspecialchars($row['createdat']); ?></td>                               
                     <td><?php echo htmlspecialchars($row['logintime']); ?></td>
                     <td><?php echo htmlspecialchars($row['logouttime']); ?></td>
-                    <td><?php echo $workhour;?></td>
-  <td><?php echo htmlspecialchars($row['createdat']); ?></td>   
+                    <td><?php $login = new DateTime($row['logintime']);
+$logout = new DateTime($row['logouttime']);
+$interval = $login->diff($logout);
+$workhourdata = $interval->format('%h hours %i minutes')?><?php echo $workhourdata; ?></td>
+                    <td><?php echo htmlspecialchars($row['notes']); ?></td>
+  
                   </tr>
                    <?php endforeach; ?>
                   </tbody>
                   <tfoot>
                   <tr>
                   <th>Id</th>
-                    <th>User Id</th>
-                    <th>Notes</th>
+                    <th>Date</th>
                     <th>Login Time</th>
                     <th>Logout Time</th>
                     <th>Total Duration</th>
-                    <th>Create Date</th>
-                    
+                    <th>Notes</th>
+   
                        </tr>
                   </tfoot>
                 </table>
@@ -1156,6 +1166,6 @@ $loggedcount = $stmt->fetchColumn();
         });
     });
 </script>
-
+<?php include("../panel/util/alert.php");?>
 </body>
 </html>

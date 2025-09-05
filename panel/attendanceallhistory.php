@@ -19,8 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['userid']))
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
 }
-
-
+$stmt = $db->prepare("SELECT *
+FROM userattendance ua
+JOIN userdaytracker udt ON ua.userid = udt.userid
+WHERE ua.userid = :userid
+");
+$stmt->bindParam(':userid', $useriddata, PDO::PARAM_INT);
+$stmt->execute();
+$daytrackerhistory = $stmt->fetchAll();
+//print_r($daytrackerhistory);die;
 ?>
 
 
@@ -87,8 +94,54 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['userid']))
   <div class="card-header">
     <h3 class="card-title">All History List</h3>
   </div>
+  <?php foreach ($daytrackerhistory as $row): ?>
 
-  <!-- /.card-header -->
+    <div class="row">
+  <!-- Login Time Box -->
+  <div class="col-lg-4 col-md-6 col-12">
+    <div class="small-box bg-gradient-danger shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">🕒 Login</h4>
+        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
+        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logintime']); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sign-in-alt"></i>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Logout Time Box -->
+  <div class="col-lg-4 col-md-6 col-12">
+    <div class="small-box bg-gradient-warning shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">🚪 Logout</h4>
+        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
+        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logouttime']); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Notes Box -->
+  <div class="col-lg-4 col-md-12 col-12">
+    <div class="small-box bg-gradient-info shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">📝 Notes</h4>
+        <p><?php echo nl2br(htmlspecialchars($row['notes'])); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sticky-note"></i>
+      </div>
+      
+    </div>
+  </div>
+</div><?php endforeach; ?>
+<!-- /.card-header -->
   <div class="card-body table-responsive">
   <table id="example1" class="table table-bordered table-striped">
       <thead>
