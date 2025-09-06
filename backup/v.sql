@@ -99,3 +99,11 @@ ADD COLUMN program_id INT;
 
 ALTER TABLE paymentverification 
 ADD COLUMN program_id INT;
+
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

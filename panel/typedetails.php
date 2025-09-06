@@ -265,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
         <div class="col-md-4">
           <div class="info-box bg-gradient-success">
             <div class="info-box-content text-center">
-              <span class="info-box-text">Status</span>
+              <span class="info-box-text">Payment Status</span>
               <span class="info-box-number"><?php echo htmlspecialchars($app['Status']); ?></span>
             </div>
           </div>
