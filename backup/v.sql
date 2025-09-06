@@ -94,3 +94,8 @@ CREATE TABLE userdaytracker (
     createdat TIMESTAMP,
     FOREIGN KEY (userid) REFERENCES users(id) -- Assuming there is a 'users' table with 'userid' as its PK
 );
+ALTER TABLE application
+ADD COLUMN program_id INT;
+
+ALTER TABLE paymentverification 
+ADD COLUMN program_id INT;
