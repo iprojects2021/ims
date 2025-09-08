@@ -377,7 +377,7 @@ if (isset($_GET['id'])) {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title"><?php foreach ($applicationdata as $applications): ?><?php endforeach; ?></h3>
+          <h3 class="card-title"><?php foreach ($applicationdata as $applications): ?></h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -395,28 +395,40 @@ if (isset($_GET['id'])) {
                 <div class="col-12 col-sm-4">
                   <div class="info-box bg-light">
                     <div class="info-box-content">
-                      <span class="info-box-text text-center text-muted">Estimated budget</span>
-                      <span class="info-box-number text-center text-muted mb-0">2300</span>
+                      <span class="info-box-text text-center text-muted">Status</span>
+                      <span class="info-box-number text-center text-muted mb-0"><?php echo htmlspecialchars($applications['status']); ?></span>
                     </div>
                   </div>
                 </div>
                 <div class="col-12 col-sm-4">
+  <div class="info-box bg-light">
+    <div class="info-box-content">
+      <span class="info-box-text text-center text-muted">Assigned TO</span>
+      <?php if (empty($applications['assignedto'])): ?>
+        <div class="text-center">
+          <form method="post" action="assign.php">
+            <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applications['id']); ?>">
+            <button type="submit" class="btn btn-primary btn-sm">Assign to Me</button>
+          </form>
+        </div>
+      <?php else: ?>
+        <span class="info-box-number text-center text-muted mb-0">
+          <?php echo htmlspecialchars($applications['assignedto']); ?>
+        </span>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<div class="col-12 col-sm-4">
                   <div class="info-box bg-light">
                     <div class="info-box-content">
-                      <span class="info-box-text text-center text-muted">Total amount spent</span>
-                      <span class="info-box-number text-center text-muted mb-0">2000</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-sm-4">
-                  <div class="info-box bg-light">
-                    <div class="info-box-content">
-                      <span class="info-box-text text-center text-muted">Estimated project duration</span>
-                      <span class="info-box-number text-center text-muted mb-0">20</span>
+                      <span class="info-box-text text-center text-muted">Estimated Ticket duration</span>
+                      <span class="info-box-number text-center text-muted mb-0">2 days</span>
                     </div>
                   </div>
                 </div>
               </div>
+              <?php endforeach; ?>
               <div class="row">
                 <div class="col-12">
                   <h4>Recent Activity</h4>

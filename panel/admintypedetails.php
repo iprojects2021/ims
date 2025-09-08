@@ -144,6 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             <li class="list-group-item">Email: <b><?php echo htmlspecialchars($app['Email']); ?></b></li>
             <li class="list-group-item">Phone: <b><?php echo htmlspecialchars($app['Phone']); ?></b></li>
             <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate']); ?></b></li>
+            <button type="button" class="btn btn-sm btn-primary" onclick="redirectToForm('<?php echo $app['PaymentVerificationID']; ?>')">Edit</button>
           </ul>
         </div>
       </div>
@@ -162,6 +163,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     color: #fff;
 }
 </style>
+
+<form id="postRedirectForm" method="POST" action="paymentverificationform.php" style="display:none;">
+    <input type="hidden" name="PaymentVerificationID" id="postPaymentVerificationID">
+</form>
+
+
+<script>
+function redirectToForm(id) {
+    document.getElementById('postPaymentVerificationID').value = id;
+    document.getElementById('postRedirectForm').submit();
+}
+</script>
+
 <!-- Scripts -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
