@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- FontAwesome (for alert icon) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | INDSAC Softech</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
   <style>
     body {
       margin: 0;
@@ -168,10 +177,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         exit;
     } else {
-        // Login failed
-        $_SESSION["error"] = "Invalid email or password!";
-        header("Location: login.php");
-        exit;
+      echo '
+    <div id="statusContainer" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                z-index: 1050; width: 400px; max-width: 90%;">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert" style="box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h5><i class="icon fas fa-exclamation-triangle"></i> Error!</h5>
+            Invalid email or password!
+        </div>
+    </div>
+    <script type="text/javascript">
+        setTimeout(function() {
+            var alert = document.getElementById("statusAlert");
+            if (alert) {
+                $(alert).alert("close");
+            }
+        }, 2500);
+    </script>';
+
+        //  Login failed
+        // $_SESSION["error"] = "Invalid email or password!";
+        // header("Location: login.php");
+        // exit;
     }
 }
 ?>

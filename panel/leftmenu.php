@@ -184,15 +184,39 @@ $role = $_SESSION['user']['role'] ?? null;
   <?php if ($role === 'admin'): ?>
     <!-- Show ONLY for Admin -->
     <li class="nav-item">
-      <a href="admin_addprogrms.php" class="nav-link">
+      <a href="admin_dashboard.php" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
-          Add Programs
+          Dashboard
          <!-- <span class="right badge badge-danger">New</span>-->
         </p>
       </a>
     </li>
+
+    <li class="nav-item has-treeview">
+  <a href="#" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Programs
+      <i class="right fas fa-angle-left"></i> <!-- Dropdown arrow -->
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
     <li class="nav-item">
+      <a href="admin_addprogrms.php" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Add Program</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="viewprograms.php" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>View Programs</p>
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="nav-item">
       <a href="admintickets.php" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
@@ -264,15 +288,9 @@ $role = $_SESSION['user']['role'] ?? null;
       </a>
     </li>
 
+    
     <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-chart-pie"></i>
-        <p>Current Internship</p>
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="tasks.php" class="nav-link">
         <i class="nav-icon fas fa-tasks"></i>
         <p>Tasks / Worklogs</p>
       </a>
@@ -286,21 +304,21 @@ $role = $_SESSION['user']['role'] ?? null;
     </li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="evaluations.php" class="nav-link">
         <i class="nav-icon fas fa-clipboard-check"></i>
         <p>Evaluations</p>
       </a>
     </li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="notifications.php" class="nav-link">
         <i class="nav-icon fas fa-bell"></i>
         <p>Notifications</p>
       </a>
     </li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="learningresource.php" class="nav-link">
         <i class="nav-icon fas fa-book"></i>
         <p>Learning Resources</p>
       </a>
@@ -320,12 +338,6 @@ $role = $_SESSION['user']['role'] ?? null;
       </a>
     </li>
 
-    <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-cog"></i>
-        <p>Setting</p>
-      </a>
-    </li>
      <li class="nav-item">
       <a href="student-referral-dashboard.php" class="nav-link">
         <i class="nav-icon fas fa-gift"></i>

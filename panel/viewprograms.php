@@ -2,24 +2,17 @@
 include("../includes/db.php");
 include("../panel/util/statuscolour.php");
 include("../panel/util/session.php");
-$studentName = htmlspecialchars($_SESSION["user"]["name"]);
-$email = $_SESSION['user']['email'];
-$userId = $_SESSION['user']['id'];
+try {
+    $sql = "SELECT * FROM programs";
 
-try
-{
-$stmt = $db->prepare("SELECT COUNT(*) AS pending_count FROM paymentverification WHERE VerificationStatus = 'Pending'");
-$stmt->execute();
-$pendingcount = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$sql="SELECT * FROM paymentverification";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+//  print_r($applicationData);die;
+
+    
+} catch (Exception $e) {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
 }
 
 ?>
@@ -84,7 +77,7 @@ catch(Exception $e)
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Payment Verfication</li>
+              <li class="breadcrumb-item active">View Programs</li>
             </ol>
           </div>
         </div>
@@ -97,130 +90,85 @@ catch(Exception $e)
         
         
         <!-- Stat boxes -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3><?php echo $pendingcount['pending_count'];?></h3>
-                <p>Pending</p>
-              </div>
-              <div class="icon"><i class="ion ion-bag"></i></div>
-              <p class="small-box-footer">Application Status</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>Resume</h3>
-                <p>--</p>
-              </div>
-              <div class="icon"><i class="ion ion-stats-bars"></i></div>
-              <a href="resume_upload.php" class="small-box-footer">Upload Resume <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-              <div class="inner">
-                  <h3>--</h3>
-                  <p>test</p>
-                
-              </div>
-              <div class="icon"><i class="ion ion-person-add"></i></div>
-              <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon"><i class="ion ion-pie-graph"></i></div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        </div>
-
+        
         <!-- Applications table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Applications</h3>
+            <h3 class="card-title">All Programs</h3>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Payment Verification ID</th>
-                  <th>User ID</th>
-                  <th>Payment ID</th>
-                  <th>Bank RRN</th>
-                  <th>Order ID</th>
-                  <th>Invoice ID</th>
-                  <th>Payment Method</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Amount Paid</th>
-                  <th>Status</th>
-                  <th>Notes</th>
-                  <th>Refund</th>
-                  <th>Verified By</th>
-                  <th>Verfication Status</th>
-                  <th>Created Date</th>
-                  <th>Verification Date</th>
-                  <th>Verify Notes</th>
-                </tr>
+                  <th>program_id</th>
+                  <th>title	</th>
+                  <th>slug</th>
+                  <th>short_description</th>
+                  <th>detailed_description</th>
+                  <th>duration</th>
+                  <th>start_date</th>
+                  <th>end_date	</th>
+                  <th>is_remote		</th>
+                  <th>location		</th>
+                  <th>timezone		</th>
+                  <th>stipend_amount		</th>
+                  <th>stipend_currency		</th>
+                  <th>is_paid		</th>
+                  <th>application_deadline	</th>
+                  <th>max_applicants</th>
+                  <th>is_active	</th>
+                  <th>created_at	</th>
+                  <th>updated_at	</th>
+                  </tr>
               </thead>
               <tbody>
-              <?php foreach ($applicationData as $row): ?>
-        
-         <tr class="clickable-row" data-id="<?= $row['PaymentVerificationID'] ?>">
-        <td><?= htmlspecialchars($row['PaymentVerificationID']) ?></td>
-        <td><?= htmlspecialchars($row['UserID']) ?></td>
-        <td><?= htmlspecialchars($row['PaymentID']) ?></td>
-        <td><?= htmlspecialchars($row['BankRRN']) ?></td>
-        <td><?= htmlspecialchars($row['OrderID']) ?></td>
-        <td><?= htmlspecialchars($row['InvoiceID']) ?></td>
-        <td><?= htmlspecialchars($row['PaymentMethod']) ?></td>
-        <td><?= htmlspecialchars($row['Email']) ?></td>
-        <td><?= htmlspecialchars($row['Phone']) ?></td>
-        <td><?= htmlspecialchars($row['AmountPaid']) ?></td>
-        <td><?= getStatusBadge($row['Status']) ?></td>
-        <td><?= htmlspecialchars($row['Notes']) ?></td>
-        <td><?= htmlspecialchars($row['Refund']) ?></td>
-        <td><?= htmlspecialchars($row['VerifiedBy']) ?></td>
-        <td><?= htmlspecialchars($row['VerificationStatus']) ?></td>
-        <td><?= htmlspecialchars($row['CreateDate']) ?></td>
-        <td><?= htmlspecialchars($row['VerificationDate']) ?></td>
-            <td><?= htmlspecialchars($row['VerifyNotes']) ?></td>
-        
-      </tr>
-    <?php endforeach; ?>
-
-              </tbody>
-              <tfoot>
+<?php foreach ($applicationData as $row): ?>
+  <tr class="clickable-row" data-id="<?= $row['program_id'] ?>">
+    <td><?= htmlspecialchars($row['program_id']) ?></td>
+    <td><?= htmlspecialchars($row['title']) ?></td>
+    <td><?= htmlspecialchars($row['slug']) ?></td>
+    <td><?= htmlspecialchars($row['short_description']) ?></td>
+    <td><?= htmlspecialchars($row['detailed_description']) ?></td>
+    <td><?= htmlspecialchars($row['duration']) ?></td>
+    <td><?= htmlspecialchars($row['start_date']) ?></td>
+    <td><?= htmlspecialchars($row['end_date']) ?></td>
+    <td><?= htmlspecialchars($row['is_remote']) ?></td>
+    <td><?= htmlspecialchars($row['location']) ?></td>
+    <td><?= htmlspecialchars($row['timezone']) ?></td>
+    <td><?= htmlspecialchars($row['stipend_amount']) ?></td>
+    <td><?= htmlspecialchars($row['stipend_currency']) ?></td>
+    <td><?= htmlspecialchars($row['is_paid']) ?></td>
+    <td><?= htmlspecialchars($row['application_deadline']) ?></td>
+    <td><?= htmlspecialchars($row['max_applicants']) ?></td>
+    <td><?= htmlspecialchars($row['is_active']) ?></td>
+    <td><?= htmlspecialchars($row['created_at']) ?></td>
+    <td><?= htmlspecialchars($row['updated_at']) ?></td>
+  </tr>
+<?php endforeach; ?>
+</tbody>
+<tfoot>
                 <tr>
-                <th>Payment Verification ID</th>
-                  <th>User ID</th>
-                  <th>Payment ID</th>
-                  <th>Bank RRN</th>
-                  <th>Order ID</th>
-                  <th>Invoice ID</th>
-                  <th>Payment Method</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Amount Paid</th>
-                  <th>Status</th>
-                  <th>Notes</th>
-                  <th>Refund</th>
-                  <th>Verified By</th>
-                  <th>Verfication Status</th>
-                  <th>Created Date</th>
-                  <th>Verification Date</th>
-                  <th>Verify Notes</th>
-                  </tr>
+                <th>program_id</th>
+                  <th>title	</th>
+                  <th>slug</th>
+                  <th>short_description</th>
+                  <th>detailed_description</th>
+                  <th>duration</th>
+                  <th>start_date</th>
+                  <th>end_date	</th>
+                  <th>is_remote		</th>
+                  <th>location		</th>
+                  <th>timezone		</th>
+                  <th>stipend_amount		</th>
+                  <th>stipend_currency		</th>
+                  <th>is_paid		</th>
+                  <th>application_deadline	</th>
+                  <th>max_applicants</th>
+                  <th>is_active	</th>
+                  <th>created_at	</th>
+                  <th>updated_at	</th>
+                  
+                   </tr>
               </tfoot>
             </table>
           </div>
@@ -256,18 +204,19 @@ catch(Exception $e)
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="dist/js/adminlte.min.js"></script>
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="paymentverificationform.php" style="display:none;">
-    <input type="hidden" name="PaymentVerificationID" id="hiddenId">
+<!-- Hidden Form for Submitting Program ID -->
+<form id="postForm" method="POST" action="editprograms.php" style="display:none;">
+    <input type="hidden" name="program_id" id="hiddenId">
 </form>
+
 <script>
-  
-    document.querySelectorAll('.clickable-row').forEach(row => {
-        row.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            document.getElementById('hiddenId').value = id;
-            document.getElementById('postForm').submit();
-        });
+  document.querySelectorAll('.clickable-row').forEach(row => {
+    row.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      document.getElementById('hiddenId').value = id;
+      document.getElementById('postForm').submit();
     });
+  });
 </script>
 <script>
   $(function () {
