@@ -6,42 +6,10 @@ $studentId = $_SESSION["user"]["id"] ?? null;
 if (!$studentId) {
     die("Unauthorized access.");
 }
-
-// Handle Task Submission
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['task_submit'])) {
-    $title = trim($_POST["title"]);
-    $description = trim($_POST["description"]);
-    $due_date = $_POST["due_date"];
-    $status = "New";
-    $mentor_feedback = null;
-
-    try {
-        $sql = "INSERT INTO task 
-                (studentid, title, description, due_date, status, mentor_feedback, created_at, updated_at)
-                VALUES 
-                (:studentid, :title, :description, :due_date, :status, :mentor_feedback, NOW(), NOW())";
-
-        $stmt = $db->prepare($sql);
-        $stmt->execute([
-            ':studentid' => $studentId,
-            ':title' => $title,
-            ':description' => $description,
-            ':due_date' => $due_date,
-            ':status' => $status,
-            ':mentor_feedback' => $mentor_feedback
-        ]);
-
-        $showAlert = 'success';
-    } catch (Exception $e) {
-      $showAlert = 'error';
-        $error = "Error adding task: " . $e->getMessage();
-    }
-}
-
 // Fetch Tasks
 try {
-    $stmt = $db->prepare("SELECT * FROM task WHERE studentid = :studentid ORDER BY due_date ASC");
-    $stmt->execute([':studentid' => $studentId]);
+    $stmt = $db->prepare("SELECT * FROM task");
+    $stmt->execute();
     $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     $error = "Error fetching tasks: " . $e->getMessage();
@@ -88,10 +56,11 @@ try {
     <div class="content-header">
       <div class="container-fluid"><ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Tasks </li>
+              <li class="breadcrumb-item active">Tasks</li>
             </ol>
         
-        <h1 class="m-0">Student Tasks</h1>
+        <h1 class="m-0"> Tasks List</h1>
+        
       </div>
     </div>
 
@@ -99,36 +68,12 @@ try {
       <div class="container-fluid">
 
       
-        <!-- Task Form -->
-        <div class="card card-primary">
-          <div class="card-header">
-            <h3 class="card-title">Add New Task</h3>
-          </div>
-          <form method="POST">
-            <div class="card-body">
-              <div class="form-group">
-                <label for="title">Task Title</label>
-                <input type="text" name="title" id="title" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="description">Task Description</label>
-                <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
-              </div>
-              <div class="form-group">
-                <label for="due_date">Due Date</label>
-                <input type="date" name="due_date" id="due_date" class="form-control" required>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button type="submit" name="task_submit" class="btn btn-primary">Submit Task</button>
-            </div>
-          </form>
         </div>
 
         <!-- Task Table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Your Tasks</h3>
+            <h3 class="card-title">Tasks List</h3>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
@@ -142,6 +87,7 @@ try {
                   <th>Feedback</th>
                   <th>Created</th>
                   <th>Updated</th>
+            
                 </tr>
               </thead>
               <tbody>
@@ -227,7 +173,7 @@ try {
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="studenttaskdetails.php" style="display:none;">
+<form id="postForm" method="POST" action="admintaskdetails.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>
