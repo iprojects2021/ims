@@ -128,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             <li class="list-group-item">Remote: <b><?php echo htmlspecialchars($app['is_remote']); ?></b></li>
             <li class="list-group-item">Stipend: <b><?php echo getStatusBadge($app['stipend_amount']); ?></b></li>
             <li class="list-group-item">Created At: <b><?php echo htmlspecialchars($app['created_at']); ?></b></li>
+            <button type="button" class="btn btn-sm btn-primary" onclick="redirectToFormeditprograms('<?php echo $app['program_id']; ?>')">Edit</button>
           </ul>
         </div>
 
@@ -163,7 +164,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     color: #fff;
 }
 </style>
+<form id="postRedirectFormedit" method="POST" action="editprograms.php" style="display:none;">
+    <input type="hidden" name="program_id" id="posteditprogramid">
+</form>
 
+
+<script>
+function redirectToFormeditprograms(id) {
+    document.getElementById('posteditprogramid').value = id;
+    document.getElementById('postRedirectFormedit').submit();
+}
+</script>
 <form id="postRedirectForm" method="POST" action="paymentverificationform.php" style="display:none;">
     <input type="hidden" name="PaymentVerificationID" id="postPaymentVerificationID">
 </form>

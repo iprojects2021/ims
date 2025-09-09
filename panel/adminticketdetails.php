@@ -157,6 +157,31 @@ if (isset($_GET['id'])) {
 }
 
 ?>
+<?php
+$userId = $_SESSION['user']['id'] ?? null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
+    $ticketId = (int) $_POST['id'];
+
+    try {
+
+        // Prepare and execute the update query
+        $stmt = $db->prepare("UPDATE ticket SET assignedto = :assignedto WHERE id = :id");
+        $stmt->bindParam(':assignedto', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $ticketId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+          //  echo "Ticket assigned to you successfully.";
+        } else {
+            echo "Failed to assign ticket.";
+        }
+
+    } catch (PDOException $e) {
+        echo "Database error: " . htmlspecialchars($e->getMessage());
+    }
+} else {
+    echo "Invalid request or user not logged in.";
+}
+?>
 
 
 <!DOCTYPE html>
@@ -164,7 +189,9 @@ if (isset($_GET['id'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 |Ticket</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -364,7 +391,7 @@ if (isset($_GET['id'])) {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Application Type</li>
+              <li class="breadcrumb-item active">Ticket Details</li>
             </ol>
           </div>
         </div>
@@ -406,11 +433,11 @@ if (isset($_GET['id'])) {
       <span class="info-box-text text-center text-muted">Assigned TO</span>
       <?php if (empty($applications['assignedto'])): ?>
         <div class="text-center">
-          <form method="post" action="assign.php">
-            <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applications['id']); ?>">
-            <button type="submit" class="btn btn-primary btn-sm">Assign to Me</button>
-          </form>
-        </div>
+        <form method="post">
+  <input type="hidden" name="id" value="<?php echo htmlspecialchars($applications['id']); ?>"> 
+  <button type="submit" class="btn btn-primary btn-sm">Assign to Me</button>
+</form>
+   </div>
       <?php else: ?>
         <span class="info-box-number text-center text-muted mb-0">
           <?php echo htmlspecialchars($applications['assignedto']); ?>

@@ -113,19 +113,21 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-sm-4 mb-3">
                   <div class="info-box bg-light border border-primary shadow-sm">
                     <div class="info-box-content text-center">
-                      <span class="info-box-text text-primary font-weight-bold">Estimated Budget</span>
-                      <span class="info-box-number text-dark display-6">₹2300</span>
+                      <span class="info-box-text text-primary font-weight-bold">Referral Status</span>
+                      <span class="info-box-number text-dark display-6"><?= htmlspecialchars($applicationData['status']) ?></span>
                     </div>
                   </div>
                 </div>
+                <?php foreach ($paymentandenrollmentdata as $row): ?>
                 <div class="col-sm-4 mb-3">
                   <div class="info-box bg-light border border-success shadow-sm">
                     <div class="info-box-content text-center">
-                      <span class="info-box-text text-success font-weight-bold">Amount Spent</span>
-                      <span class="info-box-number text-dark display-6">₹2000</span>
+                      <span class="info-box-text text-success font-weight-bold">Payment Status</span>
+                      <span class="info-box-number text-dark display-6"><?= htmlspecialchars($row['status']) ?></span>
                     </div>
                   </div>
                 </div>
+                <?php endforeach; ?>
                 <div class="col-sm-4 mb-3">
                   <div class="info-box bg-light border border-info shadow-sm">
                     <div class="info-box-content text-center">

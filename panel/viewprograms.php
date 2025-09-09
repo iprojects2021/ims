@@ -22,7 +22,8 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>INDSAC SOFTECH | Admin Dashboard</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
@@ -76,7 +77,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">View Programs</li>
             </ol>
           </div>
         </div>
@@ -203,18 +204,19 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="dist/js/adminlte.min.js"></script>
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="paymentverificationform.php" style="display:none;">
-    <input type="hidden" name="PaymentVerificationID" id="hiddenId">
+<!-- Hidden Form for Submitting Program ID -->
+<form id="postForm" method="POST" action="editprograms.php" style="display:none;">
+    <input type="hidden" name="program_id" id="hiddenId">
 </form>
+
 <script>
-  
-    document.querySelectorAll('.clickable-row').forEach(row => {
-        row.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            document.getElementById('hiddenId').value = id;
-            document.getElementById('postForm').submit();
-        });
+  document.querySelectorAll('.clickable-row').forEach(row => {
+    row.addEventListener('click', function () {
+      const id = this.getAttribute('data-id');
+      document.getElementById('hiddenId').value = id;
+      document.getElementById('postForm').submit();
     });
+  });
 </script>
 <script>
   $(function () {

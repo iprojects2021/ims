@@ -109,7 +109,9 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  |Admin Dashboard</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -149,7 +151,7 @@ try {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Referral Dashboard</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -189,8 +191,8 @@ catch(Exception $e)
           <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>Total Referrals</h3>
-                <p><?php echo $count ?></p>
+                <h3><?php echo $count ?></h3>
+                <p>Total Referrals</p>
               </div>
               <div class="icon"><i class="ion ion-bag"></i></div>
               <p class="small-box-footer">Total Referrals</p>
@@ -200,8 +202,8 @@ catch(Exception $e)
           <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>Conversion Rate</h3>
-                <p><?php echo $enrollmentcount?></p>
+                <h3><?php echo $enrollmentcount?></h3>
+                <p>Conversion Rate</p>
               </div>
               <div class="icon"><i class="ion ion-stats-bars"></i></div>
               <p class="small-box-footer">Conversion Rate</p>
@@ -212,8 +214,8 @@ catch(Exception $e)
           <div class="col-lg-3 col-6">
             <div class="small-box bg-warning">
               <div class="inner">
-              <h3>Pending Approvals</h3>
-                <p>123</p>
+              <h3>123</h3>
+                <p>Pending Approvals</p>
              
                 </div>
               <div class="icon"><i class="ion ion-person-add"></i></div>
@@ -224,8 +226,8 @@ catch(Exception $e)
           <div class="col-lg-3 col-6">
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>Total Revenue</h3>
-                <p>123</p>
+                <h3>123</h3>
+                <p>Total Revenue</p>
               </div>
               <div class="icon"><i class="ion ion-pie-graph"></i></div>
               <p class="small-box-footer">Total Revenue</p>
