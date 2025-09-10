@@ -91,7 +91,7 @@ try {
               <li class="breadcrumb-item active">Tasks </li>
             </ol>
         
-        <h1 class="m-0">Student Tasks</h1>
+        <h1 class="m-0"> Task</h1>
       </div>
     </div>
 
@@ -139,7 +139,6 @@ try {
                   <th>Description</th>
                   <th>Due Date</th>
                   <th>Status</th>
-                  <th>Feedback</th>
                   <th>Created</th>
                   <th>Updated</th>
                 </tr>
@@ -160,8 +159,7 @@ try {
                       <span class="badge badge-secondary"><?= htmlspecialchars($task['status']) ?></span>
                     <?php endif; ?>
                   </td>
-                  <td><?= $task['mentor_feedback'] ? htmlspecialchars($task['mentor_feedback']) : '<em>N/A</em>' ?></td>
-                  <td><?= date("Y-m-d H:i", strtotime($task['created_at'])) ?></td>
+                     <td><?= date("Y-m-d H:i", strtotime($task['created_at'])) ?></td>
                   <td><?= date("Y-m-d H:i", strtotime($task['updated_at'])) ?></td>
                 </tr>
               <?php endforeach; ?>

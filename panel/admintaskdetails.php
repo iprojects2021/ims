@@ -2,6 +2,14 @@
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
+$application = null;
+$applicationdata[] = null;
+$ticketdata[]=null;
+$comments = [];
+$taskid = $_GET['id'] ?? $_POST['id'] ?? null;
+$id = $_GET['id'] ?? $_POST['id'] ?? null;
+$createdBy = $_SESSION["user"]["id"] ?? null;
+
 //fetch admin task details
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
 {
@@ -19,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
   //echo "<pre>";print_r($applicationdata);die;
     // Fetch ticket comments for this ticket
     try{
-    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
+    $sql="SELECT * FROM taskcommit WHERE taskid = ? ORDER BY createdate ASC";
     $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $ticketdata = $stmt->fetchAll();
@@ -34,14 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
-    $ticketid = $_POST['ticketid'];
+    $taskid = $_POST['taskid'];
     $new_status = $_POST['new_status'];
     $comment = $_POST['comment'];
     $changed_by=$_SESSION['user']['id'];
     try{
-    $sql="INSERT INTO ticketstatushistory (ticketid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)";   
+    $sql="INSERT INTO taskstatushistory (taskid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)";   
     $stmt = $db->prepare($sql);
-    $stmt->execute([$ticketid, $new_status, $comment,$changed_by]);
+    $stmt->execute([$taskid, $new_status, $comment,$changed_by]);
     }
     catch(Exception $e)
     {
@@ -60,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     </div>
     <script type="text/javascript">
         setTimeout(function() {
-            window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
+            window.location.href = "admintaskdetails.php?id=' . $taskid . '";
         }, 2000);
     </script>';
   } else {
@@ -92,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 }
 // Fetch ticket comments
 try{
-$sql="SELECT * FROM ticketstatushistory";  
+$sql="SELECT * FROM taskstatushistory";  
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $statushistorydata = $stmt->fetchAll();
@@ -102,13 +110,13 @@ catch(Exception $e)
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
 if (isset($_GET['id'])) {
-  $ticketid = $_GET['id'];
+  $taskid = $_GET['id'];
    try
    {
   // Fetch ticket details
-  $sql="SELECT * FROM ticket WHERE id = ?";
+  $sql="SELECT * FROM task WHERE id = ?";
   $stmt = $db->prepare($sql);
-  $stmt->execute([$ticketid]);
+  $stmt->execute([$taskid]);
   $applicationdata = $stmt->fetchAll();
    }
    catch(Exception $e)
@@ -116,16 +124,22 @@ if (isset($_GET['id'])) {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
    }
   // Fetch ticket comments
-  try{
-  $sql="SELECT * FROM ticketstatushistory WHERE ticketid = ?";  
-  $stmt = $db->prepare($sql);
-  $stmt->execute([$ticketid]);
-  $statushistorydata = $stmt->fetchAll();
-  }
-  catch(Exception $e)
-  {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-  }
+  try {
+    // Get the ID from GET or POST
+    
+
+    if ($taskid === null) {
+        throw new Exception("No task ID provided.");
+    }
+
+    // Prepare and execute the SQL query
+    $sql = "SELECT * FROM taskstatushistory WHERE taskid = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$taskid]);
+    $statushistorydata = $stmt->fetchAll();
+} catch (Exception $e) {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . ($sql ?? 'N/A') . ' , Exception Error = ' . $e->getMessage());
+}
 } 
 ?>
 
@@ -135,7 +149,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
  // Fetch ticket details
  try{
- $sql="SELECT * FROM ticket WHERE id = ?";  
+ $sql="SELECT * FROM task WHERE id = ?";  
  $stmt = $db->prepare($sql);
  $stmt->execute([$id]);
  $applicationdata = $stmt->fetchAll();
@@ -146,7 +160,7 @@ if (isset($_GET['id'])) {
  }
     try{
     // Fetch ticket comments for this ticket
-    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
+    $sql="SELECT * FROM taskcommit WHERE taskid = ? ORDER BY createdate ASC";
     $stmt = $db->prepare($sql);
     $stmt->execute([$id]);
     $ticketdata = $stmt->fetchAll();
@@ -161,14 +175,14 @@ if (isset($_GET['id'])) {
 <?php
 $userId = $_SESSION['user']['id'] ?? null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
-    $ticketId = (int) $_POST['id'];
+    $taskid = (int) $_POST['id'];
 
     try {
 
         // Prepare and execute the update query
-        $stmt = $db->prepare("UPDATE ticket SET assignedto = :assignedto WHERE id = :id");
+        $stmt = $db->prepare("UPDATE task SET assignedto = :assignedto WHERE id = :id");
         $stmt->bindParam(':assignedto', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':id', $ticketId, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $taskid, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
           //  echo "Ticket assigned to you successfully.";
@@ -180,10 +194,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
         echo "Database error: " . htmlspecialchars($e->getMessage());
     }
 } else {
-    echo "Invalid request or user not logged in.";
+   // echo "Invalid request or user not logged in.";
 }
 ?>
+<?php
+// Handle new comment submission
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
+    $taskid = trim($_POST["taskid"]);
+    $message = trim($_POST["message"]);
 
+    if ($taskid && $message && $createdBy) {
+        try {
+            $stmt = $db->prepare("INSERT INTO taskcommit (taskid, message, createdate, createdby) VALUES (?, ?, NOW(), ?)");
+            $stmt->execute([$taskid, $message, $createdBy]);
+            echo '<div class="alert alert-success">Comment added successfully.</div>';
+            echo '<script>setTimeout(() => { window.location.href = "admintaskdetails.php?id=' . htmlspecialchars($taskid) . '"; }, 1500);</script>';
+        } catch (Exception $e) {
+            echo '<div class="alert alert-danger">Failed to add comment.</div>';
+        }
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -494,11 +525,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
 </p>
 
 <p>
-<?php if (!empty($ticket['filename'])): ?>
-<a href="../uploads/tickets/<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
-<?php else: ?>
-<em>No file</em>
-<?php endif; ?>
 <?php endforeach; ?> </p>
 
 
@@ -506,17 +532,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
 
                     </div>
                     
-                    <form method="post" action="ticketcommet.php">
-  <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
+                    <form method="post">
+  <input type="hidden" name="taskid" value="<?php echo htmlspecialchars($applications['id']); ?>">
   <div class="form-group">
     <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
-  <div class="form-group">
-      <label for="file">Upload File</label>
-      <input type="file" class="form-control-file" id="file" name="file">
-    </div>
-
-  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+  
+  <button type="submit" class="btn btn-primary btn-sm" name="addcommit">Submit</button>
 </form>
 <?php
 
@@ -551,9 +573,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
           <?php foreach ($statushistorydata as $statusdata): ?>
             <tr class="clickable-row" data-id="<?= $statusdata['id'] ?>">
               <td><?= htmlspecialchars($statusdata['id']) ?></td>
-              <td><?php echo htmlspecialchars($statusdata['ticketid']); ?></td>
+              <td><?php echo htmlspecialchars($statusdata['taskid']); ?></td>
               <td><?php echo htmlspecialchars($statusdata['changed_by']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['previous_status']); ?></td>
+              <td></td>
               <td><?php echo htmlspecialchars($statusdata['new_status']); ?></td>
               <td><?php echo htmlspecialchars($statusdata['comment']); ?></td>
               <td><?php echo htmlspecialchars($statusdata['changed_at']); ?></td>
@@ -626,7 +648,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
   </div>
 
   <!-- Include application ID as hidden input if needed -->
-  <input type="hidden" name="ticketid" value="<?php echo $applications['id']; ?>">
+  <input type="hidden" name="taskid" value="<?php echo $applications['id']; ?>">
 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>

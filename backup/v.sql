@@ -107,3 +107,36 @@ CREATE TABLE notifications (
     is_read TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE task (
+    id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    studentid INT(11) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date DATE,
+    status VARCHAR(50),
+    mentor_feedback TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE taskcommit (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    taskid INT(11) NOT NULL,
+    message TEXT,
+    createdate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdby VARCHAR(100),
+    PRIMARY KEY (id)
+);
+CREATE TABLE taskstatushistory (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    taskid INT(11) NOT NULL,
+    changed_by INT(11) NOT NULL,
+    previous_status VARCHAR(50) NOT NULL,
+    new_status VARCHAR(50) NOT NULL,
+    comment TEXT,
+    changed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_taskid (taskid),
+    INDEX idx_changed_by (changed_by)
+);
