@@ -86,8 +86,8 @@
         <div class="program-hero p-4 mb-4">
             <div class="row">
                 <div class="col-md-8">
-                    <h1 id="program-title">Java Development Internship</h1>
-                    <p class="lead" id="program-short-desc">3-month remote internship to build real PHP projects with mentorship</p>
+                    <h1 id="program-title">Python Backend Development Inrernship</h1>
+                    <p class="lead" id="program-short-desc">3-month remote internship to build real Python Backend projects with mentorship</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
@@ -124,23 +124,24 @@
                     <div class="col-lg-8">
                         <h3 class="mb-4">About the Program</h3>
                         <div id="program-description">
-                            <p>This intensive program provides hands-on experience with PHP, Laravel, and MySQL while working on live projects. Perfect for aspiring backend developers looking to gain real-world experience.</p>
+                            <p>Gain hands-on experience in developing and maintaining backend systems using Python, Django, and REST APIs. Work with relational databases like MySQL/PostgreSQL, implement authentication and security, and optimize application performance. Learn to debug, test, and deploy APIs, while collaborating on real-world full-stack projects.</p>
                             <p>You'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.</p>
+            
                         </div>
 
                         <h3 class="mt-5 mb-4">What You'll Do</h3>
                         <div id="responsibilities-list">
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-code me-2"></i> Develop and maintain Java-based applications.</h5>
-                                <p>Build scalable backend systems using modern Java practices.</p>
+                                <h5><i class="fas fa-code me-2"></i> Develop and maintain web applications using Python frameworks such as Django.</h5>
+                                <p>Build scalable and efficient backend systems following modern Python practices.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize existing Java applications.</h5>
-                                <p>Learn to identify performance bottlenecks and security issues.</p>
+                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize Python backend applications for better performance and reliability.</h5>
+                                <p>Gain hands-on experience in building secure, reliable, and production-ready REST APIs.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-database me-2"></i> Integrate MySQL databases with Core Java applications.</h5>
-                                <p>Design database schemas and integrate with Java using JDBC..</p>
+                                <h5><i class="fas fa-database me-2"></i>Integrate and manage MySQL/PostgreSQL databases with ORM tools.</h5>
+                                <p>Design optimized database schemas and implement CRUD operations.</p>
                             </div>
                         </div>
 
@@ -196,7 +197,7 @@
                                 <div id="eligibility-list">
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
-                                        <span>Basic Java knowledge</span>
+                                        <span>Basic Python knowledge</span>
                                     </div>
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
@@ -235,20 +236,20 @@
                         <h3 class="mb-4"><i class="fas fa-graduation-cap me-2"></i> Learning Outcomes</h3>
                         <div id="outcomes-list">
                             <div class="outcome-item mb-3">
-                                <h5>Core Java + OOP concepts</h5>
-                                <p>Master object-oriented programming in Java with modern practices</p>
+                                <h5>Python Backend Fundamentals</h5>
+                                <p>Build production-ready backend applications quickly using Django.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Core Java fundamentals</h5>
-                                <p>Build applications using MVC architecture and Core Java ecosystem.</p>
+                                <h5>REST API Development</h5>
+                                <p>Develop scalable and reliable RESTful APIs with Django REST Framework or FastAPI.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>REST API development using Core Java</h5>
-                                <p>Create secure APIs with authentication and documentation</p>
+                                <h5>Database Integration with ORM</h5>
+                                <p>Design and manage databases and implement CRUD operations using Django ORM.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Implement Multithreading in Java</h5>
-                                <p>Create and manage multiple threads to execute tasks concurrently.</p>
+                                <h5>Security & Authentication</h5>
+                                <p>Implement secure authentication and authorization in backend applications using JWT.</p>
                             </div>
                         </div>
                     </div>
@@ -292,13 +293,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=Hotel+Booking+System" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title"> Voice-Controlled Desktop Assistant </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Java Speech API, JDBC, MySQL</h6>
-                                <p class="card-text">Build a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.</p>
+                                <h5 class="card-title"> Fraud Detection API for Transactions </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Django REST Framework, MySQL</h6>
+                                <p class="card-text">Create an API that detects fraudulent transactions in real-time using pattern analysis.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement voice recognition using Java Speech API</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate with system commands (open apps, files, browser)</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Maintain user activity logs using JDBC + MySQL</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Analyze transaction patterns to flag anomalies.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Store transaction data securely in MySQL.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Build REST endpoints for financial applications.</li>
+                                     <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement role-based access for admins and auditors.</li>
                                 </ul>
                             </div>
                         </div>
@@ -307,14 +309,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Enterprise Resource Planning (ERP) System </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Core Java, Servlets/JSP, JDBC, MySQL</h6>
-                                <p class="card-text">Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.</p>
+                                <h5 class="card-title">Online Exam & Anti-Cheating Backend </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Flask, PostgreSQL</h6>
+                                <p class="card-text">Build a backend system for managing online exams with secure verification.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Develop admin and role-based dashboards.</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate accounting features and basic payroll.</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement real-time stock management and purchase order workflows.</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Add user authentication, authorization, and audit logs for security and tracking.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>APIs for managing question banks and exam sessions.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Role-based access for students and instructors.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate face/voice verification for anti-cheating.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Auto-grade exams and provide results through APIs.</li>
                                 </ul>
                             </div>
                         </div>
@@ -371,7 +373,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Apply for <span id="modal-program-title">Java Development Internship</span></h5>
+                    <h5 class="modal-title">Apply for <span id="modal-program-title"> Python Backend Developer Internship</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -440,9 +442,9 @@
         function loadProgramData() {
             // In a real app, you would fetch this from your API
             const programData = {
-                title: "Java Development Internship",
-                shortDesc: "3-month remote internship to build real Java projects with mentorship",
-                description: "This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
+                title: "Python Backend Development Internship",
+                shortDesc: "3-month remote internship to build real Python Backend projects with mentorship",
+                description: "Gain hands-on experience in developing and maintaining backend systems using Python, Django, and REST APIs. Work with relational databases like MySQL/PostgreSQL, implement authentication and security, and optimize application performance. Learn to debug, test, and deploy APIs, while collaborating on real-world full-stack projects.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
@@ -450,9 +452,10 @@
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
-                    { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Java practices.." },
-                    { title: "Debug and optimize existing Java applications.", desc: "Learn to identify performance bottlenecks and security issues." },
-                    { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." }
+                    { title: "Develop and maintain web applications using Python frameworks such as Django.", desc: "Build scalable and efficient backend systems following modern Python practices." },
+                    { title: "Debug and optimize Python backend applications for better performance and reliability.", desc: "Gain hands-on experience in building secure, reliable, and production-ready REST APIs." },
+                    { title: "Integrate and manage MySQL/PostgreSQL databases with ORM tools.", desc: "Design optimized database schemas and implement CRUD operations." }
+                   
                 ],
                 schedule: [
                     { time: "9:30 AM", activity: "Daily standup call with team" },
@@ -460,30 +463,34 @@
                     { time: "2 PM - 3 PM", activity: "Mentor session/code review" }
                 ],
                 outcomes: [
-                    { title: "Core PHP + OOP concepts", desc: "Master object-oriented programming in PHP with modern practices" },
-                    { title: "Laravel framework fundamentals", desc: "Build applications using MVC architecture and Laravel's ecosystem" },
-                    { title: "REST API development using Core Java ", desc: "Create secure APIs with authentication and documentation" }
+                    { title: "Python Backend Fundamentals", desc: "Build production-ready backend applications quickly using Django." },
+                    { title: "REST API Development", desc: "Develop scalable and reliable RESTful APIs with Django REST Framework or FastAPI." },
+                    { title: "Database Integration with ORM ", desc: "Design and manage databases and implement CRUD operations using Django ORM." },
+                     { title: "Security & Authentication", desc: "Implement secure authentication and authorization in backend applications using JWT." }
                 ],
                 projects: [
                     { 
-                        title: "Voice-Controlled Desktop Assistant (Jarvis in Java)", 
-                        tech: "Java Speech API, JDBC, MySQL.", 
-                        desc: "TBuild a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.",
+                        title: "Fraud Detection API for Transactions", 
+                        tech: "Django REST Framework, MySQL",
+                        desc: "Create an API that detects fraudulent transactions in real-time using pattern analysis.",
                         features: [
-                            "Implement voice recognition using Java Speech API",
-                            "Integrate with system commands (open apps, files, browser)",
-                            "Integrate payment gateway"
+                            "Analyze transaction patterns to flag anomalies.",
+                            "Build REST endpoints for financial applications.",
+                            "Store transaction data securely in MySQL.",
+                            "Implement role-based access for admins and auditors."
+                            
                         ]
                     },
                     { 
-                        title: "Enterprise Resource Planning (ERP) System", 
-                        tech: "Core Java, Servlets/JSP, JDBC, MySQL", 
-                        desc: "Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.",
+                        title: "Online Exam & Anti-Cheating Backend", 
+                        tech: "Flask, PostgreSQL", 
+                        desc: "Build a backend system for managing online exams with secure verification.",
                         features: [
-                            "Develop admin and role-based dashboards",
-                            "Integrate accounting features and basic payroll.",
-                            "Implement real-time stock management and purchase order workflows. "
-                            "Add user authentication, authorization, and audit logs for security and tracking. "
+                            "APIs for managing question banks and exam sessions.",
+                            "Integrate face/voice verification for anti-cheating.",
+                            "Auto-grade exams and provide results through APIs.",
+                            "Role-based access for students and instructors."
+                            
                         ]
                     }
                 ],
