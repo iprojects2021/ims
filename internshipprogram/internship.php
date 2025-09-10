@@ -219,7 +219,7 @@ if (isset($_GET['internship'])) {
             include('SpringBootDeveloperIntern.php');
             break;
         case 'JavaFullStackDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('JavaFullStackDeveloperIntern.php');
             break;
         case 'PythonBackendDeveloperIntern':
             include('internshiptrainingprogram.php');

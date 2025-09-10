@@ -130,16 +130,16 @@
                         <h3 class="mt-5 mb-4">What You'll Do</h3>
                         <div id="responsibilities-list">
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-code me-2"></i> Develop and maintain Java-based applications.</h5>
-                                <p>Build scalable backend systems using modern Java practices.</p>
+                                <h5><i class="fas fa-code me-2"></i> Develop and maintain web applications using Spring Boot.</h5>
+                                <p>Build scalable and efficient backend systems following modern Java practices.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize existing Java applications.</h5>
-                                <p>Learn to identify performance bottlenecks and security issues.</p>
+                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize Spring Boot applications.</h5>
+                                <p>Gain hands-on experience in building secure, reliable, and production-ready APIs.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-database me-2"></i> Integrate MySQL databases with Core Java applications.</h5>
-                                <p>Design database schemas and integrate with Java using JDBC..</p>
+                                <h5><i class="fas fa-database me-2"></i> Integrate and manage MySQL databases with Hibernate and JPA.</h5>
+                                <p>Design optimized database schemas with Spring Data JPA.</p>
                             </div>
                         </div>
 
@@ -234,16 +234,20 @@
                         <h3 class="mb-4"><i class="fas fa-graduation-cap me-2"></i> Learning Outcomes</h3>
                         <div id="outcomes-list">
                             <div class="outcome-item mb-3">
-                                <h5>Core Java + OOP concepts</h5>
-                                <p>Master object-oriented programming in Java with modern practices</p>
+                                <h5>Spring Boot Fundamentals</h5>
+                                <p>Build production-ready applications quickly using Spring Boot .</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Core Java fundamentals</h5>
-                                <p>Build applications using MVC architecture and Core Java ecosystem.</p>
+                                <h5>Spring MVC & REST API Development</h5>
+                                <p>Develop RESTful APIs with Spring MVC and Spring Boot.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>REST API development using Core Java</h5>
-                                <p>Create secure APIs with authentication and documentation</p>
+                                <h5>Database Integration with JPA & Hibernate</h5>
+                                <p>Design and manage databases and implement CRUD operations using Spring Data JPA and Hibernate.</p>
+                            </div>
+                            <div class="outcome-item mb-3">
+                                <h5>Security & Authentication</h5>
+                                <p>Implement secure authentication and authorization in Spring Boot applications with Spring Security.</p>
                             </div>
                         </div>
                     </div>
@@ -287,13 +291,13 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=Hotel+Booking+System" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title"> Voice-Controlled Desktop Assistant </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Java Speech API, JDBC, MySQL</h6>
-                                <p class="card-text">Build a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.</p>
+                                <h5 class="card-title"> Smart Parking Management System </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Spring Boot, Spring Security, MySQL</h6>
+                                <p class="card-text">Build a smart parking platform where users can book parking slots in advance, track availability, and make payments.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement voice recognition using Java Speech API</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate with system commands (open apps, files, browser)</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Maintain user activity logs using JDBC + MySQL</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement slot reservation and availability tracking APIs.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Secure user login and role-based access with Spring Security.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Manage parking history and billing using MySQL.</li>
                                 </ul>
                             </div>
                         </div>
@@ -302,13 +306,13 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Smart Expense Tracker </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Java, JavaFX/Swing, JDBC, MySQL</h6>
-                                <p class="card-text">Build a desktop application to track and categorize daily expenses with reporting and visualization features.</p>
+                                <h5 class="card-title">Smart Hostel Management System </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Spring Boot, REST API, MySQL</h6>
+                                <p class="card-text">Build a system to manage hostel room allocations, complaints, and payments.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement CRUD operations for expenses</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Develop user authentication system</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Create categories for expenses</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement room allotment and availability tracking APIs.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Allow students to submit complaints and track their status.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Maintain student details and fee records in MySQL.</li>
                                 </ul>
                             </div>
                         </div>
@@ -435,7 +439,7 @@
             // In a real app, you would fetch this from your API
             const programData = {
                 title: "Spring-Boot Developer Internship",
-                shortDesc: "3-month remote internship to build real Java projects with mentorship",
+                shortDesc: "3-month remote internship to build real Spring-Boot projects with mentorship",
                 description: "Gain hands-on experience in building scalable backend applications using the Spring Boot framework. Learn to develop RESTful APIs, integrate databases, and implement authentication while working on real-world projects.",
                 duration: "1 - 6 months",
                 duration: "1 - 6 months",
@@ -444,9 +448,9 @@
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
-                    { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Java practices.." },
-                    { title: "Debug and optimize existing Java applications.", desc: "Learn to identify performance bottlenecks and security issues." },
-                    { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." }
+                    { title: " Develop and maintain web applications using Spring Boot.", desc: "Build scalable and efficient backend systems following modern Java practices." },
+                    { title: "Debug and optimize Spring Boot applications.", desc: "LGain hands-on experience in building secure, reliable, and production-ready APIs." },
+                    { title: "Integrate and manage MySQL databases with Hibernate and JPA.", desc: "Design optimized database schemas with Spring Data JPA." }
                 ],
                 schedule: [
                     { time: "9:30 AM", activity: "Daily standup call with team" },
@@ -460,23 +464,23 @@
                 ],
                 projects: [
                     { 
-                        title: "Voice-Controlled Desktop Assistant (Jarvis in Java)", 
-                        tech: "Java Speech API, JDBC, MySQL.", 
-                        desc: "TBuild a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.",
+                        title: "Spring Boot, Spring Security, MySQL", 
+                        tech: "Spring Boot, Spring Security, MySQL.", 
+                        desc: "Build a smart parking platform where users can book parking slots in advance, track availability, and make payments.",
                         features: [
-                            "Implement voice recognition using Java Speech API",
-                            "Integrate with system commands (open apps, files, browser)",
-                            "Integrate payment gateway"
+                            "Implement slot reservation and availability tracking APIs.",
+                            "Secure user login and role-based access with Spring Security.",
+                            "Manage parking history and billing using MySQL."
                         ]
                     },
                     { 
-                        title: "Smart Expense Tracker", 
-                        tech: "Java, JavaFX/Swing, JDBC, MySQL", 
-                        desc: "Build a desktop application to track and categorize daily expenses with reporting and visualization features.",
+                        title: "Smart Hostel Management System", 
+                        tech: "Spring Boot, REST API, MySQL", 
+                        desc: "Build a system to manage hostel room allocations, complaints, and payments.",
                         features: [
-                            "Implement CRUD operations for expenses",
-                            "Develop user authentication system",
-                            "Create categories for expenses "
+                            "Implement room allotment and availability tracking APIs.",
+                            "Allow students to submit complaints and track their status.",
+                            "Maintain student details, fee records, and complaint history in MySQL."
                         ]
                     }
                 ],

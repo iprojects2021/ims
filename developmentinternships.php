@@ -651,7 +651,7 @@ $role = $_SESSION['user']['role'] ?? null;
                     <div class="track-icon">
                         <i class="fas fa-microchip"></i>
                     </div>
-                    <h3 class="track-title">MachineLearningDevelopreIntern</h3>
+                    <h3 class="track-title">Machine Learning Developer Intern</h3>
                 </div>
                 <div class="tech-stack">
                     <span class="tech-pill">C</span>
