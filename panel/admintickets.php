@@ -76,6 +76,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+<?php
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid = 'admin' 
+              AND menu_item = 'tickets'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+
 
 
 <!DOCTYPE html>

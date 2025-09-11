@@ -1,4 +1,41 @@
 <?php
+
+$ticketNotifCount = 0;
+
+try {
+    // Count unread ticket notifications for admin
+    $sql = "SELECT COUNT(*) FROM notification 
+            WHERE userid = 'admin' 
+              AND menu_item = 'tickets' 
+              AND isread = 0";
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $ticketNotifCount = $stmt->fetchColumn();
+} catch (Exception $e) {
+    // Optional: Handle/log the error
+    $ticketNotifCount = 0;
+}
+?>
+<?php
+$ticketsNotifCountforsupport = 0;
+
+try {
+    $sql = "SELECT COUNT(*) FROM notification 
+            WHERE userid = :userid 
+              AND menu_item = :menu_item 
+              AND isread = 0";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([
+        ':userid' => 'admin',
+        ':menu_item' => 'help' // assuming this is how it's labeled in DB
+    ]);
+    $ticketsNotifCountforsupport= $stmt->fetchColumn();
+} catch (Exception $e) {
+    error_log("Error fetching tickets notification count: " . $e->getMessage());
+}
+?>
+
+<?php
 //session_start(); // Ensure session is started at the top of the file
 $role = $_SESSION['user']['role'] ?? null;
 ?>
@@ -217,14 +254,18 @@ $role = $_SESSION['user']['role'] ?? null;
   </ul>
 </li>
 <li class="nav-item">
-      <a href="admintickets.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Tickets
-         <!-- <span class="right badge badge-danger">New</span>-->
-        </p>
-      </a>
-    </li>
+  <a href="admintickets.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+    Tickets
+      <?php if ($ticketNotifCount > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $ticketNotifCount; ?>
+        </span>
+      <?php endif; ?>
+       </p>
+  </a>
+</li>
     <li class="nav-item">
       <a href="admintasks.php" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
@@ -335,11 +376,18 @@ $role = $_SESSION['user']['role'] ?? null;
     </li>
 
     <li class="nav-item">
-      <a href="studenthelp.php" class="nav-link">
-        <i class="nav-icon fas fa-headset"></i>
-        <p>Support / Helpdesk</p>
-      </a>
-    </li>
+  <a href="studenthelp.php" class="nav-link">
+    <i class="nav-icon fas fa-headset"></i>
+    <p>
+      Support
+      <?php if ($ticketsNotifCountforsupport > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $ticketsNotifCountforsupport; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
 
     <li class="nav-item">
       <a href="profile.php" class="nav-link">

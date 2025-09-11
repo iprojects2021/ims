@@ -100,13 +100,17 @@ ADD COLUMN program_id INT;
 ALTER TABLE paymentverification 
 ADD COLUMN program_id INT;
 
-CREATE TABLE notifications (
+CREATE TABLE notification (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    message TEXT NOT NULL,
-    is_read TINYINT(1) DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    userid VARCHAR(22) NOT NULL  ,
+    menu_item VARCHAR(255) NOT NULL,  -- e.g., 'tickets', 'reports','application','program','payment'
+    isread BOOLEAN DEFAULT FALSE,
+    message TEXT,
+    createdBy INT,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+   
 );
+
 CREATE TABLE task (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     studentid INT(11) NOT NULL,

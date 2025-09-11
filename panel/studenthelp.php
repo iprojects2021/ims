@@ -3,6 +3,7 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
+
 // Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
@@ -12,10 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $subject = trim($_POST["subject"]);
     $message = trim($_POST["message"]);
     $status = "New"; // Default status
-
     $filename = null;
 
-    // Handle file upload if a file was uploaded
+    // Handle file upload
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
         $uploadDir = "../uploads/tickets/";
         if (!is_dir($uploadDir)) {
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         $originalName = basename($_FILES["file"]["name"]);
-        $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName); // sanitize filename
+        $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName);
         $targetPath = $uploadDir . $filename;
 
         if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
@@ -31,49 +31,75 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
         }
     }
-     try{
-    // Prepare SQL statement
-    $sql="INSERT INTO ticket 
-    (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-    VALUES
-    (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
-";
-    $stmt = $db->prepare($sql);
 
-    $result = $stmt->execute([
-        ':studentid' => $studentId,
-        ':subject' => $subject,
-        ':message' => $message,
-        ':status' => $status,
-        ':assignedto' => null,       // Ticket not yet assigned
-        ':filename' => $filename,
-        ':createdby' => $createdBy
-    ]);
-  }
-  catch(Exception $e)
-  {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-  }
+    try {
+        // Insert ticket into database
+        $sql = "INSERT INTO ticket 
+                (studentid, subject, message, status, assignedto, filename, createdate, createdby)
+                VALUES 
+                (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)";
 
-    if ($result) {
-      echo '<div class="alert alert-success alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-check"></i> Alert!</h5>
-      Data saved successfully
-    </div>';
-    echo '<script type="text/javascript">
-    setTimeout(function() {
-        window.location.href = "studenthelp.php"; 
-    }, 2000); // Redirect after 2 seconds
-  </script>';
+        $stmt = $db->prepare($sql);
+        $result = $stmt->execute([
+            ':studentid' => $studentId,
+            ':subject' => $subject,
+            ':message' => $message,
+            ':status' => $status,
+            ':assignedto' => null,
+            ':filename' => $filename,
+            ':createdby' => $createdBy
+        ]);
 
-    } else {
-      echo '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-times"></i> Error!</h5>
-      There was an error updating the data.
-    </div>';
+        if ($result) {
+            // Insert notification
+            $menuItem = 'tickets';
+            $notificationMessage = "New ticket submitted by Student ID: " . $studentId;
+
+            try {
+                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                             VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+                $notifStmt = $db->prepare($notifSql);
+                $notifStmt->execute([
+                    ':menu_item' => $menuItem,
+                    ':message' => $notificationMessage,
+                    ':createdBy' => $createdBy
+                ]);
+            } catch (Exception $e) {
+                $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+            }
+
+            echo '<div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                Ticket submitted successfully.
+            </div>';
+            echo '<script type="text/javascript">
+                setTimeout(function() {
+                    window.location.href = "studenthelp.php"; 
+                }, 2000);
+            </script>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-times"></i> Error!</h5>
+                There was an error saving your ticket.
+            </div>';
+        }
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
+        echo '<div class="alert alert-danger">An unexpected error occurred.</div>';
     }
+}
+?>
+<?php
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid = 'admin' 
+              AND menu_item = 'help'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
 }
 ?>
 

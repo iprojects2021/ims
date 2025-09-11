@@ -2,6 +2,7 @@
 include("../includes/db.php");
 include("../panel/util/encryptdecrypt.php");
 include("../panel/util/session.php");
+
 // Get current student/user ID
 $iddata = $_SESSION["user"]["id"];
 $createdBy = $iddata; // Assuming student created the ticket
@@ -12,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $key = bin2hex(random_bytes(32));  // 32 bytes = 256 bits
     $encrypted_ticketid = encrypt($ticketid, $key);
     $message = trim($_POST["message"]);
-    
+
     $filename = null;
 
     // Handle file upload if a file was uploaded
@@ -32,39 +33,64 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // Prepare SQL statement
+    // Prepare SQL statement to insert ticket comment
     $stmt = $db->prepare("INSERT INTO ticketcomment 
         (ticketid, message, filename, createdate, createdby)
         VALUES
         (:ticketid, :message , :filename, NOW(), :createdby)
     ");
-      
+
     $result = $stmt->execute([
         ':ticketid' => $ticketid,
-        ':message' => $message,           
+        ':message' => $message,
         ':filename' => $filename,
         ':createdby' => $createdBy
     ]);
 
     if ($result) {
-      echo '<div class="alert alert-success alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-check"></i> Alert!</h5>
-      Data saved successfully
-    </div>';
-    echo '<script type="text/javascript">
-    setTimeout(function() {
-        window.location.href = "adminticketdetails.php?id=' . $encrypted_ticketid . '"; 
-    }, 2000); // Redirect after 2 seconds
-</script>';
+        // ✅ Notification setup
+        $menuItem = 'help';
+        $notificationMessage = "Ticket Updated By Admin";
+        $recipient = 'admin'; // You can replace this with dynamic logic to notify specific users
+        $createdBy = $changed_by;
 
+        try {
+            $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                         VALUES (:userid, :menu_item, 0, :message, :createdBy)";
+            $notifStmt = $db->prepare($notifSql);
+            $notifStmt->execute([
+                ':userid' => $recipient,
+                ':menu_item' => $menuItem,
+                ':message' => $notificationMessage,
+                ':createdBy' => $createdBy
+            ]);
+           // print_r($notifStmt);die;
+        } catch (Exception $e) {
+            $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+        }
 
+        // ✅ Success alert and redirect
+        echo '
+        <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                    z-index: 1050; width: 400px; max-width: 90%;">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                Status updated successfully.
+            </div>
+        </div>
+        <script type="text/javascript">
+            setTimeout(function() {
+                window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
+            }, 2000);
+        </script>';
     } else {
-      echo '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-times"></i> Error!</h5>
-      There was an error updating the data.
-    </div>';
+        // ❌ Failure alert
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-times"></i> Error!</h5>
+                There was an error updating the data.
+              </div>';
     }
 }
 ?>
