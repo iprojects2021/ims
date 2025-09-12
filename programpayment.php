@@ -78,7 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $duration,
             $program_id
         ]);
-
+        $id = $db->lastInsertId();
+        $_SESSION['applicationid']=$id;
+//print_r($id);die;
         // Check for referral
         $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
 

@@ -2,57 +2,53 @@
 
 include(__DIR__ . '/includes/db.php');
 session_start();
-
-
-//echo "<pre>";print_r($userid);die;
-$id = $_POST['id'] ?? null;  // Usually auto-increment, so you may skip this
-// Check if user is logged in and get user ID if available
+$program_id = $_SESSION['application_data']['program_id'];
+$applicationiddata=$_SESSION['applicationid'];
+//print_r($program_id);die;
 $userid = $_SESSION['user']['id'] ?? null;
-$transaction = $_GET['transaction']?? null;
-$parts = explode('?', $transaction);
-$queryString = $parts[1] ?? '';
-parse_str($queryString, $params);
-$payment_id = $params['payment_id'] ?? null;
-$paymentid = $payment_id;
-//print_r($paymentid);die;
+$transaction = $_GET['transaction'] ?? null;
+$amount_paid = $_GET['amount'] ?? null;
+
+$payment_id = null;
+$status = 'Failed';
+
+if ($transaction) {
+    $parts = explode('?', $transaction);
+    $status = ($parts[0] === 'success') ? 'Success' : 'Failed';
+
+    if (isset($parts[1])) {
+        parse_str($parts[1], $params);
+        $payment_id = $params['payment_id'] ?? null;
+    }
+}
+
 $email = $_POST['email'] ?? null;
 $phone = $_POST['phone'] ?? null;
-$amount_paid=$_GET['amount'];
-$amountpaid = $amount_paid;
-$transaction = $_GET['transaction'] ?? null;
-$status = null;
-if ($transaction) 
-{
-    $parts = explode('?', $transaction);
-    $status = $parts[0];
-}
-if ($status === 'success') {
-    $status ="Success";
-} else {
-    $status="Failed";
-}
-
-
-$verificationstatus = $_POST['verificationstatus'] ?? null;
 
 try {
     $sql = "INSERT INTO PaymentVerification 
-            (UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
-            VALUES (:userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
+            (program_id, applicationid, UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
+            VALUES (:program_id, :applicationid, :userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
 
     $stmt = $db->prepare($sql);
 
     $stmt->execute([
+        ':program_id' => $program_id,
+        ':applicationid' => $applicationiddata,
         ':userid' => $userid,
-        ':paymentid' => $paymentid,
+        ':paymentid' => $payment_id,
         ':email' => $email,
         ':phone' => $phone,
-        ':amountpaid' => $amountpaid,
+        ':amountpaid' => $amount_paid,
         ':status' => $status,
-        ':verificationstatus' => 'Pending',
+        ':verificationstatus' => 'Pending', // or use $_POST['verificationstatus']
     ]);
 
-//    echo "Payment verification inserted successfully.";
+    // Optional redirect or message
+    // echo "Payment verification inserted successfully.";
+    // header("Location: success_page.php");
+    // exit;
+
 } catch (PDOException $e) {
     echo "Error inserting record: " . $e->getMessage();
 }

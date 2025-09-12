@@ -555,7 +555,30 @@ $loggedcount = $stmt->fetchColumn();
                 <h2>Today's Summary</h2>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="hours-worked"><?php echo $workhour;?></div>
+                        <div class="stat-value" id="hours-worked" style="font-size: 15px;"><?php foreach ($daytrackerhistory as $row): ?><?php
+// Set the timezone
+date_default_timezone_set('Asia/Kolkata');
+
+
+// Convert logintime to DateTime object
+$login = new DateTime($row['logintime']);
+
+// Check if logouttime is available
+if (!empty($row['logouttime'])) {
+    $logout = new DateTime($row['logouttime']);
+    $interval = $login->diff($logout);
+    $workhourdata = $interval->format('%h hours %i minutes');
+    echo "$workhourdata";
+} else {
+    // Use current time if logouttime is not available
+    $currentTime = new DateTime('now');
+    $interval = $login->diff($currentTime);
+    $workhourdata = $interval->format('%h hours %i minutes');
+    echo "$workhourdata";
+}
+
+
+?><?php endforeach; ?></div>
                         <div class="stat-label">Hours Worked</div>
                     </div>
                     <div class="stat-item">
@@ -664,10 +687,31 @@ $loggedcount = $stmt->fetchColumn();
                     <td><?php echo htmlspecialchars($row['createdat']); ?></td>                               
                     <td><?php echo htmlspecialchars($row['logintime']); ?></td>
                     <td><?php echo htmlspecialchars($row['logouttime']); ?></td>
-                    <td><?php $login = new DateTime($row['logintime']);
-$logout = new DateTime($row['logouttime']);
-$interval = $login->diff($logout);
-$workhourdata = $interval->format('%h hours %i minutes')?><?php echo $workhourdata; ?></td>
+                    <td><?php
+// Set the timezone
+date_default_timezone_set('Asia/Kolkata');
+
+
+// Convert logintime to DateTime object
+$login = new DateTime($row['logintime']);
+
+// Check if logouttime is available
+if (!empty($row['logouttime'])) {
+    $logout = new DateTime($row['logouttime']);
+    $interval = $login->diff($logout);
+    $workhourdata = $interval->format('%h hours %i minutes');
+    echo "$workhourdata";
+} else {
+    // Use current time if logouttime is not available
+    $currentTime = new DateTime('now');
+    $interval = $login->diff($currentTime);
+    $workhourdata = $interval->format('%h hours %i minutes');
+    echo "$workhourdata";
+}
+
+
+?>
+</td>
                     <td><?php echo htmlspecialchars($row['notes']); ?></td>
   
                   </tr>
@@ -1205,6 +1249,33 @@ $workhourdata = $interval->format('%h hours %i minutes')?><?php echo $workhourda
         });
     });
 </script>
+
+<script>
+  const button = document.getElementById('save-activity-btn');
+
+  // Get today's date as a string (e.g., "2025-09-12")
+  const today = new Date().toISOString().split('T')[0];
+  const savedDate = localStorage.getItem('activitySavedDate');
+
+  // Disable button if already used today
+  if (savedDate === today) {
+    button.disabled = true;
+    button.textContent = "Already Saved Today";
+  }
+
+  button.addEventListener('click', function (e) {
+    const currentSavedDate = localStorage.getItem('activitySavedDate');
+
+    if (currentSavedDate === today) {
+      e.preventDefault(); // Stop form submission
+      alert("You've already saved your activity today.");
+    } else {
+      localStorage.setItem('activitySavedDate', today);
+      // Button will submit the form normally after saving the date
+    }
+  });
+</script>
+
 <?php include("../panel/util/alert.php");?>
 </body>
 </html>

@@ -10,6 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
   $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
+  // Store studentid in session
+//  $useriddata=$_SESSION['studentid'] = $applicationdata[0]['studentid'];
+  //print_r($useriddata);die;
   }
   catch(Exception $e)
   {
@@ -123,13 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
         echo "Database error: " . htmlspecialchars($e->getMessage());
     }
 } else {
-    echo "Invalid request or user not logged in.";
+   // echo "Invalid request or user not logged in.";
 }
 ?>
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $ticketid = $_POST['ticketid'];
+    $studentid = $_POST['studentid'];
     $new_status = $_POST['new_status'];
     $comment = $_POST['comment'];
     $changed_by = $_SESSION['user']['id'];
@@ -149,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
         // ✅ Notification setup
         $menuItem = 'help';
         $notificationMessage = "Ticket ID #{$ticketid} status changed to '{$new_status}' by User ID: {$changed_by}";
-        $recipient = 'admin'; // You can replace this with dynamic logic to notify specific users
+        $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
         $createdBy = $changed_by;
 
         try {
@@ -536,6 +540,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                     
                     <form method="post" action="ticketcommet.php">
   <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
+  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
   <div class="form-group">
     <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
@@ -656,6 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 
   <!-- Include application ID as hidden input if needed -->
   <input type="hidden" name="ticketid" value="<?php echo $applications['id']; ?>">
+  <input type="hidden" name="studentid" value="<?php echo $applications['studentid']; ?>">
 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>

@@ -3,92 +3,20 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-
-// Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $subject = trim($_POST["subject"]);
-    $message = trim($_POST["message"]);
-    $status = "New"; // Default status
-    $filename = null;
-
-    // Handle file upload
-    if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
-        $uploadDir = "../uploads/tickets/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $originalName = basename($_FILES["file"]["name"]);
-        $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName);
-        $targetPath = $uploadDir . $filename;
-
-        if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
-            echo "<div class='alert alert-danger'>Failed to upload file.</div>";
-            exit();
-        }
-    }
-
-    try {
-        // Insert ticket into database
-        $sql = "INSERT INTO ticket 
-                (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-                VALUES 
-                (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)";
-
-        $stmt = $db->prepare($sql);
-        $result = $stmt->execute([
-            ':studentid' => $studentId,
-            ':subject' => $subject,
-            ':message' => $message,
-            ':status' => $status,
-            ':assignedto' => null,
-            ':filename' => $filename,
-            ':createdby' => $createdBy
-        ]);
-
-        if ($result) {
-            // Insert notification
-            $menuItem = 'tickets';
-            $notificationMessage = "New ticket submitted by Student ID: " . $studentId;
-
-            try {
-                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                             VALUES ('admin', :menu_item, 0, :message, :createdBy)";
-                $notifStmt = $db->prepare($notifSql);
-                $notifStmt->execute([
-                    ':menu_item' => $menuItem,
-                    ':message' => $notificationMessage,
-                    ':createdBy' => $createdBy
-                ]);
-            } catch (Exception $e) {
-                $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
-            }
-
-            echo '<div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-check"></i> Success!</h5>
-                Ticket submitted successfully.
-            </div>';
-            echo '<script type="text/javascript">
-                setTimeout(function() {
-                    window.location.href = "studenthelp.php"; 
-                }, 2000);
-            </script>';
-        } else {
-            echo '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-times"></i> Error!</h5>
-                There was an error saving your ticket.
-            </div>';
-        }
-    } catch (Exception $e) {
-        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
-        echo '<div class="alert alert-danger">An unexpected error occurred.</div>';
-    }
+?>
+<?php
+try{
+// Fetch ticket data
+$sql="SELECT * FROM ticket ORDER BY createdate DESC";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$tickets = $stmt->fetchAll();
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
 ?>
 <?php
@@ -152,7 +80,7 @@ try {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">HelpDesk </li>
+              <li class="breadcrumb-item active">Support</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -165,43 +93,71 @@ try {
       <div class="container-fluid">
 
       <!-- AdminLTE Card Wrapper -->
-<div class="card card-primary">
-  <div class="card-header">
-    <h3 class="card-title">Help</h3>
-  </div>
   <!-- /.card-header -->
   
   <!-- form start -->
 
 <!-- form start -->
-<form method="post" enctype="multipart/form-data">
-  <div class="card-body">
 
-    <div class="form-group">
-      <label for="subject">Subject</label>
-      <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter subject" required>
-    </div>
-
-    <div class="form-group">
-      <label for="message">Message</label>
-      <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message" required></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="file">Upload File</label>
-      <input type="file" class="form-control-file" id="file" name="file">
-    </div>
-
-  </div>
-  <!-- /.card-body -->
-
-  <div class="card-footer">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
 
 <!-- AdminLTE Card with Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Ticket List</h3>
+  </div>
 
+  <!-- /.card-header -->
+  <div class="card-body table-responsive">
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Status</th>
+          <th>Assigned To</th>
+          <th>File</th>
+          <th>Created Date</th>
+          <th>Created By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php if ($tickets): ?>
+          <?php foreach ($tickets as $ticket): ?>
+            <tr class="clickable-row" data-id="<?= $ticket['id'] ?>">
+              <td><?= htmlspecialchars($ticket['id']) ?></td>
+              <td><?= htmlspecialchars($ticket['subject']) ?></td>
+              <td><?= nl2br(htmlspecialchars($ticket['message'])) ?></td>
+              <td>
+                <?php if ($ticket['status'] == 'Open'): ?>
+                  <span class="badge badge-success">Open</span>
+                <?php elseif ($ticket['status'] == 'In Progress'): ?>
+                  <span class="badge badge-warning">In Progress</span>
+                <?php else: ?>
+                  <span class="badge badge-secondary"><?= htmlspecialchars($ticket['status']) ?></span>
+                <?php endif; ?>
+              </td>
+              <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
+              <td>
+              <?php if (!empty($ticket['filename'])): ?>
+  <!-- Update link to redirect to download.php instead of the direct file path -->
+  <a href="../uploads/download.php?file=<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
+<?php else: ?>
+  <em>No file</em>
+<?php endif; ?>
+</td>
+              <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
+              <td><?= htmlspecialchars($ticket['createdby']) ?></td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="8" class="text-center">No tickets found.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
   <!-- /.card-body -->
 </div>
 <!-- /.card -->
