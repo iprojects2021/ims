@@ -417,6 +417,7 @@
         <label for="coverLetter" class="form-label">Why are you interested in this internship? (Max 300 words)</label>
         <textarea class="form-control" id="coverLetter" name="outcome" rows="4" required></textarea>
     </div>
+    <input type="hidden" class="form-control" id="program_id" name="program_id" value="1">
     <div class="text-center">
         <button type="submit" class="btn apply-btn px-5">
             <i class="fas fa-paper-plane me-2"></i> Next

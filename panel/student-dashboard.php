@@ -2,7 +2,7 @@
 include("../includes/db.php");
 include("../panel/util/session.php");
 // Fetch the name from session
-$studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
+$studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "";
 ?>
 <?php
 $email = $_SESSION['user']['email'];
@@ -24,7 +24,9 @@ catch(Exception $e)
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  |Student Dashboard</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
    
   <!-- Google Font: Source Sans Pro -->
@@ -203,7 +205,7 @@ catch(Exception $e)
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

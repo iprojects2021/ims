@@ -1,80 +1,33 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-// Get current student/user ID
-$studentId = $_SESSION["user"]["id"];
-$createdBy = $studentId; // Assuming student created the ticket
+$useriddata=$_SESSION['user']['id'];
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $subject = trim($_POST["subject"]);
-    $message = trim($_POST["message"]);
-    $status = "New"; // Default status
-
-    $filename = null;
-
-    // Handle file upload if a file was uploaded
-    if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
-        $uploadDir = "../uploads/tickets/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        $originalName = basename($_FILES["file"]["name"]);
-        $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName); // sanitize filename
-        $targetPath = $uploadDir . $filename;
-
-        if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
-            echo "<div class='alert alert-danger'>Failed to upload file.</div>";
-            exit();
-        }
-    }
-     try{
-    // Prepare SQL statement
-    $sql="INSERT INTO ticket 
-    (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-    VALUES
-    (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
-";
-    $stmt = $db->prepare($sql);
-
-    $result = $stmt->execute([
-        ':studentid' => $studentId,
-        ':subject' => $subject,
-        ':message' => $message,
-        ':status' => $status,
-        ':assignedto' => null,       // Ticket not yet assigned
-        ':filename' => $filename,
-        ':createdby' => $createdBy
-    ]);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['userid'])) 
+{
+  $id = $_POST['userid'];
+  try{
+    $sql="SELECT * FROM userhourlytracker WHERE userid =?";
+  $stmt = $db->prepare($sql);
+  $stmt->execute([$id]);
+  $allhistory = $stmt->fetchAll();
+  //print_r($allhistory);die;
+  
   }
   catch(Exception $e)
   {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
-
-    if ($result) {
-      echo '<div class="alert alert-success alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-check"></i> Alert!</h5>
-      Data saved successfully
-    </div>';
-    echo '<script type="text/javascript">
-    setTimeout(function() {
-        window.location.href = "studenthelp.php"; 
-    }, 2000); // Redirect after 2 seconds
-  </script>';
-
-    } else {
-      echo '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-times"></i> Error!</h5>
-      There was an error updating the data.
-    </div>';
-    }
 }
+$stmt = $db->prepare("SELECT *
+FROM userattendance ua
+JOIN userdaytracker udt ON ua.userid = udt.userid
+WHERE ua.userid = :userid
+");
+$stmt->bindParam(':userid', $useriddata, PDO::PARAM_INT);
+$stmt->execute();
+$daytrackerhistory = $stmt->fetchAll();
+//print_r($daytrackerhistory);die;
 ?>
 
 
@@ -83,9 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
-  <link rel="icon" type="image/png" href="../favico.png">
-
+  <title>INDSAC SOFTECH  |Student Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -125,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">HelpDesk </li>
+              <li class="breadcrumb-item active">Dashboard v1</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -137,115 +88,95 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <section class="content">
       <div class="container-fluid">
 
-      <!-- AdminLTE Card Wrapper -->
-<div class="card card-primary">
-  <div class="card-header">
-    <h3 class="card-title">Help</h3>
-  </div>
-  <!-- /.card-header -->
-  
-  <!-- form start -->
-
-<!-- form start -->
-<form method="post" enctype="multipart/form-data">
-  <div class="card-body">
-
-    <div class="form-group">
-      <label for="subject">Subject</label>
-      <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter subject" required>
-    </div>
-
-    <div class="form-group">
-      <label for="message">Message</label>
-      <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message" required></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="file">Upload File</label>
-      <input type="file" class="form-control-file" id="file" name="file">
-    </div>
-
-  </div>
-  <!-- /.card-body -->
-
-  <div class="card-footer">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
-<?php
-
-
-
-try{
-// Fetch ticket data
-$sql="SELECT * FROM ticket ORDER BY createdate DESC";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$tickets = $stmt->fetchAll();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
-?>
 
 <!-- AdminLTE Card with Table -->
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">Ticket List</h3>
+    <h3 class="card-title">All History List</h3>
+  </div>
+  <?php foreach ($daytrackerhistory as $row): ?>
+
+    <div class="row">
+  <!-- Login Time Box -->
+  <div class="col-lg-4 col-md-6 col-12">
+    <div class="small-box bg-gradient-danger shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">🕒 Login</h4>
+        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
+        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logintime']); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sign-in-alt"></i>
+      </div>
+      
+    </div>
   </div>
 
-  <!-- /.card-header -->
+  <!-- Logout Time Box -->
+  <div class="col-lg-4 col-md-6 col-12">
+    <div class="small-box bg-gradient-warning shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">🚪 Logout</h4>
+        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
+        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logouttime']); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Notes Box -->
+  <div class="col-lg-4 col-md-12 col-12">
+    <div class="small-box bg-gradient-info shadow-lg">
+      <div class="inner">
+        <h4 class="mb-2">📝 Notes</h4>
+        <p><?php echo nl2br(htmlspecialchars($row['notes'])); ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-sticky-note"></i>
+      </div>
+      
+    </div>
+  </div>
+</div><?php endforeach; ?>
+<!-- /.card-header -->
   <div class="card-body table-responsive">
-    <table id="example1" class="table table-bordered table-striped">
+  <table id="example1" class="table table-bordered table-striped">
       <thead>
         <tr>
           <th>ID</th>
-          <th>Subject</th>
-          <th>Message</th>
-          <th>Status</th>
-          <th>Assigned To</th>
-          <th>File</th>
-          <th>Created Date</th>
-          <th>Created By</th>
-        </tr>
+          <th>User Id</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Notes</th>
+          <th>Create Date</th>
+          
+          </tr>
       </thead>
       <tbody>
-        <?php if ($tickets): ?>
-          <?php foreach ($tickets as $ticket): ?>
-            <tr class="clickable-row" data-id="<?= $ticket['id'] ?>">
-              <td><?= htmlspecialchars($ticket['id']) ?></td>
-              <td><?= htmlspecialchars($ticket['subject']) ?></td>
-              <td><?= nl2br(htmlspecialchars($ticket['message'])) ?></td>
-              <td>
-                <?php if ($ticket['status'] == 'Open'): ?>
-                  <span class="badge badge-success">Open</span>
-                <?php elseif ($ticket['status'] == 'In Progress'): ?>
-                  <span class="badge badge-warning">In Progress</span>
-                <?php else: ?>
-                  <span class="badge badge-secondary"><?= htmlspecialchars($ticket['status']) ?></span>
-                <?php endif; ?>
-              </td>
-              <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
-              <td>
-              <?php if (!empty($ticket['filename'])): ?>
-  <!-- Update link to redirect to download.php instead of the direct file path -->
-  <a href="../uploads/download.php?file=<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
-<?php else: ?>
-  <em>No file</em>
-<?php endif; ?>
-</td>
-              <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
-              <td><?= htmlspecialchars($ticket['createdby']) ?></td>
+        <?php if ($allhistory): ?>
+          <?php foreach ($allhistory as $documentdata): ?>
+            <tr class="clickable-row" data-id="<?= $documentdata['id'] ?>">
+              <td><?= htmlspecialchars($documentdata['id']) ?></td>
+              <td><?= htmlspecialchars($documentdata['userid']) ?></td>
+              <td><?= htmlspecialchars($documentdata['start_time']) ?></td>
+              <td><?= htmlspecialchars($documentdata['start_time']) ?></td>
+              <td><?= htmlspecialchars($documentdata['notes']) ?></td>
+              <td><?= htmlspecialchars($documentdata['createdate']) ?></td>
+              
+              
             </tr>
           <?php endforeach; ?>
         <?php else: ?>
           <tr>
-            <td colspan="8" class="text-center">No tickets found.</td>
+            <td colspan="8" class="text-center">No documentdata found.</td>
           </tr>
         <?php endif; ?>
       </tbody>
     </table>
+
   </div>
   <!-- /.card-body -->
 </div>

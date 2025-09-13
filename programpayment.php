@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $type = trim($_POST['type'] ?? '');
     $amount = $_POST['amount'] ?? 0;
     $duration = $_POST['duration'] ?? '';
+    $program_id = $_POST['program_id'] ?? '';
 
     // Store posted data in session variables
     $_SESSION['application_data'] = [
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'type' => $type,
         'amount' => $amount,
         'duration' => $duration,
+        'program_id' => $program_id,
     ];
 
     try {
@@ -59,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Insert into 'application' table
         $stmt = $db->prepare("
             INSERT INTO application 
-            (mobile, fullname, email, project, expected_start_date, outcome, status, github, type, amount, duration) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (mobile, fullname, email, project, expected_start_date, outcome, status, github, type, amount, duration, program_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $mobile,
@@ -73,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $github,
             $type,
             $amount,
-            $duration
+            $duration,
+            $program_id
         ]);
 
         // Check for referral
@@ -558,6 +561,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>Program Details</h2>
                 
                 <form id="payment-form">
+                <div class="form-group">
+        <label for="card-name">Program Id</label>
+        <input type="text" id="card-name" name="program_id" placeholder="program_id" required 
+               value="<?php echo htmlspecialchars($_SESSION['application_data']['program_id'] ?? '', ENT_QUOTES); ?>">
+    </div>
+    
     <div class="form-group">
         <label for="card-name">Name</label>
         <input type="text" id="card-name" name="fullname" placeholder="Name" required 
@@ -638,18 +647,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="payment-methods">
                     <div class="payment-method">
+                        <i class="fas fa-qrcode"></i>
+                        <p> QR Code</p>
+                    </div>
+                    <div class="payment-method">
                         <i class="fas fa-credit-card"></i>
-                        <p>Credit Card</p>
+                        <p> Card</p>
                     </div>
                     
                     <div class="payment-method">
-                        <i class="fab fa-paypal"></i>
-                        <p>PayPal</p>
+                        <i class="fab fa-wallet"></i>
+                        <p>Wallet</p>
                     </div>
                     
                     <div class="payment-method">
                         <i class="fas fa-university"></i>
-                        <p>Bank Transfer</p>
+                        <p>NetBanking</p>
                     </div>
                 </div>
                 <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBcBgFQx5N2HsF" async> </script> </form>

@@ -1,44 +1,37 @@
 <?php
-include("../includes/db.php");
 include("../panel/util/statuscolour.php");
+include("../includes/db.php");
 include("../panel/util/session.php");
-$studentName = $_SESSION["user"]["name"];
-$email = $_SESSION['user']['email'] ?? null;
-try{
-// Fetch user data (if needed)
-$sql="SELECT * FROM users WHERE email = :email";
-$stmt = $db->prepare($sql);
-$stmt->execute(['email' => $email]);
-$userData = $stmt->fetch();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
+  $id = $_POST['id'];
+  try{
+ // $sql="SELECT * FROM application WHERE id = ?";
+ $sql = "SELECT *
+        FROM paymentverification pv
+        JOIN application a ON pv.program_id = a.program_id
+        JOIN programs p ON pv.program_id = p.program_id
+        WHERE a.id = ?";
 
-}
-// Fetch application by ID if posted
-$applicationData = [];
-if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
-    $id = $_POST['id'];
-    try{
-    $sql="SELECT * FROM application WHERE id = ?";  
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $applicationData = $stmt->fetch(); // Only one record expected
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-}
+  
+  $stmt = $db->prepare($sql);
+  $stmt->execute([$id]);
+  $applicationdata = $stmt->fetchAll();
+  //print_r($applicationdata);die;
+   
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH | Admin Dashboard</title>
-
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
   <!-- AdminLTE Styles -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -68,99 +61,97 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
 
     <!-- Main Content -->
     <section class="content">
-      <div class="container-fluid">
+    <?php foreach ($applicationdata as $app): ?>
+  <div class="card card-primary card-outline">
+    <div class="card-header">
+      <h3 class="card-title">
+        <i class="fas fa-file-alt"></i> <?php echo htmlspecialchars($app['type']); ?>
+      </h3>
+    </div>
+    <div class="card-body">
 
-        <?php if ($applicationData): ?>
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title"><?php echo htmlspecialchars($applicationData['type']); ?></h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-            </div>
-          </div>
-
-          <div class="card-body">
-            <div class="row">
-              
-              <!-- Application Info -->
-              <div class="col-md-8">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Estimated Budget</span>
-                        <span class="info-box-number text-muted text-center mb-0">₹2300</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Amount Spent</span>
-                        <span class="info-box-number text-muted text-center mb-0">₹2000</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Project Duration</span>
-                        <span class="info-box-number text-muted text-center mb-0">20 Days</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Activities Placeholder -->
-                <div class="mt-4">
-                  <h5>Recent Activity</h5>
-                  <div class="post">
-                    <div class="user-block">
-                      <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="User image">
-                      <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                      <span class="description">Shared publicly - Today</span>
-                    </div>
-                    <p>Lorem ipsum content example...</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Application Details -->
-              <div class="col-md-4">
-                <h5 class="text-primary">Details</h5>
-                <p><strong>ID:</strong> <?php echo htmlspecialchars($applicationData['id']); ?></p>
-                <p><strong>Mobile:</strong> <?php echo htmlspecialchars($applicationData['mobile']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($applicationData['email']); ?></p>
-                <p><strong>Project:</strong> <?php echo htmlspecialchars($applicationData['project']); ?></p>
-                <p><strong>Outcome:</strong> <?php echo htmlspecialchars($applicationData['outcome']); ?></p>
-                <p><strong>Start Date:</strong> <?php echo htmlspecialchars($applicationData['expected_start_date']); ?></p>
-                <p><strong>Due Date:</strong> <?php echo htmlspecialchars($applicationData['expected_due_date']); ?></p>
-                <p><strong>Type:</strong> <?php echo htmlspecialchars($applicationData['type']); ?></p>
-                <p><strong>Status:</strong> <?php echo getStatusBadge($applicationData['status']); ?></p>
-                <p><strong>Created:</strong> <?php echo htmlspecialchars($applicationData['createddate']); ?></p>
-
-                <!-- File Links -->
-                <h6 class="mt-4">Project Files</h6>
-                <ul class="list-unstyled">
-                  <li><a href="#" class="btn-link"><i class="far fa-file-word"></i> Functional-requirements.docx</a></li>
-                  <li><a href="#" class="btn-link"><i class="far fa-file-pdf"></i> UAT.pdf</a></li>
-                </ul>
-
-                <div class="text-center">
-                  <a href="#" class="btn btn-sm btn-primary">Add Files</a>
-                  <a href="#" class="btn btn-sm btn-warning">Report Issue</a>
-                </div>
-              </div>
-
+      <!-- Top Summary Info -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="info-box bg-gradient-info">
+            <div class="info-box-content text-center">
+              <span class="info-box-text">Payment Verification Status</span>
+              <span class="info-box-number"><?php echo htmlspecialchars($app['VerificationStatus']); ?></span>
             </div>
           </div>
         </div>
-        <?php else: ?>
-          <div class="alert alert-warning">No application data found.</div>
-        <?php endif; ?>
-
+        <div class="col-md-4">
+          <div class="info-box bg-gradient-success">
+            <div class="info-box-content text-center">
+              <span class="info-box-text">Payment Status</span>
+              <span class="info-box-number"><?php echo htmlspecialchars($app['Status']); ?></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info-box bg-gradient-warning">
+            <div class="info-box-content text-center">
+              <span class="info-box-text">Amount Paid</span>
+              <span class="info-box-number"><?php echo htmlspecialchars($app['AmountPaid']); ?></span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Application Information -->
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <h5><i class="fas fa-user"></i> Applicant Info</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">ID: <b><?php echo htmlspecialchars($app['id']); ?></b></li>
+            <li class="list-group-item">Mobile: <b><?php echo htmlspecialchars($app['mobile']); ?></b></li>
+            <li class="list-group-item">Email: <b><?php echo htmlspecialchars($app['email']); ?></b></li>
+            <li class="list-group-item">Project: <b><?php echo htmlspecialchars($app['project']); ?></b></li>
+            <li class="list-group-item">Outcome: <b><?php echo htmlspecialchars($app['outcome']); ?></b></li>
+            <li class="list-group-item">Start Date: <b><?php echo htmlspecialchars($app['expected_start_date']); ?></b></li>
+            <li class="list-group-item">Program Type: <b><?php echo htmlspecialchars($app['type']); ?></b></li>
+            <li class="list-group-item">Status: <b><?php echo getStatusBadge($app['status']); ?></b></li>
+            <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate']); ?></b></li>
+          </ul>
+        </div>
+
+        <!-- Program Details -->
+        <div class="col-md-4">
+          <h5><i class="fas fa-info-circle"></i> Program Details</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Program ID: <b><?php echo htmlspecialchars($app['program_id']); ?></b></li>
+            <li class="list-group-item">Title: <b><?php echo htmlspecialchars($app['title']); ?></b></li>
+            <li class="list-group-item">Slug: <b><?php echo htmlspecialchars($app['slug']); ?></b></li>
+            <li class="list-group-item">Short Description: <b><?php echo htmlspecialchars($app['short_description']); ?></b></li>
+            <li class="list-group-item">Duration: <b><?php echo htmlspecialchars($app['duration']); ?> days</b></li>
+            <li class="list-group-item">Start Date: <b><?php echo htmlspecialchars($app['start_date']); ?></b></li>
+            <li class="list-group-item">Remote: <b><?php echo htmlspecialchars($app['is_remote']); ?></b></li>
+            <li class="list-group-item">Stipend: <b><?php echo getStatusBadge($app['stipend_amount']); ?></b></li>
+            <li class="list-group-item">Created At: <b><?php echo htmlspecialchars($app['created_at']); ?></b></li>
+            <button type="button" class="btn btn-sm btn-primary" onclick="redirectToFormeditprograms('<?php echo $app['program_id']; ?>')">Edit</button>
+          </ul>
+        </div>
+
+        <!-- Payment Verification -->
+        <div class="col-md-4">
+          <h5><i class="fas fa-credit-card"></i> Payment Verification</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Payment ID: <b><?php echo htmlspecialchars($app['PaymentVerificationID']); ?></b></li>
+            <li class="list-group-item">User ID: <b><?php echo htmlspecialchars($app['UserID']); ?></b></li>
+            <li class="list-group-item">Payment Ref: <b><?php echo htmlspecialchars($app['PaymentID']); ?></b></li>
+            <li class="list-group-item">Bank RRN: <b><?php echo htmlspecialchars($app['BankRRN']); ?></b></li>
+            <li class="list-group-item">Order ID: <b><?php echo htmlspecialchars($app['OrderID']); ?></b></li>
+            <li class="list-group-item">Invoice ID: <b><?php echo htmlspecialchars($app['InvoiceID']); ?></b></li>
+            <li class="list-group-item">Email: <b><?php echo htmlspecialchars($app['Email']); ?></b></li>
+            <li class="list-group-item">Phone: <b><?php echo htmlspecialchars($app['Phone']); ?></b></li>
+            <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate']); ?></b></li>
+            <button type="button" class="btn btn-sm btn-primary" onclick="redirectToForm('<?php echo $app['PaymentVerificationID']; ?>')">Edit</button>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endforeach; ?>
     </section>
   </div>
 
@@ -173,6 +164,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
     color: #fff;
 }
 </style>
+<form id="postRedirectFormedit" method="POST" action="editprograms.php" style="display:none;">
+    <input type="hidden" name="program_id" id="posteditprogramid">
+</form>
+
+
+<script>
+function redirectToFormeditprograms(id) {
+    document.getElementById('posteditprogramid').value = id;
+    document.getElementById('postRedirectFormedit').submit();
+}
+</script>
+<form id="postRedirectForm" method="POST" action="paymentverificationform.php" style="display:none;">
+    <input type="hidden" name="PaymentVerificationID" id="postPaymentVerificationID">
+</form>
+
+
+<script>
+function redirectToForm(id) {
+    document.getElementById('postPaymentVerificationID').value = id;
+    document.getElementById('postRedirectForm').submit();
+}
+</script>
+
 <!-- Scripts -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

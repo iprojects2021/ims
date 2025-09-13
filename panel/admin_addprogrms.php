@@ -65,26 +65,9 @@ $stmt->execute([
 
     // Check if the query was successful
  if ($stmt->rowCount() > 0) {
-  // Success: Show alert and redirect
-  echo '<div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-check"></i> Alert!</h5>
-          Data saved successfully
-        </div>';
-
-  // Redirect using JavaScript after displaying the success message
-  echo '<script type="text/javascript">
-          setTimeout(function() {
-              window.location.href = "admin_addprogrms.php"; 
-          }, 2000); // Redirect after 2 seconds
-        </script>';
+  $showAlert = 'success';
 } else {
-  // Error: Show error alert
-  echo '<div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-times"></i> Error!</h5>
-          There was an error updating the data.
-        </div>';
+  $showAlert = 'error';
 }
 
   //header('Location: collegeprojectsform.php');
@@ -96,7 +79,9 @@ $stmt->execute([
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  |Student Dashboard</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -136,7 +121,7 @@ $stmt->execute([
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item active">Add Programs</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -157,104 +142,106 @@ $stmt->execute([
   
   <!-- form start -->
   <form method="post">
-    <div class="card-body">
+  <div class="card-body">
+    <div class="row">
 
-      <div class="form-group">
-        <label for="title">Program Title</label>
-        <input type="text" class="form-control" id="title" name="title" placeholder="e.g., Internship in Web Dev" required>
+      <div class="col-md-6 mb-2">
+        <label for="title" class="form-label">Program Title</label>
+        <input type="text" class="form-control form-control-sm" id="title" name="title" placeholder="e.g., Internship in Web Dev" required>
       </div>
 
-      <div class="form-group">
-        <label for="slug">Slug</label>
-        <input type="text" class="form-control" id="slug" name="slug" placeholder="e.g., web-dev-internship" required>
+      <div class="col-md-6 mb-2">
+        <label for="slug" class="form-label">Slug</label>
+        <input type="text" class="form-control form-control-sm" id="slug" name="slug" placeholder="e.g., web-dev-internship" required>
       </div>
 
-      <div class="form-group">
-        <label for="short_description">Short Description</label>
-        <input type="text" class="form-control" id="short_description" name="short_description" placeholder="A short overview..." required>
+      <div class="col-md-6 mb-2">
+        <label for="short_description" class="form-label">Short Description</label>
+        <input type="text" class="form-control form-control-sm" id="short_description" name="short_description" placeholder="A short overview..." required>
       </div>
 
-      <div class="form-group">
-        <label for="detailed_description">Detailed Description</label>
-        <textarea class="form-control" id="detailed_description" name="detailed_description" rows="4" placeholder="Full internship details..." required></textarea>
+      <div class="col-md-6 mb-2">
+        <label for="duration" class="form-label">Duration</label>
+        <input type="text" class="form-control form-control-sm" id="duration" name="duration" placeholder="e.g., 3 months" required>
       </div>
 
-      <div class="form-group">
-        <label for="duration">Duration</label>
-        <input type="text" class="form-control" id="duration" name="duration" placeholder="e.g., 3 months" required>
+      <div class="col-md-12 mb-2">
+        <label for="detailed_description" class="form-label">Detailed Description</label>
+        <textarea class="form-control form-control-sm" id="detailed_description" name="detailed_description" rows="3" placeholder="Full internship details..." required></textarea>
       </div>
 
-      <div class="form-group">
-        <label for="start_date">Start Date</label>
-        <input type="date" class="form-control" id="start_date" name="start_date" required>
+      <div class="col-md-6 mb-2">
+        <label for="start_date" class="form-label">Start Date</label>
+        <input type="date" class="form-control form-control-sm" id="start_date" name="start_date" required>
       </div>
 
-      <div class="form-group">
-        <label for="end_date">End Date</label>
-        <input type="date" class="form-control" id="end_date" name="end_date" required>
+      <div class="col-md-6 mb-2">
+        <label for="end_date" class="form-label">End Date</label>
+        <input type="date" class="form-control form-control-sm" id="end_date" name="end_date" required>
       </div>
 
-      <div class="form-group">
-        <label for="is_remote">Is Remote</label>
-        <select class="form-control" id="is_remote" name="is_remote" required>
+      <div class="col-md-6 mb-2">
+        <label for="is_remote" class="form-label">Is Remote</label>
+        <select class="form-control form-control-sm" id="is_remote" name="is_remote" required>
           <option value="1">Yes</option>
           <option value="0">No</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="location">Location</label>
-        <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Mumbai, India" required>
+      <div class="col-md-6 mb-2">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control form-control-sm" id="location" name="location" placeholder="e.g., Mumbai, India" required>
       </div>
 
-      <div class="form-group">
-        <label for="timezone">Time Zone</label>
-        <input type="text" class="form-control" id="timezone" name="timezone" placeholder="e.g., IST" required>
+      <div class="col-md-6 mb-2">
+        <label for="timezone" class="form-label">Time Zone</label>
+        <input type="text" class="form-control form-control-sm" id="timezone" name="timezone" placeholder="e.g., IST" required>
       </div>
 
-      <div class="form-group">
-        <label for="stipend_amount">Stipend Amount</label>
-        <input type="number" class="form-control" id="stipend_amount" name="stipend_amount" placeholder="e.g., 10000" required>
+      <div class="col-md-6 mb-2">
+        <label for="stipend_amount" class="form-label">Stipend Amount</label>
+        <input type="number" class="form-control form-control-sm" id="stipend_amount" name="stipend_amount" placeholder="e.g., 10000" required>
       </div>
 
-      <div class="form-group">
-        <label for="stipend_currency">Stipend Currency</label>
-        <input type="text" class="form-control" id="stipend_currency" name="stipend_currency" placeholder="e.g., INR" required>
+      <div class="col-md-6 mb-2">
+        <label for="stipend_currency" class="form-label">Stipend Currency</label>
+        <input type="text" class="form-control form-control-sm" id="stipend_currency" name="stipend_currency" placeholder="e.g., INR" required>
       </div>
 
-      <div class="form-group">
-        <label for="is_paid">Is Paid</label>
-        <select class="form-control" id="is_paid" name="is_paid" required>
+      <div class="col-md-6 mb-2">
+        <label for="is_paid" class="form-label">Is Paid</label>
+        <select class="form-control form-control-sm" id="is_paid" name="is_paid" required>
           <option value="1">Yes</option>
           <option value="0">No</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="application_deadline">Application Deadline</label>
-        <input type="date" class="form-control" id="application_deadline" name="application_deadline" required>
+      <div class="col-md-6 mb-2">
+        <label for="application_deadline" class="form-label">Application Deadline</label>
+        <input type="date" class="form-control form-control-sm" id="application_deadline" name="application_deadline" required>
       </div>
 
-      <div class="form-group">
-        <label for="max_applicants">Max Applicants</label>
-        <input type="number" class="form-control" id="max_applicants" name="max_applicants" placeholder="e.g., 100" required>
+      <div class="col-md-6 mb-2">
+        <label for="max_applicants" class="form-label">Max Applicants</label>
+        <input type="number" class="form-control form-control-sm" id="max_applicants" name="max_applicants" placeholder="e.g., 100" required>
       </div>
 
-      <div class="form-group">
-        <label for="is_active">Is Active</label>
-        <select class="form-control" id="is_active" name="is_active" required>
+      <div class="col-md-6 mb-2">
+        <label for="is_active" class="form-label">Is Active</label>
+        <select class="form-control form-control-sm" id="is_active" name="is_active" required>
           <option value="1">Yes</option>
           <option value="0">No</option>
         </select>
       </div>
 
     </div>
-    <!-- /.card-body -->
+  </div>
 
-    <div class="card-footer">
-      <button type="submit" class="btn btn-primary">Submit Program</button>
-    </div>
-  </form>
+  <div class="card-footer text-end">
+    <button type="submit" class="btn btn-sm btn-primary">Submit Program</button>
+  </div>
+</form>
+
 </div>
 <!-- /.card -->
 
@@ -307,5 +294,6 @@ $stmt->execute([
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+<?php include("../panel/util/alert.php");?>
 </body>
 </html>

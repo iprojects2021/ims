@@ -30,6 +30,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
     {
       $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
     }
+
+    
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
+    {
+      $id = $_POST['id'];
+      try{
+        $sql = "SELECT * 
+        FROM payments 
+        JOIN enrollments ON payments.referralid = enrollments.referralid 
+        WHERE payments.id = ?";  // or enrollments.id = ? if needed
+
+$stmt = $db->prepare($sql);
+$stmt->execute([$id]);
+$paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      }
+      catch(Exception $e)
+      {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+      }
+    }
+    
+      
 }
 ?>
 <!DOCTYPE html>
@@ -68,96 +91,127 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
 
     <!-- Main Content -->
     <section class="content">
-      <div class="container-fluid">
+  <div class="container-fluid">
 
-        <?php if ($applicationData): ?>
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Referral Details</h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-            </div>
-          </div>
-
-          <div class="card-body">
-            <div class="row">
-              
-              <!-- Application Info -->
-              <div class="col-md-8">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Estimated Budget</span>
-                        <span class="info-box-number text-muted text-center mb-0">?2300</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Amount Spent</span>
-                        <span class="info-box-number text-muted text-center mb-0">?2000</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="info-box bg-light">
-                      <div class="info-box-content">
-                        <span class="info-box-text text-muted text-center">Project Duration</span>
-                        <span class="info-box-number text-muted text-center mb-0">20 Days</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Activities Placeholder -->
-                <div class="mt-4">
-                  <h5>Recent Activity</h5>
-                  <div class="post">
-                    <div class="user-block">
-                      <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="User image">
-                      <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                      <span class="description">Shared publicly - Today</span>
-                    </div>
-                    <p>Lorem ipsum content example...</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Application Details -->
-              <div class="col-md-4">
-                <h5 class="text-primary">Details</h5>
-                <p><strong>ID:</strong> <?php echo htmlspecialchars($applicationData['id']); ?></p>
-                <p><strong>User Id:</strong> <?php echo htmlspecialchars($applicationData['userid']); ?></p>
-                <p><strong>Referred Email:</strong> <?php echo htmlspecialchars($applicationData['referred_email']); ?></p>
-                <p><strong>Referred Mobile:</strong> <?php echo htmlspecialchars($applicationData['referred_phone']); ?></p>
-                <p><strong>Status:</strong> <?php echo htmlspecialchars($applicationData['status']); ?></p>
-                <p><strong>Created At:</strong> <?php echo htmlspecialchars($applicationData['created_at']); ?></p>
-                
-                <!-- File Links -->
-                <h6 class="mt-4">Project Files</h6>
-                <ul class="list-unstyled">
-                  <li><a href="#" class="btn-link"><i class="far fa-file-word"></i> Functional-requirements.docx</a></li>
-                  <li><a href="#" class="btn-link"><i class="far fa-file-pdf"></i> UAT.pdf</a></li>
-                </ul>
-
-                <div class="text-center">
-                  <a href="#" class="btn btn-sm btn-primary">Add Files</a>
-                  <a href="#" class="btn btn-sm btn-warning">Report Issue</a>
-                </div>
-              </div>
-
-            </div>
+    <?php if ($applicationData): ?>
+      <!-- Referral Details Card -->
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0"><i class="fas fa-user-friends mr-2"></i>Referral Details</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool text-white" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            <button type="button" class="btn btn-tool text-white" data-card-widget="remove"><i class="fas fa-times"></i></button>
           </div>
         </div>
-        <?php else: ?>
-          <div class="alert alert-warning">No application data found.</div>
-        <?php endif; ?>
 
-      </div>
-    </section>
+        <div class="card-body">
+          <div class="row">
+            
+            <!-- Left: Budget Info -->
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-sm-4 mb-3">
+                  <div class="info-box bg-light border border-primary shadow-sm">
+                    <div class="info-box-content text-center">
+                      <span class="info-box-text text-primary font-weight-bold">Referral Status</span>
+                      <span class="info-box-number text-dark display-6"><?= htmlspecialchars($applicationData['status']) ?></span>
+                    </div>
+                  </div>
+                </div>
+                <?php foreach ($paymentandenrollmentdata as $row): ?>
+                <div class="col-sm-4 mb-3">
+                  <div class="info-box bg-light border border-success shadow-sm">
+                    <div class="info-box-content text-center">
+                      <span class="info-box-text text-success font-weight-bold">Payment Status</span>
+                      <span class="info-box-number text-dark display-6"><?= htmlspecialchars($row['status']) ?></span>
+                    </div>
+                  </div>
+                </div>
+                <?php endforeach; ?>
+                <div class="col-sm-4 mb-3">
+                  <div class="info-box bg-light border border-info shadow-sm">
+                    <div class="info-box-content text-center">
+                      <span class="info-box-text text-info font-weight-bold">Project Duration</span>
+                      <span class="info-box-number text-dark display-6">20 Days</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Program Table -->
+              <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                  <h4 class="card-title mb-0"><i class="fas fa-list-alt mr-2"></i>All List</h4>
+                </div>
+                <div class="card-body table-responsive">
+                  <table id="example1" class="table table-bordered table-hover table-striped">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>ID</th>
+                        <th>Referral ID</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Program</th>
+                        <th>Enrollment Date</th>
+                        <th>Fee Paid</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($paymentandenrollmentdata as $row): ?>
+                        <tr class="clickable-row" data-id="<?= $row['id'] ?>">
+                          <td><?= htmlspecialchars($row['id']) ?></td>
+                          <td><?= htmlspecialchars($row['referralid']) ?></td>
+                          <td><?= htmlspecialchars($row['amount']) ?></td>
+                          <td><?= htmlspecialchars($row['payment_date']) ?></td>
+                          <td><?= htmlspecialchars($row['status']) ?></td>
+                          <td><?= htmlspecialchars($row['program']) ?></td>
+                          <td><?= htmlspecialchars($row['enrollmentdate']) ?></td>
+                          <td><?= htmlspecialchars($row['fee_paid']) ?></td>
+                        </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                    <tfoot class="bg-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>Referral ID</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Program</th>
+                        <th>Enrollment Date</th>
+                        <th>Fee Paid</th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Application Details -->
+            <div class="col-md-4">
+              <div class="border p-3 rounded shadow-sm bg-light">
+                <h5 class="text-primary"><i class="fas fa-info-circle mr-2"></i>Referral Summary</h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><strong>ID:</strong> <?= htmlspecialchars($applicationData['id']) ?></li>
+                  <li class="list-group-item"><strong>User ID:</strong> <?= htmlspecialchars($applicationData['userid']) ?></li>
+                  <li class="list-group-item"><strong>Referred Email:</strong> <?= htmlspecialchars($applicationData['referred_email']) ?></li>
+                  <li class="list-group-item"><strong>Referred Phone:</strong> <?= htmlspecialchars($applicationData['referred_phone']) ?></li>
+                  <li class="list-group-item"><strong>Status:</strong> <?= htmlspecialchars($applicationData['status']) ?></li>
+                  <li class="list-group-item"><strong>Created At:</strong> <?= htmlspecialchars($applicationData['created_at']) ?></li>
+                </ul>
+              </div>
+            </div>
+
+          </div> <!-- /.row -->
+        </div> <!-- /.card-body -->
+      </div> <!-- /.card -->
+    <?php else: ?>
+      <div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> No application data found.</div>
+    <?php endif; ?>
+
+  </div> <!-- /.container-fluid -->
+</section>
   </div>
 
   <?php include("footer.php"); ?>
@@ -169,11 +223,56 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
     color: #fff;
 }
 </style>
+<form id="postForm" method="POST" action="adminreferraltypedetails.php" style="display:none;">
+    <input type="hidden" name="id" id="hiddenId">
+</form>
+<script>
+  
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            document.getElementById('hiddenId').value = id;
+            document.getElementById('postForm').submit();
+        });
+    });
+</script>
+
 <!-- Scripts -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script src="dist/js/demo.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 </body>
 </html>

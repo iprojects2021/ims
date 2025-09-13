@@ -69,3 +69,74 @@ CREATE TABLE PaymentVerification (
     VerificationDate DATETIME,
     VerifyNotes TEXT
 );
+CREATE TABLE userattendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    logintime DATETIME,
+    logouttime DATETIME,
+    notes TEXT,
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id)  -- Assuming there is a 'users' table with 'id' as primary key
+);
+CREATE TABLE userhourlytracker (
+    it INT PRIMARY KEY,
+    userid INT,
+    start_time VARCHAR(255),
+    end_time VARCHAR(255),
+    notes TEXT,
+    createdat TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id)  -- assuming there's a "users" table with a "userid" field
+);
+CREATE TABLE userdaytracker (
+    it INT PRIMARY KEY,
+    userid INT,
+    notes TEXT,
+    createdat TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(id) -- Assuming there is a 'users' table with 'userid' as its PK
+);
+ALTER TABLE application
+ADD COLUMN program_id INT;
+
+ALTER TABLE paymentverification 
+ADD COLUMN program_id INT;
+
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE task (
+    id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    studentid INT(11) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date DATE,
+    status VARCHAR(50),
+    mentor_feedback TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE taskcommit (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    taskid INT(11) NOT NULL,
+    message TEXT,
+    createdate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdby VARCHAR(100),
+    PRIMARY KEY (id)
+);
+CREATE TABLE taskstatushistory (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    taskid INT(11) NOT NULL,
+    changed_by INT(11) NOT NULL,
+    previous_status VARCHAR(50) NOT NULL,
+    new_status VARCHAR(50) NOT NULL,
+    comment TEXT,
+    changed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_taskid (taskid),
+    INDEX idx_changed_by (changed_by)
+);
