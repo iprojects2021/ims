@@ -56,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($result) {
         // ✅ Notification setup
-        $menuItem = 'help';
-        $notificationMessage = "Ticket Updated By Admin";
+        $menuItem = 'tickets';
+        $notificationMessage = "Ticket Updated By Admin.$ticketid";
         $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
         $createdBy =$_SESSION['user']['id'];
 

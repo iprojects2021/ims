@@ -1,4 +1,5 @@
 <?php
+include("../includes/db.php");
 include("../panel/util/session.php");
 // Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";

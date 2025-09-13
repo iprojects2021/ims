@@ -16,13 +16,37 @@ try {
     $tasks = [];
 }
 ?>
+<?php
+
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid ='admin' 
+              AND menu_item = 'task'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+<?php
+
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid ='admin' 
+              AND menu_item = 'task'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Task  | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 

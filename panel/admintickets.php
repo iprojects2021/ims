@@ -95,7 +95,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Ticket | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
   <!-- Google Font: Source Sans Pro -->

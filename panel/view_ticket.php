@@ -25,7 +25,7 @@ try {
     $sql = "UPDATE notification 
             SET isread = 1 
             WHERE userid =$useriddata 
-              AND menu_item = 'help'";
+              AND menu_item = 'tickets'";
     $db->query($sql);
 } catch (Exception $e) {
     // Optional: Log the error

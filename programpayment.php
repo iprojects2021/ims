@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Insert into 'application' table
         $stmt = $db->prepare("
             INSERT INTO application 
-            (mobile, fullname, email, project, expected_start_date, outcome, status, github, type, amount, duration, program_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (mobile, fullname, email, project, expected_start_date, outcome, status, github, type, amount, duration, program_id, mentorid) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'admin')
         ");
         $stmt->execute([
             $mobile,
@@ -77,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $amount,
             $duration,
             $program_id
+            
         ]);
         $id = $db->lastInsertId();
         $_SESSION['applicationid']=$id;
-//print_r($id);die;
         // Check for referral
         $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
 

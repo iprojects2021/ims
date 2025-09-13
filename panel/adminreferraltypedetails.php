@@ -60,7 +60,9 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH | Admin Dashboard</title>
+  <title>Admin-Referral | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 
   <!-- AdminLTE Styles -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">

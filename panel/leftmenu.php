@@ -1,6 +1,4 @@
 <?php
-// Make sure session is started
-// session_start();
 
 $role = $_SESSION['user']['role'] ?? null;
 $userid = $_SESSION['user']['id'] ?? null;
@@ -65,13 +63,15 @@ function getUnreadNotifications($db, $userid, $menu_item, $role, $limit = 5) {
 // Notification counts
 $notificationCounts = [
     'tickets' => getNotificationCount($db, $userid, 'tickets', $role),
-    'help'    => getNotificationCount($db, $userid, 'help', $role),
+    'application'    => getNotificationCount($db, $userid, 'application', $role),
+    'task'    => getNotificationCount($db, $userid, 'task', $role),
 ];
-$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['help'];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task'];
 
 // Notification messages
 $ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
-$helpMessages   = getUnreadNotifications($db, $userid, 'help', $role);
+$applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
+$taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
 ?>
 
 
@@ -200,12 +200,13 @@ $helpMessages   = getUnreadNotifications($db, $userid, 'help', $role);
             </a>
         <?php endforeach; ?>
 
-        <!-- Help Messages -->
-        <?php foreach ($helpMessages as $help): ?>
+        
+<!-- task Messages -->
+<?php foreach ($taskMessages as $task): ?>
             <a href="studenthelp.php" class="dropdown-item">
                 <i class="fas fa-life-ring mr-2"></i>
-                <?= htmlspecialchars($help['message']) ?>
-                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($help['createdAt'])) ?></span>
+                <?= htmlspecialchars($task['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($task['createdAt'])) ?></span>
             </a>
         <?php endforeach; ?>
 
@@ -313,15 +314,33 @@ $helpMessages   = getUnreadNotifications($db, $userid, 'help', $role);
     </p>
   </a>
 </li>
-    <li class="nav-item">
-      <a href="admintasks.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Tasks
-         <!-- <span class="right badge badge-danger">New</span>-->
-        </p>
-      </a>
-    </li>
+<li class="nav-item">
+  <a href="application.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Application
+      <?php if ($notificationCounts['application'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['application']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="admintasks.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Task
+      <?php if ($notificationCounts['task'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['task']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
 
     <li class="nav-item">
       <a href="adminreferral.php" class="nav-link">
@@ -387,12 +406,34 @@ $helpMessages   = getUnreadNotifications($db, $userid, 'help', $role);
     </li>
 
     
+    <li class="nav-item has-treeview <?php echo ($page == 'create_task' || $page == 'view_task') ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?php echo ($page == 'create_task' || $page == 'view_task') ? 'active' : ''; ?>">
+  <i class="nav-icon fas fa-copy"></i>
+    <p>
+      Task
+      <?php if ($notificationCounts['task'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['task']; ?>
+        </span>
+      <?php endif; ?>
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="tasks.php" class="nav-link">
-        <i class="nav-icon fas fa-tasks"></i>
-        <p>Tasks / Worklogs</p>
+      <a href="tasks.php" class="nav-link <?php echo ($page == 'create_task') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Create Task</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="view_task.php" class="nav-link <?php echo ($page == 'view_task') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>View Task</p>
+      </a>
+    </li>
+  </ul>
+</li>
 
     <li class="nav-item">
       <a href="uploaddocuments.php" class="nav-link">
@@ -428,9 +469,9 @@ $helpMessages   = getUnreadNotifications($db, $userid, 'help', $role);
     <i class="nav-icon fas fa-headset"></i>
     <p>
       Support
-      <?php if ($notificationCounts['help'] > 0): ?>
+      <?php if ($notificationCounts['tickets'] > 0): ?>
         <span class="right badge badge-danger">
-          New <?php echo $notificationCounts['help']; ?>
+          New <?php echo $notificationCounts['tickets']; ?>
         </span>
       <?php endif; ?>
       <i class="right fas fa-angle-left"></i>

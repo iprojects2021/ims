@@ -2,10 +2,11 @@
 
 include(__DIR__ . '/includes/db.php');
 session_start();
+
 $program_id = $_SESSION['application_data']['program_id'];
-$applicationiddata=$_SESSION['applicationid'];
-//print_r($program_id);die;
+$applicationiddata = $_SESSION['applicationid'];
 $userid = $_SESSION['user']['id'] ?? null;
+
 $transaction = $_GET['transaction'] ?? null;
 $amount_paid = $_GET['amount'] ?? null;
 
@@ -26,6 +27,7 @@ $email = $_POST['email'] ?? null;
 $phone = $_POST['phone'] ?? null;
 
 try {
+    // Insert Payment Verification
     $sql = "INSERT INTO PaymentVerification 
             (program_id, applicationid, UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
             VALUES (:program_id, :applicationid, :userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
@@ -41,18 +43,43 @@ try {
         ':phone' => $phone,
         ':amountpaid' => $amount_paid,
         ':status' => $status,
-        ':verificationstatus' => 'Pending', // or use $_POST['verificationstatus']
+        ':verificationstatus' => 'Pending',
     ]);
 
-    // Optional redirect or message
-    // echo "Payment verification inserted successfully.";
-    // header("Location: success_page.php");
-    // exit;
+    $id = $db->lastInsertId();
+
+    // Update application table with payment verification ID
+    $stmt = $db->prepare("UPDATE application SET paymentverificationid = :paymentid WHERE id = :appid");
+    $stmt->bindParam(':paymentid', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':appid', $applicationiddata, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // ---- Notification Section ----
+    $menuItem = 'application';
+    $notificationMessage = "New payment submitted by User ID: " . $userid;
+    $createdBy = $userid ?? 'system'; // fallback if user ID not found
+
+    try {
+        $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                     VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+        $notifStmt = $db->prepare($notifSql);
+        $notifStmt->execute([
+            ':menu_item' => $menuItem,
+            ':message' => $notificationMessage,
+            ':createdBy' => $createdBy
+        ]);
+
+
+
+    } catch (Exception $e) {
+
+    }
 
 } catch (PDOException $e) {
-    echo "Error inserting record: " . $e->getMessage();
+
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

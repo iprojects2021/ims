@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $taskid = $_POST['taskid'];
+    $studentid = $_POST['studentid'];
     $new_status = $_POST['new_status'];
     $comment = $_POST['comment'];
     $changed_by=$_SESSION['user']['id'];
@@ -55,6 +56,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     {
       $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
     }
+    if ($stmt->rowCount() > 0) {
+      // ✅ Notification setup
+      $menuItem = 'task';
+      $notificationMessage = "Task Updated By Admin Task ID #.$taskid";
+      $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
+      $createdBy = $createdBy;
+
+      try {
+          $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                       VALUES (:userid, :menu_item, 0, :message, :createdBy)";
+          $notifStmt = $db->prepare($notifSql);
+          $notifStmt->execute([
+              ':userid' => $recipient,
+              ':menu_item' => $menuItem,
+              ':message' => $notificationMessage,
+              ':createdBy' => $createdBy
+          ]);
+         // print_r($notifStmt);die;
+      } catch (Exception $e) {
+          $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+      }
+
+       } else {
+       }
     if ($stmt->rowCount() > 0) {
       // Success: Show alert and redirect
       echo '
@@ -202,8 +227,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
     $taskid = trim($_POST["taskid"]);
     $message = trim($_POST["message"]);
+    $studentid = trim($_POST["studentid"]);
 
-    if ($taskid && $message && $createdBy) {
         try {
             $stmt = $db->prepare("INSERT INTO taskcommit (taskid, message, createdate, createdby) VALUES (?, ?, NOW(), ?)");
             $stmt->execute([$taskid, $message, $createdBy]);
@@ -212,7 +237,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
         } catch (Exception $e) {
             echo '<div class="alert alert-danger">Failed to add comment.</div>';
         }
-    }
+        if ($stmt->rowCount() > 0) {
+          // ✅ Notification setup
+          $menuItem = 'task';
+          $notificationMessage = "Task Updated By Admin Task ID #.$taskid";
+          $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
+          $createdBy = $createdBy;
+  
+          try {
+              $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                           VALUES (:userid, :menu_item, 0, :message, :createdBy)";
+              $notifStmt = $db->prepare($notifSql);
+              $notifStmt->execute([
+                  ':userid' => $recipient,
+                  ':menu_item' => $menuItem,
+                  ':message' => $notificationMessage,
+                  ':createdBy' => $createdBy
+              ]);
+             // print_r($notifStmt);die;
+          } catch (Exception $e) {
+              $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+          }
+  
+           } else {
+           }
+    
 }
 ?>
 
@@ -221,7 +270,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Task  | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -534,6 +583,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
                     
                     <form method="post">
   <input type="hidden" name="taskid" value="<?php echo htmlspecialchars($applications['id']); ?>">
+  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
   <div class="form-group">
     <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
@@ -649,7 +699,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
 
   <!-- Include application ID as hidden input if needed -->
   <input type="hidden" name="taskid" value="<?php echo $applications['id']; ?>">
-
+  <input type="hidden" name="studentid" value="<?php echo $applications['studentid']; ?>">
+ 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>
 
