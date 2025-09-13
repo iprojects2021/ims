@@ -213,7 +213,7 @@
 <body>
     <div class="container" id="chooseplan">
         
-        <h1 id-1="program-title">🚀 Java Development Internship</h1>
+       
         
         
         <h2>Choose Your Plan & Start Your Coding Journey Today!</h2>
@@ -225,6 +225,20 @@
         
         <div class="pricing-plans" >
             <!-- Basic Plan -->
+             <div class="plan">
+                <h3><i class="fas fa-star"></i> Basic</h3>
+                <div class="price">₹1,000 <span>/ 15 Days</span></div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Live Meetings</li>
+                    <li><i class="fas fa-check"></i> Downloadable resources</li>
+                    <li><i class="fas fa-check"></i> 2 hands-on projects</li>
+                    <li><i class="fas fa-check"></i> Email support</li>
+                    <li><i class="fas fa-check"></i> Certificate of completion</li>
+                </ul>
+                
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹1,000/-','Basic','15 Days')">Apply Now</button>
+                
+            </div>
             <div class="plan">
                 <h3><i class="fas fa-star"></i> Advanced</h3>
                 <div class="price">₹2,000 <span>/ 1 Month</span></div>
