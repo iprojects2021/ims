@@ -647,18 +647,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="payment-methods">
                     <div class="payment-method">
+                        <i class="fas fa-qrcode"></i>
+                        <p> QR Code</p>
+                    </div>
+                    <div class="payment-method">
                         <i class="fas fa-credit-card"></i>
-                        <p>Credit Card</p>
+                        <p> Card</p>
                     </div>
                     
                     <div class="payment-method">
-                        <i class="fab fa-paypal"></i>
-                        <p>PayPal</p>
+                        <i class="fab fa-wallet"></i>
+                        <p>Wallet</p>
                     </div>
                     
                     <div class="payment-method">
                         <i class="fas fa-university"></i>
-                        <p>Bank Transfer</p>
+                        <p>NetBanking</p>
                     </div>
                 </div>
                 <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBcBgFQx5N2HsF" async> </script> </form>
