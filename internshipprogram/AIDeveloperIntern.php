@@ -86,8 +86,8 @@
         <div class="program-hero p-4 mb-4">
             <div class="row">
                 <div class="col-md-8">
-                    <h1 id="program-title">Java Development Internship</h1>
-                    <p class="lead" id="program-short-desc">3-month remote internship to build real Java projects with mentorship</p>
+                    <h1 id="program-title">AI Developer Internship</h1>
+                    <p class="lead" id="program-short-desc">3-month remote internship to build real AI projects with mentorship</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
@@ -124,23 +124,23 @@
                     <div class="col-lg-8">
                         <h3 class="mb-4">About the Program</h3>
                         <div id="program-description">
-                            <p>This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.</p>
+                            <p>This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.</p>
                             <p>You'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.</p>
                         </div>
 
                         <h3 class="mt-5 mb-4">What You'll Do</h3>
                         <div id="responsibilities-list">
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-code me-2"></i> Develop and maintain Java-based applications.</h5>
-                                <p>Build scalable backend systems using modern Java practices.</p>
+                                <h5><i class="fas fa-code me-2"></i> Develop and train AI/ML models using Python.</h5>
+                                <p>Build intelligent applications with Natural Language Processing (NLP) and Computer Vision.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize existing Java applications.</h5>
-                                <p>Learn to identify performance bottlenecks and security issues..</p>
+                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize machine learning models for accuracy and performance.</h5>
+                                <p>Learn to identify data quality issues and apply preprocessing techniques.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-database me-2"></i> Integrate MySQL databases with Core Java applications.</h5>
-                                <p>Design database schemas and integrate with Java using JDBC.</p>
+                                <h5><i class="fas fa-database me-2"></i> Integrate AI models into applications through REST APIs.</h5>
+                                <p>Deploy AI solutions on cloud platforms for scalability and real-world usage.</p>
                             </div>
                         </div>
 
@@ -196,7 +196,7 @@
                                 <div id="eligibility-list">
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
-                                        <span>Basic Java knowledge</span>
+                                        <span>Basic Python knowledge</span>
                                     </div>
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
@@ -235,20 +235,20 @@
                         <h3 class="mb-4"><i class="fas fa-graduation-cap me-2"></i> Learning Outcomes</h3>
                         <div id="outcomes-list">
                             <div class="outcome-item mb-3">
-                                <h5>Core Java + OOP concepts</h5>
-                                <p>Master object-oriented programming in Java with modern practices</p>
+                                <h5>AI & Machine Learning Fundamentals</h5>
+                                <p>Understand the core concepts of AI, supervised and unsupervised learning, and model evaluation.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Core Java fundamentals</h5>
-                                <p>Build applications using MVC architecture and Core Java ecosystem.</p>
+                                <h5>Data Preprocessing & Feature Engineering</h5>
+                                <p>Learn techniques to clean, preprocess, and transform raw data into usable formats for AI models.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>REST API development using Core Java</h5>
-                                <p>Create secure APIs with authentication and documentation.</p>
+                                <h5>Natural Language Processing (NLP)</h5>
+                                <p>Build applications that can analyze, process, and understand human language.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Implement Multithreading in Java</h5>
-                                <p>Create and manage multiple threads to execute tasks concurrently.</p>
+                                <h5>Model Deployment & Integration</h5>
+                                <p>Deploy trained AI/ML models into real-world applications using REST APIs and cloud services.</p>
                             </div>
                         </div>
                     </div>
@@ -292,13 +292,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=Hotel+Booking+System" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title"> Voice-Controlled Desktop Assistant </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Java Speech API, JDBC, MySQL</h6>
-                                <p class="card-text">Build a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.</p>
+                                <h5 class="card-title"> Smart Chatbot for Customer Support </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Python, Rasa, NLP, FastAPI</h6>
+                                <p class="card-text">Develop a chatbot capable of understanding queries, providing answers, and escalating issues when needed.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement voice recognition using Java Speech API</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate with system commands (open apps, files, browser)</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Maintain user activity logs using JDBC + MySQL</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement NLP-based intent recognition.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Train the model with real customer support data.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Enable multi-turn conversations with context retention.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Deploy chatbot APIs for web/mobile integration.</li>
                                 </ul>
                             </div>
                         </div>
@@ -307,14 +308,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Enterprise Resource Planning (ERP) System </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Core Java, Servlets/JSP, JDBC, MySQL</h6>
-                                <p class="card-text">Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.</p>
+                                <h5 class="card-title">Crop Disease Detection System </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Python, CNN, TensorFlow, OpenCV</h6>
+                                <p class="card-text">Develop a computer vision model that identifies plant diseases from leaf images.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Develop admin and role-based dashboards.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Train CNN models on agricultural datasets.</li>
                                     <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate accounting features and basic payroll.</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement real-time stock management and purchase order workflows.</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Add user authentication, authorization, and audit logs for security and tracking.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Build a farmer-friendly mobile/web app.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Deploy with TensorFlow Lite for edge devices.</li>
                                 </ul>
                             </div>
                         </div>
@@ -371,7 +372,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Apply for <span id="modal-program-title">Java Development Internship</span></h5>
+                    <h5 class="modal-title">Apply for <span id="modal-program-title">AI Developer Internship</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -440,18 +441,18 @@
         function loadProgramData() {
             // In a real app, you would fetch this from your API
             const programData = {
-                title: "Java Development Internship",
-                shortDesc: "3-month remote internship to build real Java projects with mentorship",
-                description: "This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
+                title: "AI Developer Internship",
+                shortDesc: "3-month remote internship to build real AI projects with mentorship",
+                description: "This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
                 stipend: "₹3000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
-                    { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Java practices." },
-                    { title: "Debug and optimize existing Java applications.", desc: "Learn to identify performance bottlenecks and security issues." },
-                    { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." }
+                    { title: "Develop and train AI/ML models using Python.", desc: "Build intelligent applications with Natural Language Processing (NLP) and Computer Vision." },
+                    { title: "Debug and optimize machine learning models for accuracy and performance.", desc: "Learn to identify data quality issues and apply preprocessing techniques." },
+                    { title: "Integrate AI models into applications through REST APIs.", desc: "Deploy AI solutions on cloud platforms for scalability and real-world usage." }
                 ],
                 schedule: [
                     { time: "9:30 AM", activity: "Daily standup call with team" },
@@ -459,32 +460,32 @@
                     { time: "2 PM - 3 PM", activity: "Mentor session/code review" }
                 ],
                 outcomes: [
-                    { title: "Core PHP + OOP concepts", desc: "Master object-oriented programming in PHP with modern practices." },
-                    { title: "Laravel framework fundamentals", desc: "Build applications using MVC architecture and Laravel's ecosystem." },
-                    { title: "REST API development using Core Java", desc: "Create secure APIs with authentication and documentation" },
-                    { title: "Responsive Web Design", desc: "Create mobile-friendly and cross-browser compatible web applications using HTML5 and CSS3." }
+                    { title: "AI & Machine Learning Fundamentals", desc: "Understand the core concepts of AI, supervised and unsupervised learning, and model evaluation." },
+                    { title: "Data Preprocessing & Feature Engineering", desc: "Learn techniques to clean, preprocess, and transform raw data into usable formats for AI models." },
+                    { title: "Natural Language Processing (NLP)", desc: "Build applications that can analyze, process, and understand human language." },
+                    { title: "Model Deployment & Integration", desc: "Deploy trained AI/ML models into real-world applications using REST APIs and cloud services." }
                 ],
                 projects: [
                     { 
-                        title: "Voice-Controlled Desktop Assistant (Jarvis in Java)", 
-                        tech: "Java Speech API, JDBC, MySQL", 
-                        desc: "Build a voice-activated desktop assistant that executes commands like opening applications, searching the web, managing files, and fetching live data.",
+                        title: "Smart Chatbot for Customer Support", 
+                        tech: "Python, Rasa, NLP, FastAPI", 
+                        desc: "Develop a chatbot capable of understanding queries, providing answers, and escalating issues when needed.",
                         features: [
-                            "Display dynamic course catalog using API integration.",
-                            "Implement video player and course progress tracker.",
-                            "Provide student dashboards for enrolled courses.",
-                            "PManage state using Context API or Redux."
+                            "Implement NLP-based intent recognition.",
+                            "Enable multi-turn conversations with context retention.",
+                            "Train the model with real customer support data.",
+                            "Deploy chatbot APIs for web/mobile integration."
                         ]
                     },
                     { 
-                        title: "Enterprise Resource Planning (ERP) System", 
-                        tech: "Core Java, Servlets/JSP, JDBC, MySQL", 
-                        desc: "Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.",
+                        title: "Crop Disease Detection System", 
+                        tech: "Python, CNN, TensorFlow, OpenCV", 
+                        desc: "Develop a computer vision model that identifies plant diseases from leaf images.",
                         features: [
-                             "Develop admin and role-based dashboards",
-                            "Integrate accounting features and basic payroll.",
-                            "Implement real-time stock management and purchase order workflows. ",
-                            "Add user authentication, authorization, and audit logs for security and tracking. "
+                            "Train CNN models on agricultural datasets.",
+                            "Classify diseases and suggest preventive measures.",
+                            "Build a farmer-friendly mobile/web app.",
+                            "Deploy with TensorFlow Lite for edge devices."
                         ]
                     }
                 ],

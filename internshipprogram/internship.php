@@ -241,19 +241,19 @@ if (isset($_GET['internship'])) {
             include('FrontEndReactJSDeveloperIntern.php');
             break;
         case 'SoftwareTestingIntern':
-            include('internshiptrainingprogram.php');
+            include('SoftwareTestingIntern.php');
             break;
         case 'CloudDevopsIntern':
-            include('internshiptrainingprogram.php');
+            include('CloudDevopsIntern.php');
             break;
         case 'AIDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('AIDeveloperIntern.php');
             break;
         case 'MachineLearningDevelopreIntern':
-            include('internshiptrainingprogram.php');
+            include('MachineLearningDevelopreIntern.php');
             break;
         case 'DatabaseBackendDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('DatabaseBackendDeveloperIntern.php');
             break;
 
     }

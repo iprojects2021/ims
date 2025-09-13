@@ -476,7 +476,7 @@
                         features: [
                             "APIs for table booking, menu CRUD operations, and reservations.",
                             "JWT authentication for customers and restaurant admins.",
-                            "PostgreSQL database for storing bookings, users, and menus."
+                            "PostgreSQL database for storing bookings, users, and menus.",
                             "Angular frontend for booking management and menu browsing."
                         ]
                     },
@@ -487,7 +487,7 @@
                         features: [
                             "APIs for storing trips and user preferences.",
                             "Integrate Google Maps API for travel routes.",
-                            "React UI for planning and sharing trips."
+                            "React UI for planning and sharing trips.",
                             "Secure access with JWT for users and admins."
                         ]
                     }

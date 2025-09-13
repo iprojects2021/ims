@@ -476,7 +476,7 @@
                         features: [
                             "Build REST APIs for adding, updating, and categorizing income/expenses.",
                             "Store user transactions and reports in MySQL using Spring Data JPA.",
-                            "Create a React dashboard with charts (Recharts/Chart.js) for analytics."
+                            "Create a React dashboard with charts (Recharts/Chart.js) for analytics.",
                             "Implement secure authentication and role-based access with Spring Security & JWT."
                         ]
                     },
@@ -487,7 +487,7 @@
                         features: [
                             "Implement REST APIs for resume parsing and scoring.",
                             "Store and manage candidate data using MySQL with JPA.",
-                            "Create an HR dashboard with React for viewing shortlisted candidates."
+                            "Create an HR dashboard with React for viewing shortlisted candidates.",
                             "Secure login and role-based access using Spring Security."
                         ]
                     }

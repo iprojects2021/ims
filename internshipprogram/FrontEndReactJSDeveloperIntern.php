@@ -124,23 +124,23 @@
                     <div class="col-lg-8">
                         <h3 class="mb-4">About the Program</h3>
                         <div id="program-description">
-                            <p>This intensive program provides hands-on experience with PHP, Laravel, and MySQL while working on live projects. Perfect for aspiring backend developers looking to gain real-world experience.</p>
+                            <p>A Front-End ReactJS Developer builds interactive and responsive web applications using ReactJS, focusing on delivering seamless user experiences. They implement UI components, manage state efficiently, and integrate with backend APIs.</p>
                             <p>You'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.</p>
                         </div>
 
                         <h3 class="mt-5 mb-4">What You'll Do</h3>
                         <div id="responsibilities-list">
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-code me-2"></i> Develop and maintain web applications using Python frameworks</h5>
-                                <p>Build scalable and efficient backend systems following modern Python practices.</p>
+                                <h5><i class="fas fa-code me-2"></i> Develop and maintain interactive and responsive web applications using ReactJS</h5>
+                                <p>Build scalable and efficient frontend systems following modern ReactJS practices.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize Python backend applications for better performances.</h5>
-                                <p>Gain hands-on experience in building secure, reliable, and production-ready REST APIs.</p>
+                                <h5><i class="fas fa-bug me-2"></i> Debug and optimize ReactJS applications for better performance and user experience.</h5>
+                                <p>Gain hands-on experience in integrating RESTful APIs for dynamic data rendering.</p>
                             </div>
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-database me-2"></i> Integrate and manage MySQL/PostgreSQL databases</h5>
-                                <p>Design optimized database schemas and implement CRUD operations with ORM-based data models.</p>
+                                <h5><i class="fas fa-database me-2"></i> Implement responsive layouts and ensure cross-browser compatibility using HTML5 and CSS3.</h5>
+                                <p>Design and implement reusable UI components using ReactJS.</p>
                             </div>
                         </div>
 
@@ -196,7 +196,7 @@
                                 <div id="eligibility-list">
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
-                                        <span>Basic PHP/HTML knowledge</span>
+                                        <span>Basic JavaScript/HTML knowledge</span>
                                     </div>
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
@@ -235,16 +235,20 @@
                         <h3 class="mb-4"><i class="fas fa-graduation-cap me-2"></i> Learning Outcomes</h3>
                         <div id="outcomes-list">
                             <div class="outcome-item mb-3">
-                                <h5>Core PHP + OOP concepts</h5>
-                                <p>Master object-oriented programming in PHP with modern practices</p>
+                                <h5>ReactJS Fundamentals</h5>
+                                <p>Understand component-based architecture and build dynamic, reusable UI components.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>Laravel framework fundamentals</h5>
-                                <p>Build applications using MVC architecture and Laravel's ecosystem</p>
+                                <h5>LState Management</h5>
+                                <p>Manage application state effectively using React Hooks, Context API, or Redux.</p>
                             </div>
                             <div class="outcome-item mb-3">
-                                <h5>REST API development</h5>
-                                <p>Create secure APIs with authentication and documentation</p>
+                                <h5>REST API Integration</h5>
+                                <p>Fetch and display dynamic data by integrating frontend with backend APIs.</p>
+                            </div>
+                            <div class="outcome-item mb-3">
+                                <h5>Responsive Web Design</h5>
+                                <p>Create mobile-friendly and cross-browser compatible web applications using HTML5 and CSS3.</p>
                             </div>
                         </div>
                     </div>
@@ -288,13 +292,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=Hotel+Booking+System" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Hotel Booking System</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">PHP, Laravel, MySQL</h6>
-                                <p class="card-text">Build a full-stack reservation system with user authentication, room inventory management, and payment integration.</p>
+                                <h5 class="card-title">E-Learning Course Platform</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">ReactJS, REST API, Bootstrap</h6>
+                                <p class="card-text">Build an interactive learning portal for students to browse, enroll, and track courses.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement CRUD operations</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Develop admin dashboard</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Integrate payment gateway</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Display dynamic course catalog using API integration. </li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement video player and course progress tracker.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Provide student dashboards for enrolled courses.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i>Manage state using Context API or Redux.</li>
                                 </ul>
                             </div>
                         </div>
@@ -303,13 +308,14 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">API Migration Project</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">PHP, Postman, REST</h6>
-                                <p class="card-text">Convert legacy SOAP API to modern RESTful endpoints with documentation and version control.</p>
+                                <h5 class="card-title">Smart Portfolio Builder</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">ReactJS, JSON, Bootstrap</h6>
+                                <p class="card-text">Create a customizable portfolio generator where users can input their details and instantly generate a professional portfolio website.</p>
                                 <ul class="list-group list-group-flush mb-3">
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Design API contracts</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Implement authentication</li>
-                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Write unit tests</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Build form-driven inputs to collect user details.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Generate portfolio sections dynamically.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Allow users to export their portfolio as a static HTML/JSON.</li>
+                                    <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Manage state with Context API for live updates.</li>
                                 </ul>
                             </div>
                         </div>
@@ -366,7 +372,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Apply for <span id="modal-program-title">PHP Development Internship</span></h5>
+                    <h5 class="modal-title">Apply for <span id="modal-program-title">Front-End ReactJS Development Internship</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -437,16 +443,16 @@
             const programData = {
                 title: "Front End ReactJS Development Internship",
                 shortDesc: "3-month remote internship to build real Front End ReactJS projects with mentorship",
-                description: "This intensive program provides hands-on experience with PHP, Laravel, and MySQL while working on live projects. Perfect for aspiring backend developers looking to gain real-world experience.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
+                description: "A Front-End ReactJS Developer builds interactive and responsive web applications using ReactJS, focusing on delivering seamless user experiences. They implement UI components, manage state efficiently, and integrate with backend APIs.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
                 stipend: "₹3000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
-                    { title: "Develop and maintain web applications using Python frameworks.", desc: "Build scalable and efficient backend systems following modern Python practices." },
-                    { title: "Debug and optimize Python backend applications.", desc: "Gain hands-on experience in building secure, reliable, and production-ready REST APIs." },
-                    { title: "Integrate and manage MySQL/PostgreSQL databases.", desc: "Design optimized database schemas and implement CRUD operations with ORM-based data models." }
+                    { title: "Develop and maintain interactive and responsive web applications using ReactJS", desc: "Build scalable and efficient frontend systems following modern ReactJS practices." },
+                    { title: "Debug and optimize ReactJS applications for better performance ", desc: "Gain hands-on experience in integrating RESTful APIs for dynamic data rendering." },
+                    { title: "Implement responsive layouts and ensure cross-browser compatibility using HTML5 and CSS3.", desc: "Design and implement reusable UI components using ReactJS." }
                 ],
                 schedule: [
                     { time: "9:30 AM", activity: "Daily standup call with team" },
@@ -454,29 +460,32 @@
                     { time: "2 PM - 3 PM", activity: "Mentor session/code review" }
                 ],
                 outcomes: [
-                    { title: "Core PHP + OOP concepts", desc: "Master object-oriented programming in PHP with modern practices" },
-                    { title: "Laravel framework fundamentals", desc: "Build applications using MVC architecture and Laravel's ecosystem" },
-                    { title: "REST API development", desc: "Create secure APIs with authentication and documentation" }
+                    { title: "CReactJS Fundamentals", desc: "Understand component-based architecture and build dynamic, reusable UI components." },
+                    { title: "State Management", desc: "Manage application state effectively using React Hooks, Context API, or Redux." },
+                    { title: "REST API Integration", desc: "Fetch and display dynamic data by integrating frontend with backend APIs." },
+                    { title: "Responsive Web Design", desc: "Create mobile-friendly and cross-browser compatible web applications using HTML5 and CSS3." }
                 ],
                 projects: [
                     { 
-                        title: "Hotel Booking System", 
-                        tech: "PHP, Laravel, MySQL", 
-                        desc: "Build a full-stack reservation system with user authentication, room inventory management, and payment integration.",
+                        title: "E-Learning Course Platform", 
+                        tech: "ReactJS, REST API, Bootstrap", 
+                        desc: "Build an interactive learning portal for students to browse, enroll, and track courses.",
                         features: [
-                            "Implement CRUD operations",
-                            "Develop admin dashboard",
-                            "Integrate payment gateway"
+                            "Display dynamic course catalog using API integration.",
+                            "Implement video player and course progress tracker.",
+                            "Provide student dashboards for enrolled courses.",
+                            "PManage state using Context API or Redux."
                         ]
                     },
                     { 
-                        title: "API Migration Project", 
-                        tech: "PHP, Postman, REST", 
-                        desc: "Convert legacy SOAP API to modern RESTful endpoints with documentation and version control.",
+                        title: "Smart Portfolio Builder", 
+                        tech: "ReactJS, JSON, Bootstrap", 
+                        desc: "Create a customizable portfolio generator where users can input their details and instantly generate a professional portfolio website.",
                         features: [
-                            "Design API contracts",
-                            "Implement authentication",
-                            "Write unit tests"
+                            "Build form-driven inputs to collect user details.",
+                            "Generate portfolio sections dynamically.",
+                            "Allow users to export their portfolio as a static HTML/JSON.",
+                            "Manage state with Context API for live updates."
                         ]
                     }
                 ],
