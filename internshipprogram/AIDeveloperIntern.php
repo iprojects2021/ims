@@ -442,11 +442,11 @@
             // In a real app, you would fetch this from your API
             const programData = {
                 title: "AI Developer Internship",
-                shortDesc: "3-month remote internship to build real AI projects with mentorship",
+                shortDesc: "1 to 6 months remote internship to build real AI projects with mentorship available",
                 description: "This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
