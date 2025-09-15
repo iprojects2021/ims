@@ -297,6 +297,16 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="userinfo.php" class="nav-link">
+        <i class="nav-icon fas fa-th"></i>
+        <p>
+          User Details
+         <!-- <span class="right badge badge-danger">New</span>-->
+        </p>
+      </a>
+    </li>
+
 
     <li class="nav-item has-treeview">
   <a href="#" class="nav-link">

@@ -70,8 +70,76 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
       </h3>
     </div>
     <div class="card-body">
+   <!-- Stat boxes -->
+<div class="row">
+  <!-- Document Status -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>Pending</h3>
+        <p>Document Status</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-document"></i>
+      </div>
+      <a href="resume_upload.php" class="small-box-footer">
+        View Document <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
 
-      <!-- Top Summary Info -->
+  <!-- Resume Upload -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-success">
+      <div class="inner">
+        <h3>Uploaded</h3>
+        <p>Resume Status</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-upload"></i>
+      </div>
+      <a href="resume_upload.php" class="small-box-footer">
+        View Ticket <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Tasks -->
+  <div class="col-lg-3 col-6">
+  <div class="small-box bg-warning">
+    <div class="inner">
+      <h3>task</h3>
+      <p>Tasks</p>
+    </div>
+    <div class="icon">
+      <i class="ion ion-clipboard"></i>
+    </div>
+    <form action="admintasks.php" method="POST">
+      <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+      <button type="submit" class="small-box-footer btn btn-link" style="text-decoration: none;">
+        View Tasks <i class="fas fa-arrow-circle-right"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+  <!-- Visitors -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-danger">
+      <div class="inner">
+        <h3>65</h3>
+        <p>Unique Visitors</p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-eye"></i>
+      </div>
+      <a href="#" class="small-box-footer">
+        View Referral <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  </div>
+</div>
+   <!-- Top Summary Info -->
       <div class="row">
         <div class="col-md-4">
           <div class="info-box bg-gradient-info">

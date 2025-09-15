@@ -6,15 +6,31 @@ $studentId = $_SESSION["user"]["id"] ?? null;
 if (!$studentId) {
     die("Unauthorized access.");
 }
+
 // Fetch Tasks
-try {
-    $stmt = $db->prepare("SELECT * FROM task");
-    $stmt->execute();
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $error = "Error fetching tasks: " . $e->getMessage();
-    $tasks = [];
+if (isset($_POST['userid'])) {
+  $id = $_POST['userid'];
+  try {
+      $stmt = $db->prepare("SELECT * FROM task WHERE studentid = :id");
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Use PARAM_STR if it's not an integer
+      $stmt->execute();
+      $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $error = "Error fetching tasks: " . $e->getMessage();
+      $tasks = [];
+  }
+} else {
+  try {
+      $stmt = $db->prepare("SELECT * FROM task");
+      $stmt->execute();
+      $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $error = "Error fetching tasks: " . $e->getMessage();
+      $tasks = [];
+  }
 }
+
+
 ?>
 <?php
 
@@ -104,6 +120,7 @@ try {
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>User ID</th>
                   <th>Title</th>
                   <th>Description</th>
                   <th>Due Date</th>
@@ -118,6 +135,7 @@ try {
               <?php foreach ($tasks as $task): ?>
                 <tr class="clickable-row" data-id="<?= $task['id'] ?>">
                   <td><?= $task['id'] ?></td>
+                  <td><?= $task['studentid'] ?></td>
                   <td><?= htmlspecialchars($task['title']) ?></td>
                   <td><?= nl2br(htmlspecialchars($task['description'])) ?></td>
                   <td><?= htmlspecialchars($task['due_date']) ?></td>
