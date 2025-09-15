@@ -134,18 +134,20 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
           <div class="col-12">
   
   <div class="services-grid">
-            <!-- Service 1 -->
+    <!-- Service 4 -->
             <div class="service-card">
                 <div class="service-icon">
-                    <i class="fas fa-laptop-code"></i>
+                    <i class="fas fa-briefcase"></i>
                 </div>
-                <h3 class="service-title">College Final Year Projects Development </h3>
+                <h3 class="service-title">Internship & Live Project Support</h3>
                 <p class="service-desc">
-                    End-to-end project development from concept to execution with documentation support.
+                    Real-world project experience with mentorship from industry professionals.
                 </p>
-                <a href="../collegeprojects.php" class="btn">Learn More</a>
+                <a href="../developmentinternships.php" class="btn">Learn More</a>
             </div>
-            
+
+
+
             <!-- Service 2 -->
             <div class="service-card">
                 <div class="service-icon">
@@ -158,19 +160,7 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
                 <a href="../trainingprograms.php" class="btn">Learn More</a>
             </div>
 
-             <!-- Service 4 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <h3 class="service-title">Internship & Live Project Support</h3>
-                <p class="service-desc">
-                    Real-world project experience with mentorship from industry professionals.
-                </p>
-                <a href="../developmentinternships.php" class="btn">Learn More</a>
-            </div>
-            
-            <!-- Service 3 -->
+ <!-- Service 3 -->
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-user-tie"></i>
@@ -181,6 +171,22 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
                 </p>
                 <a href="../interviewpreparation.php" class="btn">Learn More</a>
             </div>
+            <!-- Service 1 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3 class="service-title">College Final Year Projects Development </h3>
+                <p class="service-desc">
+                    End-to-end project development from concept to execution with documentation support.
+                </p>
+                <a href="../collegeprojects.php" class="btn">Learn More</a>
+            </div>
+            
+            
+             
+            
+           
             
            
         </div>

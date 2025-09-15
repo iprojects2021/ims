@@ -449,7 +449,7 @@
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
-                    { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Java practices." },
+                    { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Professional Java practices." },
                     { title: "Debug and optimize existing Java applications.", desc: "Learn to identify performance bottlenecks and security issues." },
                     { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." }
                 ],
