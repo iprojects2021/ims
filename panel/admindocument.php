@@ -2,72 +2,11 @@
 include("../includes/db.php");
 include("../panel/util/alerts.php");
 session_start();
-
 $useriddata=$_SESSION['user']['id'];
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $education = $_POST['education'];
-    $remark = $_POST['remark'];
-    $studentid = $useriddata; // Make sure $useriddata is defined
-    $createdBy = $studentid;  // Assuming the student is the one who created it
-
-    if (isset($_FILES['document']) && $_FILES['document']['error'] === 0) {
-        $targetDir = "uploads/";
-        if (!file_exists($targetDir)) {
-            mkdir($targetDir, 0777, true);
-        }
-
-        $filename = basename($_FILES["document"]["name"]);
-        $targetFilePath = $targetDir . time() . "_" . $filename;
-
-        if (move_uploaded_file($_FILES["document"]["tmp_name"], $targetFilePath)) {
-            // Save document info to database
-            $stmt = $db->prepare("INSERT INTO documents (education_level, file_path, remark, studentid, status) VALUES (?, ?, ?, ?, 'uploaded')");
-            $result = $stmt->execute([$education, $targetFilePath, $remark, $studentid]);
-
-            if ($result) {
-                // Insert notification
-                $menuItem = 'document'; // Use 'documents' or relevant menu section
-                $notificationMessage = "New document uploaded by Student ID: " . $studentid;
-
-                try {
-                    $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                                 VALUES ('admin', :menu_item, 0, :message, :createdBy)";
-                    $notifStmt = $db->prepare($notifSql);
-                    $notifStmt->execute([
-                        ':menu_item' => $menuItem,
-                        ':message' => $notificationMessage,
-                        ':createdBy' => $createdBy
-                    ]);
-                } catch (Exception $e) {
-                    // Optional: handle/log error
-                    $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
-                }
-
-                $showAlert = 'success';
-              } else {
-                echo '<div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h5><i class="icon fas fa-times"></i> Error!</h5>
-                    There was an error saving your document.
-                </div>';
-            }
-        } else {
-            echo "<div class='alert alert-danger'>Error uploading file.</div>";
-        }
-    } else {
-        echo "<div class='alert alert-danger'>No file selected or upload error.</div>";
-    }
-}
-
-
 ?>
-
 <?php
-
 try{
-$sql="SELECT * FROM documents where studentid=$useriddata";
+$sql="SELECT * FROM documents";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $documentlist = $stmt->fetchAll();
@@ -87,18 +26,20 @@ try{
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
 ?>
+
 <?php
-$useriddata=$_SESSION['user']['id'];
+
 try {
     $sql = "UPDATE notification 
             SET isread = 1 
-            WHERE userid =$useriddata 
+            WHERE userid ='admin' 
               AND menu_item = 'document'";
     $db->query($sql);
 } catch (Exception $e) {
     // Optional: Log the error
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -161,52 +102,7 @@ try {
       <div class="container-fluid">
 
   
-  <!-- form start -->
-<!-- AdminLTE styled form -->
-<div class="container mt-5">
-    <div class="card card-primary">
-        <div class="card-header"><h3 class="card-title">Upload Document</h3></div>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="education">Select Education Level</label>
-                    <select class="form-control" name="education" id="education" required>
-                        <option value="">-- Select --</option>
-                        <option value="10th">10th</option>
-                        <option value="12th">12th</option>
-                        <option value="Graduation">Graduation</option>
-                    </select>
-                </div>
 
-                <div id="uploadSection" style="display:none;">
-                    <div class="form-group">
-                        <label for="document">Choose File</label>
-                        <input type="file" class="form-control" name="document" id="document" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="remark">Remark</label>
-                        <textarea class="form-control" name="remark" id="remark" rows="3" placeholder="Enter remark" ></textarea>
-                    </div>
-                </div>
-            </div>
-            <?php 
-$allowedStatuses = ['Approved', 'Offer Sent', 'Confirmed', 'Ongoing', 'Completed'];
-
-foreach ($checkstatus as $checkstatusdata): 
-    if (in_array($checkstatusdata['status'], $allowedStatuses)): ?>
-    
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary" id="uploadBtn">Upload</button>
-        </div>
-
-<?php 
-    endif;
-endforeach; 
-?>
-
-             </form>
-    </div>
-</div>
 <!-- AdminLTE Card with Table -->
 <div class="card">
   <div class="card-header">
@@ -243,7 +139,6 @@ endforeach;
 <?php else: ?>
     <em>No file</em>
 <?php endif; ?>
-
                   </td>
               <td><?= htmlspecialchars($documentdata['remark']) ?></td>
               <td><?= htmlspecialchars($documentdata['status']) ?>
@@ -333,7 +228,6 @@ endforeach;
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<?php include("../panel/util/alert.php");?>
 </body>
 </html>
 <!-- Script to show file upload when dropdown is selected -->
@@ -368,4 +262,30 @@ document.getElementById('education').addEventListener('change', function () {
     });
   });
 </script>
+       <!-- Hidden form to send POST -->
+       <form id="postForm" method="POST" action="documenttype.PHP" style="display:none;">
+    <input type="hidden" name="id" id="hiddenId">
+</form>
+<script>
+  
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            document.getElementById('hiddenId').value = id;
+            document.getElementById('postForm').submit();
+        });
+    });
+</script>
 
+<?php if ($showAlert): ?>
+<script>
+Swal.fire({
+    title: 'Success!',
+    text: 'Record inserted successfully.',
+    icon: 'success',
+    confirmButtonText: 'OK'
+});
+</script>
+<?php else: ?>
+
+<?php endif; ?>

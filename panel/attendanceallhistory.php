@@ -102,8 +102,8 @@ $daytrackerhistory = $stmt->fetchAll();
     <div class="small-box bg-gradient-danger shadow-lg">
       <div class="inner">
         <h4 class="mb-2">🕒 Login</h4>
-        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
-        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logintime']); ?></p>
+        <p><strong>DateTime:</strong> </p>
+        <p><strong></strong> <?php echo htmlspecialchars($row['logintime']); ?></p>
       </div>
       <div class="icon">
         <i class="fas fa-sign-in-alt"></i>
@@ -117,8 +117,8 @@ $daytrackerhistory = $stmt->fetchAll();
     <div class="small-box bg-gradient-warning shadow-lg">
       <div class="inner">
         <h4 class="mb-2">🚪 Logout</h4>
-        <p><strong>Date:</strong> <?php echo date('Y-m-d', strtotime($row['createdat'])); ?></p>
-        <p><strong>Time:</strong> <?php echo htmlspecialchars($row['logouttime']); ?></p>
+        <p><strong>DateTime:</strong> </p>
+        <p><strong></strong> <?php echo htmlspecialchars($row['logouttime']); ?></p>
       </div>
       <div class="icon">
         <i class="fas fa-sign-out-alt"></i>

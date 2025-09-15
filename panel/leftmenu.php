@@ -65,13 +65,17 @@ $notificationCounts = [
     'tickets' => getNotificationCount($db, $userid, 'tickets', $role),
     'application'    => getNotificationCount($db, $userid, 'application', $role),
     'task'    => getNotificationCount($db, $userid, 'task', $role),
+    'document'    => getNotificationCount($db, $userid, 'document', $role),
 ];
-$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task'];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document'];
 
 // Notification messages
 $ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
 $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
 $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
+$documentMessages   = getUnreadNotifications($db, $userid, 'document', $role);
+$applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
+
 ?>
 
 
@@ -197,6 +201,23 @@ $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($ticket['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($ticket['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+<!-- document Messages -->
+<?php foreach ($documentMessages as $document): ?>
+            <a href="admintickets.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($document['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($document['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
+<!-- application Messages -->
+<?php foreach ($applicationMessages as $apllication): ?>
+            <a href="admintickets.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($apllication['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($apllication['createdAt'])) ?></span>
             </a>
         <?php endforeach; ?>
 
@@ -341,6 +362,20 @@ $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
     </p>
   </a>
 </li>
+<li class="nav-item">
+  <a href="admindocument.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Document
+      <?php if ($notificationCounts['document'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['document']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+
 
     <li class="nav-item">
       <a href="adminreferral.php" class="nav-link">
@@ -438,7 +473,12 @@ $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
     <li class="nav-item">
       <a href="uploaddocuments.php" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
-        <p>Documents</p>
+        <p>Documents <?php if ($notificationCounts['document'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['document']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
       </a>
     </li>
 

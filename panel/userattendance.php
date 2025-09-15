@@ -123,8 +123,11 @@ $hourtrackerhistory = $stmt->fetchAll();
  $daytrackerhistory = $stmt->fetchAll();
 
 
-
-
+ $sql = "SELECT * FROM userattendance WHERE userid = $useriddata AND DATE(createdat) = CURDATE()";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+ $userattendance = $stmt->fetchAll();
+ 
 //today work hour
 
 $stmt = $db->prepare("SELECT 
@@ -555,7 +558,7 @@ $loggedcount = $stmt->fetchColumn();
                 <h2>Today's Summary</h2>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="hours-worked" style="font-size: 15px;"><?php foreach ($daytrackerhistory as $row): ?><?php
+                        <div class="stat-value" id="hours-worked" style="font-size: 15px;"><?php foreach ($userattendance as $row): ?><?php
 // Set the timezone
 date_default_timezone_set('Asia/Kolkata');
 
