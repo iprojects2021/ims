@@ -211,43 +211,49 @@ if (isset($_GET['internship'])) {
     $internship = $_GET['internship'];
      switch ($internship) {
         case 'JavaDeveloperIntern':
-            include('internshiptrainingprogram.php');
+         
+            include('JavaDeveloperIntern.php');
             break;
         case 'SpringBootDeveloperIntern':
-            include('internshiptrainingprogram.php');
+          
+            include('SpringBootDeveloperIntern.php');
             break;
         case 'JavaFullStackDeveloperIntern':
-            include('internshiptrainingprogram.php');
+
+            include('JavaFullStackDeveloperIntern.php');
             break;
         case 'PythonBackendDeveloperIntern':
-            include('internshiptrainingprogram.php');
+
+            include('PythonBackendDeveloperIntern.php');
             break;
         case 'PythonFullStackDeveloperIntern':
-            include('internshiptrainingprogram.php');
+
+            include('PythonFullStackDeveloperIntern.php');
             break;
         case 'PHPDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('PHPDeveloperIntern.php');
             break;
         case 'FrontEndDeveloperBasicIntern':
-            include('internshiptrainingprogram.php');
+          
+            include('FrontEndDeveloperBasicIntern.php');
             break;
         case 'FrontEndReactJSDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('FrontEndReactJSDeveloperIntern.php');
             break;
         case 'SoftwareTestingIntern':
-            include('internshiptrainingprogram.php');
+            include('SoftwareTestingIntern.php');
             break;
         case 'CloudDevopsIntern':
-            include('internshiptrainingprogram.php');
+            include('CloudDevopsIntern.php');
             break;
         case 'AIDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('AIDeveloperIntern.php');
             break;
         case 'MachineLearningDevelopreIntern':
-            include('internshiptrainingprogram.php');
+            include('MachineLearningDevelopreIntern.php');
             break;
         case 'DatabaseBackendDeveloperIntern':
-            include('internshiptrainingprogram.php');
+            include('DatabaseBackendDeveloperIntern.php');
             break;
 
     }
