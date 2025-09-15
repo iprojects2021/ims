@@ -266,7 +266,7 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="profile.php" class="d-block"><?php echo isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "";?></a>
         </div>
       </div>
 
