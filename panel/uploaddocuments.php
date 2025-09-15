@@ -9,9 +9,9 @@ $useriddata=$_SESSION['user']['id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $education = $_POST['education'];
     $remark = $_POST['remark'];
-    $studentid=$useriddata;
-    
- 
+    $studentid = $useriddata; // Make sure $useriddata is defined
+    $createdBy = $studentid;  // Assuming the student is the one who created it
+
     if (isset($_FILES['document']) && $_FILES['document']['error'] === 0) {
         $targetDir = "uploads/";
         if (!file_exists($targetDir)) {
@@ -20,18 +20,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $filename = basename($_FILES["document"]["name"]);
         $targetFilePath = $targetDir . time() . "_" . $filename;
-        move_uploaded_file($_FILES["document"]["tmp_name"], $targetFilePath);
 
-       
-        $stmt = $db->prepare("INSERT INTO documents (education_level, file_path, remark,studentid,status) VALUES (?, ?, ?, ?, 'uploaded')");
-        $stmt->execute([$education, $targetFilePath, $remark, $studentid]);
+        if (move_uploaded_file($_FILES["document"]["tmp_name"], $targetFilePath)) {
+            // Save document info to database
+            $stmt = $db->prepare("INSERT INTO documents (education_level, file_path, remark, studentid, status) VALUES (?, ?, ?, ?, 'uploaded')");
+            $result = $stmt->execute([$education, $targetFilePath, $remark, $studentid]);
 
-        $showAlert = true;
-       // echo "<div class='alert alert-success'>File uploaded and data saved!</div>";
+            if ($result) {
+                // Insert notification
+                $menuItem = 'document'; // Use 'documents' or relevant menu section
+                $notificationMessage = "New document uploaded by Student ID: " . $studentid;
+
+                try {
+                    $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                                 VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+                    $notifStmt = $db->prepare($notifSql);
+                    $notifStmt->execute([
+                        ':menu_item' => $menuItem,
+                        ':message' => $notificationMessage,
+                        ':createdBy' => $createdBy
+                    ]);
+                } catch (Exception $e) {
+                    // Optional: handle/log error
+                    $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+                }
+
+                $showAlert = 'success';
+              } else {
+                echo '<div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-times"></i> Error!</h5>
+                    There was an error saving your document.
+                </div>';
+            }
+        } else {
+            echo "<div class='alert alert-danger'>Error uploading file.</div>";
+        }
     } else {
-        echo "<div class='alert alert-danger'>Error uploading file.</div>";
+        echo "<div class='alert alert-danger'>No file selected or upload error.</div>";
     }
 }
+
+
 ?>
 
 <?php
@@ -56,6 +86,18 @@ try{
   {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
+?>
+<?php
+$useriddata=$_SESSION['user']['id'];
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid =$useriddata 
+              AND menu_item = 'document'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
 ?>
 
 
@@ -193,11 +235,15 @@ endforeach;
               <td><?= htmlspecialchars($documentdata['studentid']) ?></td>
               <td><?= htmlspecialchars($documentdata['education_level']) ?></td>
               <td> <?php if (!empty($documentdata['file_path'])): ?>
-                  <a href="<?= htmlspecialchars($documentdata['file_path']) ?>" target="_blank">View</a>
-                <?php else: ?>
-                  <em>No file</em>
-                <?php endif; ?>
-             
+    <?php
+        // Extract just the filename
+        $filename = basename($documentdata['file_path']);
+    ?>
+    <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
+<?php else: ?>
+    <em>No file</em>
+<?php endif; ?>
+
                   </td>
               <td><?= htmlspecialchars($documentdata['remark']) ?></td>
               <td><?= htmlspecialchars($documentdata['status']) ?>
@@ -287,6 +333,7 @@ endforeach;
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<?php include("../panel/util/alert.php");?>
 </body>
 </html>
 <!-- Script to show file upload when dropdown is selected -->
@@ -322,15 +369,3 @@ document.getElementById('education').addEventListener('change', function () {
   });
 </script>
 
-<?php if ($showAlert): ?>
-<script>
-Swal.fire({
-    title: 'Success!',
-    text: 'Record inserted successfully.',
-    icon: 'success',
-    confirmButtonText: 'OK'
-});
-</script>
-<?php else: ?>
-
-<?php endif; ?>

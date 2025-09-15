@@ -76,6 +76,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+<?php
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid = 'admin' 
+              AND menu_item = 'tickets'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+
 
 
 <!DOCTYPE html>
@@ -83,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Ticket | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
   <!-- Google Font: Source Sans Pro -->

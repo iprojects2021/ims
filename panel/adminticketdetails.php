@@ -10,6 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
   $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
+  // Store studentid in session
+//  $useriddata=$_SESSION['studentid'] = $applicationdata[0]['studentid'];
+  //print_r($useriddata);die;
   }
   catch(Exception $e)
   {
@@ -32,63 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
 
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
-    $ticketid = $_POST['ticketid'];
-    $new_status = $_POST['new_status'];
-    $comment = $_POST['comment'];
-    $changed_by=$_SESSION['user']['id'];
-    try{
-    $sql="INSERT INTO ticketstatushistory (ticketid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)";   
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$ticketid, $new_status, $comment,$changed_by]);
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-    if ($stmt->rowCount() > 0) {
-      // Success: Show alert and redirect
-      echo '
-    <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
-                z-index: 1050; width: 400px; max-width: 90%;">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h5><i class="icon fas fa-check"></i> Success!</h5>
-            Status updated successfully.
-        </div>
-    </div>
-    <script type="text/javascript">
-        setTimeout(function() {
-            window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
-        }, 2000);
-    </script>';
-  } else {
-      // Error: Show error alert
-      echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-              <h5><i class="icon fas fa-times"></i> Error!</h5>
-              There was an error updating the data.
-            </div>';
-  }
-  
-  // Auto-dismiss script
-  echo "<script>
-      setTimeout(function() {
-          var alert = document.getElementById('statusAlert');
-          if(alert) {
-              alert.classList.remove('show');
-              alert.classList.add('fade');
-              setTimeout(function() {
-                  alert.remove();
-              }, 500); // Wait for fade-out animation
-          }
-      }, 3000); // 3 seconds
-  </script>";
-  
-  
-  
-    
-}
+
 // Fetch ticket comments
 try{
 $sql="SELECT * FROM ticketstatushistory";  
@@ -179,7 +126,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
         echo "Database error: " . htmlspecialchars($e->getMessage());
     }
 } else {
-    echo "Invalid request or user not logged in.";
+   // echo "Invalid request or user not logged in.";
+}
+?>
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
+    $ticketid = $_POST['ticketid'];
+    $studentid = $_POST['studentid'];
+    $new_status = $_POST['new_status'];
+    $comment = $_POST['comment'];
+    $changed_by = $_SESSION['user']['id'];
+
+    try {
+        // Insert into ticket status history
+        $sql = "INSERT INTO ticketstatushistory (ticketid, new_status, comment, changed_by) 
+                VALUES (?, ?, ?, ?)";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$ticketid, $new_status, $comment, $changed_by]);
+
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
+    }
+
+    if ($stmt->rowCount() > 0) {
+        // ✅ Notification setup
+        $menuItem = 'tickets';
+        $notificationMessage = "Ticket ID #{$ticketid} status changed to '{$new_status}' by User ID: {$changed_by}";
+        $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
+        $createdBy = $changed_by;
+
+        try {
+            $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                         VALUES (:userid, :menu_item, 0, :message, :createdBy)";
+            $notifStmt = $db->prepare($notifSql);
+            $notifStmt->execute([
+                ':userid' => $recipient,
+                ':menu_item' => $menuItem,
+                ':message' => $notificationMessage,
+                ':createdBy' => $createdBy
+            ]);
+           // print_r($notifStmt);die;
+        } catch (Exception $e) {
+            $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+        }
+
+        // ✅ Success alert and redirect
+        echo '
+        <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                    z-index: 1050; width: 400px; max-width: 90%;">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Success!</h5>
+                Status updated successfully.
+            </div>
+        </div>
+        <script type="text/javascript">
+            setTimeout(function() {
+                window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
+            }, 2000);
+        </script>';
+    } else {
+        // ❌ Failure alert
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-times"></i> Error!</h5>
+                There was an error updating the data.
+              </div>';
+    }
+
+    // Auto-dismiss script
+    echo "<script>
+        setTimeout(function() {
+            var alert = document.getElementById('statusAlert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(function() {
+                    alert.remove();
+                }, 500); // Wait for fade-out animation
+            }
+        }, 3000); // 3 seconds
+    </script>";
 }
 ?>
 
@@ -189,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Ticket | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -512,6 +540,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
                     
                     <form method="post" action="ticketcommet.php">
   <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
+  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
   <div class="form-group">
     <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
   </div>
@@ -632,6 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
 
   <!-- Include application ID as hidden input if needed -->
   <input type="hidden" name="ticketid" value="<?php echo $applications['id']; ?>">
+  <input type="hidden" name="studentid" value="<?php echo $applications['studentid']; ?>">
 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>

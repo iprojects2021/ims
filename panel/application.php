@@ -42,13 +42,26 @@ catch(Exception $e)
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
 ?>
+<?php
+
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid ='admin' 
+              AND menu_item = 'application'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin-Dashboard | INDSAC SOFTECH</title>
+  <title>Admin-Application | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -104,7 +117,7 @@ catch(Exception $e)
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
+              <li class="breadcrumb-item active">Application</li>
             </ol>
           </div>
         </div>
@@ -115,67 +128,8 @@ catch(Exception $e)
     <section class="content">
       <div class="container-fluid">
         
-        <!-- Welcome message -->
-        <div class="row">
-          <div class="col-12">
-            <div class="callout callout-success">
-              <h5>Welcome!</h5>
-              Hello <strong><?= $studentName ?></strong>, we're glad to have you here. Explore your dashboard, and make the most of your learning journey. Let's achieve greatness together!
-            </div>
-          </div>
-        </div>
 
-        <!-- Stat boxes -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>Status</h3>
-                <p>status</p>
-              </div>
-              <div class="icon"><i class="ion ion-bag"></i></div>
-              <p class="small-box-footer">Application Status</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>Resume</h3>
-                <p>--</p>
-              </div>
-              <div class="icon"><i class="ion ion-stats-bars"></i></div>
-              <a href="resume_upload.php" class="small-box-footer">Upload Resume <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <?php if ($currentUser): ?>
-                  <h3><?= htmlspecialchars($currentUser['id']) ?></h3>
-                  <p><?= htmlspecialchars($currentUser['full_name']) ?></p>
-                <?php else: ?>
-                  <h3>--</h3>
-                  <p>User not found</p>
-                <?php endif; ?>
-              </div>
-              <div class="icon"><i class="ion ion-person-add"></i></div>
-              <a href="profile.php" class="small-box-footer">Profile <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon"><i class="ion ion-pie-graph"></i></div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- Applications table -->
         <div class="card">

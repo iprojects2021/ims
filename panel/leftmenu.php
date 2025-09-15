@@ -1,7 +1,85 @@
 <?php
-//session_start(); // Ensure session is started at the top of the file
+
 $role = $_SESSION['user']['role'] ?? null;
+$userid = $_SESSION['user']['id'] ?? null;
+
+// Function to get unread notification count
+function getNotificationCount($db, $userid, $menu_item, $role) {
+    try {
+        $sql = "SELECT COUNT(*) FROM notification 
+                WHERE userid = :userid 
+                  AND menu_item = :menu_item 
+                  AND isread = 0";
+        $stmt = $db->prepare($sql);
+
+        if ($role === 'admin') {
+            $stmt->execute([
+                ':userid' => 'admin',
+                ':menu_item' => $menu_item
+            ]);
+        } else {
+            $stmt->execute([
+                ':userid' => $userid,
+                ':menu_item' => $menu_item
+            ]);
+        }
+
+        return $stmt->fetchColumn();
+    } catch (Exception $e) {
+        error_log("Error fetching notification count for $menu_item: " . $e->getMessage());
+        return 0;
+    }
+}
+
+// Function to fetch unread notification messages
+function getUnreadNotifications($db, $userid, $menu_item, $role, $limit = 5) {
+    try {
+        $sql = "SELECT message, createdAt 
+                FROM notification 
+                WHERE userid = :userid 
+                  AND menu_item = :menu_item 
+                  AND isread = 0 
+                ORDER BY createdAt DESC 
+                LIMIT :limit";
+        $stmt = $db->prepare($sql);
+
+        if ($role === 'admin') { 
+            $stmt->bindValue(':userid','admin', PDO::PARAM_STR);
+        } else {
+            $stmt->bindValue(':userid', $userid, PDO::PARAM_STR);
+        }
+
+        $stmt->bindValue(':menu_item', $menu_item, PDO::PARAM_STR);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("Error fetching unread notifications: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Notification counts
+$notificationCounts = [
+    'tickets' => getNotificationCount($db, $userid, 'tickets', $role),
+    'application'    => getNotificationCount($db, $userid, 'application', $role),
+    'task'    => getNotificationCount($db, $userid, 'task', $role),
+    'document'    => getNotificationCount($db, $userid, 'document', $role),
+];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document'];
+
+// Notification messages
+$ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
+$applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
+$taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
+$documentMessages   = getUnreadNotifications($db, $userid, 'document', $role);
+$applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
+
 ?>
+
+
+
 <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
@@ -106,31 +184,58 @@ $role = $_SESSION['user']['role'] ?? null;
       </li>
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
+    <a class="nav-link" data-toggle="dropdown" href="#">
+        <i class="far fa-bell"></i>
+        <?php if ($totalNotifications > 0): ?>
+            <span class="badge badge-warning navbar-badge"><?= $totalNotifications ?></span>
+        <?php endif; ?>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <span class="dropdown-item dropdown-header"><?= $totalNotifications ?> Notifications</span>
+
+        <div class="dropdown-divider"></div>
+
+        <!-- Ticket Messages -->
+        <?php foreach ($ticketMessages as $ticket): ?>
+            <a href="admintickets.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($ticket['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($ticket['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+<!-- document Messages -->
+<?php foreach ($documentMessages as $document): ?>
+            <a href="admintickets.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($document['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($document['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
+<!-- application Messages -->
+<?php foreach ($applicationMessages as $apllication): ?>
+            <a href="admintickets.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($apllication['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($apllication['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
+        
+<!-- task Messages -->
+<?php foreach ($taskMessages as $task): ?>
+            <a href="studenthelp.php" class="dropdown-item">
+                <i class="fas fa-life-ring mr-2"></i>
+                <?= htmlspecialchars($task['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($task['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
+        <div class="dropdown-divider"></div>
+        <a href="all-notifications.php" class="dropdown-item dropdown-footer">See All Notifications</a>
+    </div>
+</li>
+
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -216,24 +321,61 @@ $role = $_SESSION['user']['role'] ?? null;
     </li>
   </ul>
 </li>
+<!-- Tickets Menu Item -->
 <li class="nav-item">
-      <a href="admintickets.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Tickets
-         <!-- <span class="right badge badge-danger">New</span>-->
-        </p>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="admintasks.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
-          Tasks
-         <!-- <span class="right badge badge-danger">New</span>-->
-        </p>
-      </a>
-    </li>
+  <a href="admintickets.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Tickets
+      <?php if ($notificationCounts['tickets'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['tickets']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+<li class="nav-item">
+  <a href="application.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Application
+      <?php if ($notificationCounts['application'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['application']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="admintasks.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Task
+      <?php if ($notificationCounts['task'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['task']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+<li class="nav-item">
+  <a href="admindocument.php" class="nav-link">
+    <i class="nav-icon fas fa-th"></i>
+    <p>
+      Document
+      <?php if ($notificationCounts['document'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['document']; ?>
+        </span>
+      <?php endif; ?>
+    </p>
+  </a>
+</li>
+
 
     <li class="nav-item">
       <a href="adminreferral.php" class="nav-link">
@@ -299,17 +441,44 @@ $role = $_SESSION['user']['role'] ?? null;
     </li>
 
     
+    <li class="nav-item has-treeview <?php echo ($page == 'create_task' || $page == 'view_task') ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?php echo ($page == 'create_task' || $page == 'view_task') ? 'active' : ''; ?>">
+  <i class="nav-icon fas fa-copy"></i>
+    <p>
+      Task
+      <?php if ($notificationCounts['task'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['task']; ?>
+        </span>
+      <?php endif; ?>
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="tasks.php" class="nav-link">
-        <i class="nav-icon fas fa-tasks"></i>
-        <p>Tasks / Worklogs</p>
+      <a href="tasks.php" class="nav-link <?php echo ($page == 'create_task') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Create Task</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="view_task.php" class="nav-link <?php echo ($page == 'view_task') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>View Task</p>
+      </a>
+    </li>
+  </ul>
+</li>
 
     <li class="nav-item">
       <a href="uploaddocuments.php" class="nav-link">
         <i class="nav-icon fas fa-file"></i>
-        <p>Documents</p>
+        <p>Documents <?php if ($notificationCounts['document'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['document']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
       </a>
     </li>
 
@@ -334,12 +503,36 @@ $role = $_SESSION['user']['role'] ?? null;
       </a>
     </li>
 
+    <!-- Support Menu Item -->
+    <li class="nav-item has-treeview <?php echo ($page == 'create_ticket' || $page == 'view_tickets') ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?php echo ($page == 'create_ticket' || $page == 'view_tickets') ? 'active' : ''; ?>">
+    <i class="nav-icon fas fa-headset"></i>
+    <p>
+      Support
+      <?php if ($notificationCounts['tickets'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['tickets']; ?>
+        </span>
+      <?php endif; ?>
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="studenthelp.php" class="nav-link">
-        <i class="nav-icon fas fa-headset"></i>
-        <p>Support / Helpdesk</p>
+      <a href="studenthelp.php" class="nav-link <?php echo ($page == 'create_ticket') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Create Ticket</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="view_ticket.php" class="nav-link <?php echo ($page == 'view_tickets') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>View Tickets</p>
+      </a>
+    </li>
+  </ul>
+</li>
+
 
     <li class="nav-item">
       <a href="profile.php" class="nav-link">

@@ -6,11 +6,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
   try{
  // $sql="SELECT * FROM application WHERE id = ?";
- $sql = "SELECT *
-        FROM paymentverification pv
-        JOIN application a ON pv.program_id = a.program_id
-        JOIN programs p ON pv.program_id = p.program_id
-        WHERE a.id = ?";
+ $sql = "SELECT a.*, p.*, pv.*
+ FROM application a
+ JOIN programs p ON a.program_id = p.program_id
+ JOIN paymentverification pv ON a.paymentverificationid = pv.PaymentVerificationID
+ WHERE a.id = ?
+ ";
 
   
   $stmt = $db->prepare($sql);

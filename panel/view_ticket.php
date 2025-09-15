@@ -1,78 +1,37 @@
+
+
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-
-$studentId = $_SESSION["user"]["id"] ?? null;
-if (!$studentId) {
-    die("Unauthorized access.");
+$studentId = $_SESSION["user"]["id"];
+$createdBy = $studentId; // Assuming student created the ticket
+?>
+<?php
+try{
+// Fetch ticket data
+$sql="SELECT * FROM ticket ORDER BY createdate DESC";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$tickets = $stmt->fetchAll();
 }
-
-// Handle Task Submission
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['task_submit'])) {
-    $title = trim($_POST["title"]);
-    $description = trim($_POST["description"]);
-    $due_date = $_POST["due_date"];
-    $status = "New";
-    $mentor_feedback = null;
-
-    try {
-        $sql = "INSERT INTO task 
-                (studentid, title, description, due_date, status, mentor_feedback, created_at, updated_at)
-                VALUES 
-                (:studentid, :title, :description, :due_date, :status, :mentor_feedback, NOW(), NOW())";
-
-        $stmt = $db->prepare($sql);
-        $result = $stmt->execute([
-            ':studentid' => $studentId,
-            ':title' => $title,
-            ':description' => $description,
-            ':due_date' => $due_date,
-            ':status' => $status,
-            ':mentor_feedback' => $mentor_feedback
-        ]);
-        $showAlert = 'success';
-  
-        if ($result) {
-            // ✅ Insert notification after task is saved
-            $menuItem = 'task'; // or 'tickets' if that's the intended section
-            $notificationMessage = "New task submitted by Student ID: " . $studentId;
-            $createdBy = $studentId; // or 'system' or another ID, based on your app logic
-
-            try {
-                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                             VALUES ('admin', :menu_item, 0, :message, :createdBy)";
-                $notifStmt = $db->prepare($notifSql);
-                $notifStmt->execute([
-                    ':menu_item' => $menuItem,
-                    ':message' => $notificationMessage,
-                    ':createdBy' => $createdBy
-                ]);
-            } catch (Exception $e) {
-                error_log('Notification Insert Failed: ' . $e->getMessage());
-            }
-
-        } else {
-        }
-    } catch (Exception $e) {
-        echo '<div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h5><i class="icon fas fa-times"></i> Exception!</h5>
-            Error adding task: ' . $e->getMessage() . '
-        </div>';
-    }
-}
-
-
-// Fetch Tasks
-try {
-    $stmt = $db->prepare("SELECT * FROM task WHERE studentid = :studentid ORDER BY due_date ASC");
-    $stmt->execute([':studentid' => $studentId]);
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $error = "Error fetching tasks: " . $e->getMessage();
-    $tasks = [];
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
 ?>
+<?php
+$useriddata=$_SESSION['user']['id'];
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid =$useriddata 
+              AND menu_item = 'tickets'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -109,56 +68,119 @@ try {
 
   <?php include("leftmenu.php"); ?>
 
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
     <div class="content-header">
-      <div class="container-fluid"><ol class="breadcrumb float-sm-right">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Tasks </li>
+              <li class="breadcrumb-item active">Support</li>
             </ol>
-        
-        <h1 class="m-0"> Task</h1>
-      </div>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
+    <!-- /.content-header -->
 
+    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
 
-      
-        <!-- Task Form -->
-        <div class="card card-primary">
-          <div class="card-header">
-            <h3 class="card-title">Add New Task</h3>
-          </div>
-          <form method="POST">
-            <div class="card-body">
-              <div class="form-group">
-                <label for="title">Task Title</label>
-                <input type="text" name="title" id="title" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="description">Task Description</label>
-                <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
-              </div>
-              <div class="form-group">
-                <label for="due_date">Due Date</label>
-                <input type="date" name="due_date" id="due_date" class="form-control" required>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button type="submit" name="task_submit" class="btn btn-primary">Submit Task</button>
-            </div>
-          </form>
-        </div>
+      <!-- AdminLTE Card Wrapper -->
+  <!-- /.card-header -->
+  
+  <!-- form start -->
 
-        
+<!-- form start -->
 
-      </div>
-    </section>
+
+<!-- AdminLTE Card with Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Ticket List</h3>
   </div>
 
-  <?php include("footer.php"); ?>
+  <!-- /.card-header -->
+  <div class="card-body table-responsive">
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Status</th>
+          <th>Assigned To</th>
+          <th>File</th>
+          <th>Created Date</th>
+          <th>Created By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php if ($tickets): ?>
+          <?php foreach ($tickets as $ticket): ?>
+            <tr class="clickable-row" data-id="<?= $ticket['id'] ?>">
+              <td><?= htmlspecialchars($ticket['id']) ?></td>
+              <td><?= htmlspecialchars($ticket['subject']) ?></td>
+              <td><?= nl2br(htmlspecialchars($ticket['message'])) ?></td>
+              <td>
+                <?php if ($ticket['status'] == 'Open'): ?>
+                  <span class="badge badge-success">Open</span>
+                <?php elseif ($ticket['status'] == 'In Progress'): ?>
+                  <span class="badge badge-warning">In Progress</span>
+                <?php else: ?>
+                  <span class="badge badge-secondary"><?= htmlspecialchars($ticket['status']) ?></span>
+                <?php endif; ?>
+              </td>
+              <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
+              <td>
+              <?php if (!empty($ticket['filename'])): ?>
+  <!-- Update link to redirect to download.php instead of the direct file path -->
+  <a href="../uploads/download.php?file=<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
+<?php else: ?>
+  <em>No file</em>
+<?php endif; ?>
+</td>
+              <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
+              <td><?= htmlspecialchars($ticket['createdby']) ?></td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="8" class="text-center">No tickets found.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
 
 </div>
+<!-- /.card -->
+
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ <?php include("footer.php"); ?>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -207,9 +229,10 @@ try {
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
+</body>
+</html>
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="studenttaskdetails.php" style="display:none;">
+<form id="postForm" method="POST" action="studenttypehelp.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>
@@ -239,6 +262,3 @@ try {
     });
   });
 </script>
-<?php include("../panel/util/alert.php");?>
-</body>
-</html>

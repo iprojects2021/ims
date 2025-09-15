@@ -29,20 +29,49 @@ if ($id) {
 
 // Handle new comment submission
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['add'])) {
-    $taskid = trim($_POST["taskid"]);
-    $message = trim($_POST["message"]);
+  $taskid = trim($_POST["taskid"]);
+  $message = trim($_POST["message"]);
 
-    if ($taskid && $message && $createdBy) {
-        try {
-            $stmt = $db->prepare("INSERT INTO taskcommit (taskid, message, createdate, createdby) VALUES (?, ?, NOW(), ?)");
-            $stmt->execute([$taskid, $message, $createdBy]);
-            echo '<div class="alert alert-success">Comment added successfully.</div>';
-            echo '<script>setTimeout(() => { window.location.href = "studenttaskdetails.php?id=' . htmlspecialchars($taskid) . '"; }, 1500);</script>';
-        } catch (Exception $e) {
-            echo '<div class="alert alert-danger">Failed to add comment.</div>';
-        }
-    }
+  if ($taskid && $message && $createdBy) {
+      try {
+          // Insert comment into taskcommit table
+          $stmt = $db->prepare("INSERT INTO taskcommit (taskid, message, createdate, createdby) VALUES (?, ?, NOW(), ?)");
+          $stmt->execute([$taskid, $message, $createdBy]);
+
+          // ✅ Insert Notification for Admin or Responsible User
+          $menuItem = 'task'; // or whatever menu this relates to
+          $notificationMessage = "New comment added to Task ID: " . htmlspecialchars($taskid);
+
+          try {
+              $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                           VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+              $notifStmt = $db->prepare($notifSql);
+              $notifStmt->execute([
+                  ':menu_item' => $menuItem,
+                  ':message' => $notificationMessage,
+                  ':createdBy' => $createdBy
+              ]);
+          } catch (Exception $e) {
+              // Optional: Log error or handle notification insert failure
+              if (isset($logger)) {
+                  $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+              }
+          }
+
+          // Success message and redirect
+          echo '<div class="alert alert-success">Comment added successfully.</div>';
+          echo '<script>
+              setTimeout(() => { 
+                  window.location.href = "studenttaskdetails.php?id=' . htmlspecialchars($taskid) . '"; 
+              }, 1500);
+          </script>';
+
+      } catch (Exception $e) {
+          echo '<div class="alert alert-danger">Failed to add comment.</div>';
+      }
+  }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

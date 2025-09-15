@@ -15,256 +15,94 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']))
 {
   $id = $_POST['id'];
   try{
-    $sql="SELECT * FROM task WHERE id = ?";
+    $sql="SELECT * FROM documents WHERE id = ?";
   $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
+  //print_r($applicationdata);die;
   }
   catch(Exception $e)
   {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
-  //echo "<pre>";print_r($applicationdata);die;
-    // Fetch ticket comments for this ticket
-    try{
-    $sql="SELECT * FROM taskcommit WHERE taskid = ? ORDER BY createdate ASC";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $ticketdata = $stmt->fetchAll();
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-} 
+
+}
+ 
 ?>
 
 <?php
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
-    $taskid = $_POST['taskid'];
+    $id = $_POST['id'];
     $studentid = $_POST['studentid'];
-    $new_status = $_POST['new_status'];
-    $comment = $_POST['comment'];
-    $changed_by=$_SESSION['user']['id'];
-    try{
-    $sql="INSERT INTO taskstatushistory (taskid,  new_status, comment,changed_by) VALUES (?, ?, ?, ?)";   
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$taskid, $new_status, $comment,$changed_by]);
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-    if ($stmt->rowCount() > 0) {
-      // ✅ Notification setup
-      $menuItem = 'task';
-      $notificationMessage = "Task Updated By Admin Task ID #.$taskid";
-      $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
-      $createdBy = $createdBy;
-
-      try {
-          $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                       VALUES (:userid, :menu_item, 0, :message, :createdBy)";
-          $notifStmt = $db->prepare($notifSql);
-          $notifStmt->execute([
-              ':userid' => $recipient,
-              ':menu_item' => $menuItem,
-              ':message' => $notificationMessage,
-              ':createdBy' => $createdBy
-          ]);
-         // print_r($notifStmt);die;
-      } catch (Exception $e) {
-          $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
-      }
-
-       } else {
-       }
-    if ($stmt->rowCount() > 0) {
-      // Success: Show alert and redirect
-      echo '
-    <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
-                z-index: 1050; width: 400px; max-width: 90%;">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h5><i class="icon fas fa-check"></i> Success!</h5>
-            Status updated successfully.
-        </div>
-    </div>
-    <script type="text/javascript">
-        setTimeout(function() {
-            window.location.href = "admintaskdetails.php?id=' . $taskid . '";
-        }, 2000);
-    </script>';
-  } else {
-      // Error: Show error alert
-      echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-              <h5><i class="icon fas fa-times"></i> Error!</h5>
-              There was an error updating the data.
-            </div>';
-  }
-  
-  // Auto-dismiss script
-  echo "<script>
-      setTimeout(function() {
-          var alert = document.getElementById('statusAlert');
-          if(alert) {
-              alert.classList.remove('show');
-              alert.classList.add('fade');
-              setTimeout(function() {
-                  alert.remove();
-              }, 500); // Wait for fade-out animation
-          }
-      }, 3000); // 3 seconds
-  </script>";
-  
-  
-  
-    
-}
-// Fetch ticket comments
-try{
-$sql="SELECT * FROM taskstatushistory";  
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$statushistorydata = $stmt->fetchAll();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
-if (isset($_GET['id'])) {
-  $taskid = $_GET['id'];
-   try
-   {
-  // Fetch ticket details
-  $sql="SELECT * FROM task WHERE id = ?";
-  $stmt = $db->prepare($sql);
-  $stmt->execute([$taskid]);
-  $applicationdata = $stmt->fetchAll();
-   }
-   catch(Exception $e)
-   {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-   }
-  // Fetch ticket comments
-  try {
-    // Get the ID from GET or POST
-    
-
-    if ($taskid === null) {
-        throw new Exception("No task ID provided.");
-    }
-
-    // Prepare and execute the SQL query
-    $sql = "SELECT * FROM taskstatushistory WHERE taskid = ?";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$taskid]);
-    $statushistorydata = $stmt->fetchAll();
-} catch (Exception $e) {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . ($sql ?? 'N/A') . ' , Exception Error = ' . $e->getMessage());
-}
-} 
-?>
-
-<?php
-
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
- // Fetch ticket details
- try{
- $sql="SELECT * FROM task WHERE id = ?";  
- $stmt = $db->prepare($sql);
- $stmt->execute([$id]);
- $applicationdata = $stmt->fetchAll();
- }
- catch(Exception $e)
- {
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
- }
-    try{
-    // Fetch ticket comments for this ticket
-    $sql="SELECT * FROM taskcommit WHERE taskid = ? ORDER BY createdate ASC";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $ticketdata = $stmt->fetchAll();
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-}
-
-?>
-<?php
-$userId = $_SESSION['user']['id'] ?? null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
-    $taskid = (int) $_POST['id'];
+    $status = $_POST['status'];
 
     try {
+        // Use named placeholders for security and clarity
+        $sql = "UPDATE documents SET status = :status WHERE id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            ':status' => $status,
+            ':id' => $id
+        ]);
 
-        // Prepare and execute the update query
-        $stmt = $db->prepare("UPDATE task SET assignedto = :assignedto WHERE id = :id");
-        $stmt->bindParam(':assignedto', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':id', $taskid, PDO::PARAM_INT);
+                    // ✅ Show success alert and redirect
+                    echo '
+                    <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                                z-index: 1050; width: 400px; max-width: 90%;">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-check"></i> Success!</h5>
+                            Status updated successfully.
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        setTimeout(function() {
+                        }, 2000);
+                    </script>';
+        
 
-        if ($stmt->execute()) {
-          //  echo "Ticket assigned to you successfully.";
-        } else {
-            echo "Failed to assign ticket.";
-        }
-
-    } catch (PDOException $e) {
-        echo "Database error: " . htmlspecialchars($e->getMessage());
-    }
-} else {
-   // echo "Invalid request or user not logged in.";
-}
-?>
-<?php
-// Handle new comment submission
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
-    $taskid = trim($_POST["taskid"]);
-    $message = trim($_POST["message"]);
-    $studentid = trim($_POST["studentid"]);
-
-        try {
-            $stmt = $db->prepare("INSERT INTO taskcommit (taskid, message, createdate, createdby) VALUES (?, ?, NOW(), ?)");
-            $stmt->execute([$taskid, $message, $createdBy]);
-            echo '<div class="alert alert-success">Comment added successfully.</div>';
-            echo '<script>setTimeout(() => { window.location.href = "admintaskdetails.php?id=' . htmlspecialchars($taskid) . '"; }, 1500);</script>';
-        } catch (Exception $e) {
-            echo '<div class="alert alert-danger">Failed to add comment.</div>';
-        }
         if ($stmt->rowCount() > 0) {
-          // ✅ Notification setup
-          $menuItem = 'task';
-          $notificationMessage = "Task Updated By Admin Task ID #.$taskid";
-          $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
-          $createdBy = $createdBy;
-  
-          try {
-              $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                           VALUES (:userid, :menu_item, 0, :message, :createdBy)";
-              $notifStmt = $db->prepare($notifSql);
-              $notifStmt->execute([
-                  ':userid' => $recipient,
-                  ':menu_item' => $menuItem,
-                  ':message' => $notificationMessage,
-                  ':createdBy' => $createdBy
-              ]);
-             // print_r($notifStmt);die;
-          } catch (Exception $e) {
-              $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
-          }
-  
-           } else {
-           }
-    
+            // ✅ Notification setup
+            $menuItem = 'document';
+            $notificationMessage = "Document Status Updated By Admin. Document ID #$id";
+            $recipient = $studentid;
+            $createdBy = $_SESSION['userid'] ?? 'admin'; // Replace with actual session user ID or fallback
+
+            try {
+                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                             VALUES (:userid, :menu_item, 0, :message, :createdBy)";
+                $notifStmt = $db->prepare($notifSql);
+                $notifStmt->execute([
+                    ':userid' => $recipient,
+                    ':menu_item' => $menuItem,
+                    ':message' => $notificationMessage,
+                    ':createdBy' => $createdBy
+                ]);
+            } catch (Exception $e) {
+                $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+            }
+
+        } else {
+        }
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': SQL Error = ' . $e->getMessage());
+    }
+
+    // ✅ Auto-dismiss alert script
+    echo "<script>
+        setTimeout(function() {
+            var alert = document.getElementById('statusAlert');
+            if(alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(function() {
+                    alert.remove();
+                }, 500);
+            }
+        }, 3000);
+    </script>";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -467,12 +305,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Task Details</h1>
+            <h1>Document Details</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Task Details</li>
+              <li class="breadcrumb-item active">Document Details</li>
             </ol>
           </div>
         </div>
@@ -511,8 +349,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
                 <div class="col-12 col-sm-4">
   <div class="info-box bg-light">
     <div class="info-box-content">
-      <span class="info-box-text text-center text-muted">Assigned TO</span>
-      <?php if (empty($applications['assignedto'])): ?>
+      <span class="info-box-text text-center text-muted">Test</span>
+      <!-- <?php if (empty($applications['assignedto'])): ?>
         <div class="text-center">
         <form method="post">
   <input type="hidden" name="id" value="<?php echo htmlspecialchars($applications['id']); ?>"> 
@@ -523,7 +361,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
         <span class="info-box-number text-center text-muted mb-0">
           <?php echo htmlspecialchars($applications['assignedto']); ?>
         </span>
-      <?php endif; ?>
+      <?php endif; ?> -->
     </div>
   </div>
 </div>
@@ -539,108 +377,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
               <?php endforeach; ?>
               <div class="row">
                 <div class="col-12">
-                  <h4>Recent Activity</h4>
-                    <div class="post">
-                    <?php foreach ($applicationdata as $applications): ?>
-
-                      <div class="user-block">
-                        <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
-                        <span class="username">
-                          <a href="#"><?php echo htmlspecialchars($applications['title']); ?></a>
-                        </span>
-                        <span class="description"><?php echo htmlspecialchars($applications['created_at']); ?></span>
-                      </div>
-                      <!-- /.user-block -->
-                      <p>
-                      <?php echo htmlspecialchars($applications['description']); ?>
-                      </p>
-
-                      <p>
-                       <?php endforeach; ?> </p>
-
-
-                <?php foreach ($ticketdata as $ticket): ?>
-
-<div class="user-block">
-  <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
-  <span class="username">
-    <a href="#"><?php echo htmlspecialchars($ticket['createdby']); ?></a>
-  </span>
-  <span class="description"><?php echo htmlspecialchars($ticket['createdate']); ?></span>
-</div>
-<!-- /.user-block -->
-<p>
-<?php echo htmlspecialchars($ticket['message']); ?>
-</p>
-
-<p>
-<?php endforeach; ?> </p>
-
-
-
-
-                    </div>
                     
-                    <form method="post">
-  <input type="hidden" name="taskid" value="<?php echo htmlspecialchars($applications['id']); ?>">
-  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
-  <div class="form-group">
-    <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
-  </div>
-  
-  <button type="submit" class="btn btn-primary btn-sm" name="addcommit">Submit</button>
-</form>
-<?php
-
-
-
-
-?>
+     
 
 <!-- AdminLTE Card with Table -->
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">Status History</h3>
+    
   </div>
 
   <!-- /.card-header -->
-  <div class="card-body table-responsive">
-    <table id="example1" class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Ticket Id</th>
-          <th>Changed By</th>
-          <th>Previous Status</th>
-          <th>New Status</th>
-          <th>Comment</th>
-          <th>Changed At</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($statushistorydata): ?>
-          <?php foreach ($statushistorydata as $statusdata): ?>
-            <tr class="clickable-row" data-id="<?= $statusdata['id'] ?>">
-              <td><?= htmlspecialchars($statusdata['id']) ?></td>
-              <td><?php echo htmlspecialchars($statusdata['taskid']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['changed_by']); ?></td>
-              <td></td>
-              <td><?php echo htmlspecialchars($statusdata['new_status']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['comment']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['changed_at']); ?></td>
-              
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="8" class="text-center">No tickets found.</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-  <!-- /.card-body -->
+   <!-- /.card-body -->
 </div>
 <!-- /.card -->
 
@@ -661,84 +408,58 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addcommit'])) {
             </div>
             <?php foreach ($applicationdata as $applications): ?>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Task details</h3>
+              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Document details</h3>
               <div class="text-muted">
-              <p class="text-sm">Title
-                  <b class="d-block"><?php echo htmlspecialchars($applications['title']); ?></b>
-                </p>
-                
-                <p class="text-sm">Id
+              <p class="text-sm">Id
                   <b class="d-block"><?php echo htmlspecialchars($applications['id']); ?></b>
                 </p>
-                <p class="text-sm">Student Id
-                  <b class="d-block"><?php echo htmlspecialchars($applications['studentid']); ?></b>
+                
+                <p class="text-sm">Education Level
+                  <b class="d-block"><?php echo htmlspecialchars($applications['education_level']); ?></b>
                 </p>
-                <p class="text-sm">Description
-                  <b class="d-block"><?php echo htmlspecialchars($applications['description']); ?></b>
+                <p class="text-sm">File
+                <b class="d-block"> <?php if (!empty($applications['file_path'])): ?>
+    <?php
+        // Extract just the filename
+        $filename = basename($applications['file_path']);
+    ?>
+    <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
+<?php else: ?>
+    <em>No file</em>
+<?php endif; ?></b>
                 </p>
-                <p class="text-sm mb-1">
-  Status
-  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status']); ?></b>
-</p>
-<form  method="post">
+                <p class="text-sm">Remark
+                  <b class="d-block"><?php echo htmlspecialchars($applications['remark']); ?></b>
+                </p>
+                <p class="text-sm mb-1">Status
+                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status']); ?></b>
+                </p>
+                <p class="text-sm mb-1">Student Id
+                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['studentid']); ?></b>
+                </p>
+                <form method="post" action="">
   <div class="form-group">
     <label for="statusSelect">Change Status</label>
-    <select class="form-control" id="statusSelect" name="new_status">
-      <option value="New">New</option>
-      <option value="Open">Open</option>
-      <option value="In-Progress">In-Progress</option>
-      <option value="ReOpen">ReOpen</option>
-      <option value="Close">Close</option>
+    <select class="form-control" id="statusSelect" name="status" required>
+      <option value="">-- Select Status --</option>
+      <option value="Verified" <?php if ($applications['status'] == 'Verified') echo 'selected'; ?>>Verified</option>
+      <option value="Pending Action" <?php if ($applications['status'] == 'Pending Action') echo 'selected'; ?>>Pending Action</option>
     </select>
   </div>
 
-  <div class="form-group">
-    <label for="comment">Comment</label>
-    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."></textarea>
-  </div>
+  <!-- Hidden inputs to preserve necessary data -->
+  <input type="hidden" name="id" value="<?php echo htmlspecialchars($applications['id']); ?>">
+  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
 
-  <!-- Include application ID as hidden input if needed -->
-  <input type="hidden" name="taskid" value="<?php echo $applications['id']; ?>">
-  <input type="hidden" name="studentid" value="<?php echo $applications['studentid']; ?>">
- 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>
 
-<p class="text-sm mb-1">
-  Crated At
-  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['created_at']); ?></b>
-</p>
-<p class="text-sm mb-1">
-  Updated At
-  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['updated_at']); ?></b>
-</p>
+
 
 
                  </div>
 
-              <h5 class="mt-5 text-muted">Project files</h5>
-              <ul class="list-unstyled">
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
-                </li>
-              </ul>
-              <div class="text-center mt-5 mb-3">
-                <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-              </div>
-            </div>
+                  </div>
             <?php endforeach; ?>
           </div>
         </div>

@@ -3,60 +3,83 @@
 include(__DIR__ . '/includes/db.php');
 session_start();
 
-
-//echo "<pre>";print_r($userid);die;
-$id = $_POST['id'] ?? null;  // Usually auto-increment, so you may skip this
-// Check if user is logged in and get user ID if available
+$program_id = $_SESSION['application_data']['program_id'];
+$applicationiddata = $_SESSION['applicationid'];
 $userid = $_SESSION['user']['id'] ?? null;
-$transaction = $_GET['transaction']?? null;
-$parts = explode('?', $transaction);
-$queryString = $parts[1] ?? '';
-parse_str($queryString, $params);
-$payment_id = $params['payment_id'] ?? null;
-$paymentid = $payment_id;
-//print_r($paymentid);die;
+
+$transaction = $_GET['transaction'] ?? null;
+$amount_paid = $_GET['amount'] ?? null;
+
+$payment_id = null;
+$status = 'Failed';
+
+if ($transaction) {
+    $parts = explode('?', $transaction);
+    $status = ($parts[0] === 'success') ? 'Success' : 'Failed';
+
+    if (isset($parts[1])) {
+        parse_str($parts[1], $params);
+        $payment_id = $params['payment_id'] ?? null;
+    }
+}
+
 $email = $_POST['email'] ?? null;
 $phone = $_POST['phone'] ?? null;
-$amount_paid=$_GET['amount'];
-$amountpaid = $amount_paid;
-$transaction = $_GET['transaction'] ?? null;
-$status = null;
-if ($transaction) 
-{
-    $parts = explode('?', $transaction);
-    $status = $parts[0];
-}
-if ($status === 'success') {
-    $status ="Success";
-} else {
-    $status="Failed";
-}
-
-
-$verificationstatus = $_POST['verificationstatus'] ?? null;
 
 try {
+    // Insert Payment Verification
     $sql = "INSERT INTO PaymentVerification 
-            (UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
-            VALUES (:userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
+            (program_id, applicationid, UserID, PaymentID, Email, Phone, AmountPaid, Status, VerificationStatus, CreateDate) 
+            VALUES (:program_id, :applicationid, :userid, :paymentid, :email, :phone, :amountpaid, :status, :verificationstatus, NOW())";
 
     $stmt = $db->prepare($sql);
 
     $stmt->execute([
+        ':program_id' => $program_id,
+        ':applicationid' => $applicationiddata,
         ':userid' => $userid,
-        ':paymentid' => $paymentid,
+        ':paymentid' => $payment_id,
         ':email' => $email,
         ':phone' => $phone,
-        ':amountpaid' => $amountpaid,
+        ':amountpaid' => $amount_paid,
         ':status' => $status,
         ':verificationstatus' => 'Pending',
     ]);
 
-//    echo "Payment verification inserted successfully.";
+    $id = $db->lastInsertId();
+
+    // Update application table with payment verification ID
+    $stmt = $db->prepare("UPDATE application SET paymentverificationid = :paymentid WHERE id = :appid");
+    $stmt->bindParam(':paymentid', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':appid', $applicationiddata, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // ---- Notification Section ----
+    $menuItem = 'application';
+    $notificationMessage = "New payment submitted by User ID: " . $userid;
+    $createdBy = $userid ?? 'system'; // fallback if user ID not found
+
+    try {
+        $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                     VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+        $notifStmt = $db->prepare($notifSql);
+        $notifStmt->execute([
+            ':menu_item' => $menuItem,
+            ':message' => $notificationMessage,
+            ':createdBy' => $createdBy
+        ]);
+
+
+
+    } catch (Exception $e) {
+
+    }
+
 } catch (PDOException $e) {
-    echo "Error inserting record: " . $e->getMessage();
+
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

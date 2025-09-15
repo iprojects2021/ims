@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['task_submit'])) {
                 (:studentid, :title, :description, :due_date, :status, :mentor_feedback, NOW(), NOW())";
 
         $stmt = $db->prepare($sql);
-        $result = $stmt->execute([
+        $stmt->execute([
             ':studentid' => $studentId,
             ':title' => $title,
             ':description' => $description,
@@ -30,38 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['task_submit'])) {
             ':status' => $status,
             ':mentor_feedback' => $mentor_feedback
         ]);
+
         $showAlert = 'success';
-  
-        if ($result) {
-            // ✅ Insert notification after task is saved
-            $menuItem = 'task'; // or 'tickets' if that's the intended section
-            $notificationMessage = "New task submitted by Student ID: " . $studentId;
-            $createdBy = $studentId; // or 'system' or another ID, based on your app logic
-
-            try {
-                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                             VALUES ('admin', :menu_item, 0, :message, :createdBy)";
-                $notifStmt = $db->prepare($notifSql);
-                $notifStmt->execute([
-                    ':menu_item' => $menuItem,
-                    ':message' => $notificationMessage,
-                    ':createdBy' => $createdBy
-                ]);
-            } catch (Exception $e) {
-                error_log('Notification Insert Failed: ' . $e->getMessage());
-            }
-
-        } else {
-        }
     } catch (Exception $e) {
-        echo '<div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <h5><i class="icon fas fa-times"></i> Exception!</h5>
-            Error adding task: ' . $e->getMessage() . '
-        </div>';
+      $showAlert = 'error';
+        $error = "Error adding task: " . $e->getMessage();
     }
 }
-
 
 // Fetch Tasks
 try {
@@ -73,7 +48,18 @@ try {
     $tasks = [];
 }
 ?>
-
+<?php
+$useriddata=$_SESSION['user']['id'];
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid =$useriddata 
+              AND menu_item = 'task'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,33 +110,50 @@ try {
       <div class="container-fluid">
 
       
-        <!-- Task Form -->
-        <div class="card card-primary">
-          <div class="card-header">
-            <h3 class="card-title">Add New Task</h3>
-          </div>
-          <form method="POST">
-            <div class="card-body">
-              <div class="form-group">
-                <label for="title">Task Title</label>
-                <input type="text" name="title" id="title" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="description">Task Description</label>
-                <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
-              </div>
-              <div class="form-group">
-                <label for="due_date">Due Date</label>
-                <input type="date" name="due_date" id="due_date" class="form-control" required>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button type="submit" name="task_submit" class="btn btn-primary">Submit Task</button>
-            </div>
-          </form>
-        </div>
-
         
+
+        <!-- Task Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Your Tasks</h3>
+          </div>
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php foreach ($tasks as $task): ?>
+                <tr class="clickable-row" data-id="<?= $task['id'] ?>">
+                  <td><?= $task['id'] ?></td>
+                  <td><?= htmlspecialchars($task['title']) ?></td>
+                  <td><?= nl2br(htmlspecialchars($task['description'])) ?></td>
+                  <td><?= htmlspecialchars($task['due_date']) ?></td>
+                  <td>
+                    <?php if ($task['status'] === 'Completed'): ?>
+                      <span class="badge badge-success">Completed</span>
+                    <?php elseif ($task['status'] === 'In Progress'): ?>
+                      <span class="badge badge-warning">In Progress</span>
+                    <?php else: ?>
+                      <span class="badge badge-secondary"><?= htmlspecialchars($task['status']) ?></span>
+                    <?php endif; ?>
+                  </td>
+                     <td><?= date("Y-m-d H:i", strtotime($task['created_at'])) ?></td>
+                  <td><?= date("Y-m-d H:i", strtotime($task['updated_at'])) ?></td>
+                </tr>
+              <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
       </div>
     </section>

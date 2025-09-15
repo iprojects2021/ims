@@ -1,52 +1,53 @@
 <?php
 include("../includes/db.php");
-include("../panel/util/session.php");
-
-$studentId = $_SESSION["user"]["id"] ?? null;
-if (!$studentId) {
-    die("Unauthorized access.");
-}
-// Fetch Tasks
-try {
-    $stmt = $db->prepare("SELECT * FROM task");
-    $stmt->execute();
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $error = "Error fetching tasks: " . $e->getMessage();
-    $tasks = [];
-}
+include("../panel/util/alerts.php");
+session_start();
+$useriddata=$_SESSION['user']['id'];
 ?>
+<?php
+try{
+$sql="SELECT * FROM documents";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$documentlist = $stmt->fetchAll();
+}
+catch(Exception $e)
+{
+  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+}
+try{
+  $sql="SELECT * FROM application";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();
+  $checkstatus = $stmt->fetchAll();
+  }
+  catch(Exception $e)
+  {
+    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  }
+?>
+
 <?php
 
 try {
     $sql = "UPDATE notification 
             SET isread = 1 
             WHERE userid ='admin' 
-              AND menu_item = 'task'";
+              AND menu_item = 'document'";
     $db->query($sql);
 } catch (Exception $e) {
     // Optional: Log the error
 }
 ?>
-<?php
 
-try {
-    $sql = "UPDATE notification 
-            SET isread = 1 
-            WHERE userid ='admin' 
-              AND menu_item = 'task'";
-    $db->query($sql);
-} catch (Exception $e) {
-    // Optional: Log the error
-}
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin-Task  | INDSAC SOFTECH</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -76,77 +77,109 @@ try {
 
   <?php include("leftmenu.php"); ?>
 
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
     <div class="content-header">
-      <div class="container-fluid"><ol class="breadcrumb float-sm-right">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Tasks</li>
+              <li class="breadcrumb-item active">Document</li>
             </ol>
-        
-        <h1 class="m-0"> Tasks List</h1>
-        
-      </div>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
+    <!-- /.content-header -->
 
+    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
 
-      
-        </div>
+  
 
-        <!-- Task Table -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Tasks List</h3>
-          </div>
-          <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Due Date</th>
-                  <th>Status</th>
-                  
-                  <th>Created</th>
-                  <th>Updated</th>
-            
-                </tr>
-              </thead>
-              <tbody>
-              <?php foreach ($tasks as $task): ?>
-                <tr class="clickable-row" data-id="<?= $task['id'] ?>">
-                  <td><?= $task['id'] ?></td>
-                  <td><?= htmlspecialchars($task['title']) ?></td>
-                  <td><?= nl2br(htmlspecialchars($task['description'])) ?></td>
-                  <td><?= htmlspecialchars($task['due_date']) ?></td>
-                  <td>
-                    <?php if ($task['status'] === 'Completed'): ?>
-                      <span class="badge badge-success">Completed</span>
-                    <?php elseif ($task['status'] === 'In Progress'): ?>
-                      <span class="badge badge-warning">In Progress</span>
-                    <?php else: ?>
-                      <span class="badge badge-secondary"><?= htmlspecialchars($task['status']) ?></span>
-                    <?php endif; ?>
-                  </td>
-                  
-                  <td><?= date("Y-m-d H:i", strtotime($task['created_at'])) ?></td>
-                  <td><?= date("Y-m-d H:i", strtotime($task['updated_at'])) ?></td>
-                </tr>
-              <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </div>
-    </section>
+<!-- AdminLTE Card with Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Document List</h3>
   </div>
 
-  <?php include("footer.php"); ?>
+  <!-- /.card-header -->
+  <div class="card-body table-responsive">
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student ID</th>
+          <th>Document Name</th>
+          <th>Document File</th>
+          <th>Remark</th>
+          <th>Status</th>
+          <th>Uploaded At</th>
+          </tr>
+      </thead>
+      <tbody>
+        <?php if ($documentlist): ?>
+          <?php foreach ($documentlist as $documentdata): ?>
+            <tr class="clickable-row" data-id="<?= $documentdata['id'] ?>">
+              <td><?= htmlspecialchars($documentdata['id']) ?></td>
+              <td><?= htmlspecialchars($documentdata['studentid']) ?></td>
+              <td><?= htmlspecialchars($documentdata['education_level']) ?></td>
+              <td> <?php if (!empty($documentdata['file_path'])): ?>
+    <?php
+        // Extract just the filename
+        $filename = basename($documentdata['file_path']);
+    ?>
+    <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
+<?php else: ?>
+    <em>No file</em>
+<?php endif; ?>
+                  </td>
+              <td><?= htmlspecialchars($documentdata['remark']) ?></td>
+              <td><?= htmlspecialchars($documentdata['status']) ?>
+                </td>
+              <td><?= date("Y-m-d H:i", strtotime($documentdata['uploaded_at'])) ?></td>
+              
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="8" class="text-center">No documentdata found.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+
 
 </div>
+<!-- /.card -->
+
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ <?php include("footer.php"); ?>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -195,20 +228,22 @@ try {
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
-<!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="admintaskdetails.php" style="display:none;">
-    <input type="hidden" name="id" id="hiddenId">
-</form>
+</body>
+</html>
+<!-- Script to show file upload when dropdown is selected -->
 <script>
-  
-    document.querySelectorAll('.clickable-row').forEach(row => {
-        row.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            document.getElementById('hiddenId').value = id;
-            document.getElementById('postForm').submit();
-        });
-    });
+document.getElementById('education').addEventListener('change', function () {
+    const selected = this.value;
+    const uploadSection = document.getElementById('uploadSection');
+    const uploadBtn = document.getElementById('uploadBtn');
+    if (selected) {
+        uploadSection.style.display = 'block';
+        uploadBtn.style.display = 'inline-block';
+    } else {
+        uploadSection.style.display = 'none';
+        uploadBtn.style.display = 'none';
+    }
+});
 </script>
 <script>
   $(function () {
@@ -227,6 +262,30 @@ try {
     });
   });
 </script>
-<?php include("../panel/util/alert.php");?>
-</body>
-</html>
+       <!-- Hidden form to send POST -->
+       <form id="postForm" method="POST" action="documenttype.PHP" style="display:none;">
+    <input type="hidden" name="id" id="hiddenId">
+</form>
+<script>
+  
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            document.getElementById('hiddenId').value = id;
+            document.getElementById('postForm').submit();
+        });
+    });
+</script>
+
+<?php if ($showAlert): ?>
+<script>
+Swal.fire({
+    title: 'Success!',
+    text: 'Record inserted successfully.',
+    icon: 'success',
+    confirmButtonText: 'OK'
+});
+</script>
+<?php else: ?>
+
+<?php endif; ?>
