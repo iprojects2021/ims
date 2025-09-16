@@ -1,9 +1,9 @@
 <?php
 // Start session if not already started
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 include(__DIR__ . '/includes/db.php');
 include(__DIR__ . '/panel/util/checkemailandmobile.php');
 
@@ -561,7 +561,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="content">
             <div class="payment-details">
                 <h2>Program Details</h2>
-                
                 <form id="payment-form">
                 <div class="form-group">
         <label for="card-name">Program Id</label>
@@ -635,14 +634,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="summary-item">
                     <p>Program Amount</p>
-                    <p class="value">₹3000.00</p>
+                    <p><strong>Amount:</strong> <span id="modal-amount"><?php echo htmlspecialchars($amount); ?></span></p>
                 </div>
                 
                 
                                 
                 <div class="total">
                     <p>Total</p>
-                    <p>₹3000.00</p>
+                   <p>₹<?php echo htmlspecialchars($amount); ?></p>
                 </div>
                 
                 <h2>Payment Method Available</h2>
@@ -667,7 +666,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <p>NetBanking</p>
                     </div>
                 </div>
-                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBcBgFQx5N2HsF" async> </script> </form>
+                <form><?php
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize amount
+    $amount = isset($_POST['amount']) ? preg_replace('/\D/', '', $_POST['amount']) : 0;
+    $amount = (int)$amount; // Convert to integer
+    $_SESSION['amount'] = $amount;
+
+
+    
+
+    switch ($amount) {
+        case 1000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RHsuqTDPNwtf43" async> </script>';
+            break;
+        case 2000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RGali4u2zGlJvr" async> </script>';
+            break;
+        case 3000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBUyb7qUMYYVAi" async> </script>';
+            break;
+        case 5000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBVc6Cd6lxZitM" async> </script>';
+            break;
+        case 8000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBVfcVC1KtbWd3" async> </script>';
+            break;
+        case 10000:
+            echo '<script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_RBVj0dPZqQBouR" async> </script>';
+            break;
+        default:
+            echo "<p style='color:red;'>⚠ Invalid plan amount selected!</p>";
+            break;
+    }
+} else {
+    echo "<p style='color:red;'>Invalid plan selected.</p>";
+}
+?>
+ </form>
 
                
                 <div class="secure">
@@ -675,6 +713,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
         </div>
+        
 
         <div class="footer">
             <p>© 2023 Inventory Management System. All rights reserved.</p>

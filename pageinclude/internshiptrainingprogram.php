@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -460,17 +462,21 @@
             // You would continue populating other sections similarly...
         }
 
-        function applyNow() {
-            const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
-            applicationModal.show();
-        }
+        function applyNow(amount, planName, duration) {
+    // Save the selected amount in session via AJAX or hidden input
+    // For now, we'll set it in a hidden input inside the modal form
+    const amountInput = document.getElementById('selectedAmount');
+    const planInput = document.getElementById('selectedPlan');
+    const durationInput = document.getElementById('selectedDuration');
 
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Application submitted successfully!');
-            const applicationModal = bootstrap.Modal.getInstance(document.getElementById('applicationModal'));
-            applicationModal.hide();
-        });
+    if (amountInput) amountInput.value = amount.replace(/\D/g, ''); // keep only numbers
+    if (planInput) planInput.value = planName;
+    if (durationInput) durationInput.value = duration;
+
+    // Show the modal
+    const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
+    applicationModal.show();
+}
 
         // Load program data when page loads
         window.addEventListener('DOMContentLoaded', loadProgramData);
