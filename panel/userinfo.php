@@ -122,7 +122,7 @@ try {
         <!-- Applications table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Applications</h3>
+            <h3 class="card-title">User Details </h3>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
@@ -153,7 +153,13 @@ try {
                     <td><?= htmlspecialchars($row['college']) ?></td>
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['role']) ?></td>
-                    <td><?= htmlspecialchars($row['resumepath']) ?></td>
+                    <td> <?php if (!empty($row['resumepath'])): ?>
+  <a href="download2.php?file=<?= urlencode(basename($row['resumepath'])) ?>" target="_blank">Download Resume</a>
+<?php else: ?>
+  <em>No file</em>
+<?php endif; ?>
+
+</td>
                     <td><?= htmlspecialchars($row['skills']) ?></td>
                     <td><?= htmlspecialchars($row['image_path']) ?></td>
                     <td><?= htmlspecialchars($row['experience']) ?></td>

@@ -5,15 +5,34 @@ session_start();
 $useriddata=$_SESSION['user']['id'];
 ?>
 <?php
-try{
-$sql="SELECT * FROM documents";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$documentlist = $stmt->fetchAll();
+if(isset($_POST['userid']))
+{ $id = $_POST['userid'];
+  try{
+      $stmt = $db->prepare("SELECT * FROM documents WHERE studentid = :id");
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Use PARAM_STR if it's not an integer
+      $stmt->execute();
+      $documentlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
 }
-catch(Exception $e)
+else
 {
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+  try{
+    $sql="SELECT * FROM documents";
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    $documentlist = $stmt->fetchAll();
+    }
+    catch(Exception $e)
+    {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    }
+
+
+
 }
 try{
   $sql="SELECT * FROM application";
