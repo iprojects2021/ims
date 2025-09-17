@@ -446,7 +446,7 @@
                 description: "Gain hands-on experience in building and maintaining web pages using HTML, CSS, and JavaScript. Learn to create responsive layouts, interactive elements, and dynamic content, integrate APIs, debug frontend code, and apply basic UI/UX principles for user-friendly web applications.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [

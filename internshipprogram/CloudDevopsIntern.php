@@ -446,7 +446,7 @@
                 description: "This internship provides hands-on experience in cloud platforms and DevOps practices. Interns will learn how to deploy, manage, and monitor applications on the cloud while implementing CI/CD pipelines, containerization, and automation tools. The program focuses on real-world skills like cloud infrastructure setup, version control with Git, Docker & Kubernetes, Jenkins pipelines, and Infrastructure as Code with Terraform.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [

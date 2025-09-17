@@ -446,7 +446,7 @@
                 description: "This internship focuses on applying machine learning techniques to solve real-world problems using data-driven approaches. Interns will gain hands-on experience in data preprocessing, feature engineering, model building, and evaluation. The program covers supervised and unsupervised learning, regression, classification, clustering, and model deployment using Python.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [

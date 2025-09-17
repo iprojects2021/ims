@@ -445,7 +445,7 @@
                 description: "This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
