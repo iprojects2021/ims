@@ -628,19 +628,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </div>
             
-            <div class="payment-summary">
+           <div class="payment-summary">
                 <h2>Program Summary</h2>
                 
                 <div class="summary-item">
                     <p>Program Amount</p>
-                    <p class="value">₹3000.00</p>
+                    <p><strong>Amount:</strong> <span id="modal-amount"><?php echo htmlspecialchars($amount); ?></span></p>
                 </div>
                 
                 
                                 
                 <div class="total">
                     <p>Total</p>
-                    <p>₹3000.00</p>
+                   <p>₹<?php echo htmlspecialchars($amount); ?></p>
                 </div>
                 
                 <h2>Payment Method Available</h2>
