@@ -129,10 +129,12 @@ $applicationCount1 = $stmt->fetchColumn();
         </div>
         <form action="adminreferral.php" method="POST">
           <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-          <button type="submit" class="small-box-footer">
-            View Referral <i class="fas fa-arrow-circle-right"></i>
-          </button>
-        </form>
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Referrals <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+  </form>
       </div>
     </div>
 
@@ -148,9 +150,11 @@ $applicationCount1 = $stmt->fetchColumn();
         </div>
         <form action="admindocument.php" method="POST">
           <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-          <button type="submit" class="small-box-footer">
-            View Documents <i class="fas fa-arrow-circle-right"></i>
-          </button>
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Documents <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
         </form>
       </div>
     </div>
@@ -167,10 +171,11 @@ $applicationCount1 = $stmt->fetchColumn();
         </div>
         <form action="admintasks.php" method="POST">
           <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-          <button type="submit" class="small-box-footer">
-            View Tasks <i class="fas fa-arrow-circle-right"></i>
-          </button>
-        </form>
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Tasks <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>  </form>
       </div>
     </div>
 
@@ -186,9 +191,11 @@ $applicationCount1 = $stmt->fetchColumn();
         </div>
         <form action="admintickets.php" method="POST">
           <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-          <button type="submit" class="small-box-footer">
-            View Tickets <i class="fas fa-arrow-circle-right"></i>
-          </button>
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Tickets <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
         </form>
       </div>
     </div>
@@ -205,10 +212,11 @@ $applicationCount1 = $stmt->fetchColumn();
     </div>
     <form action="application.php" method="POST">
       <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
-      <button type="submit" class="small-box-footer">
-        View Application<i class="fas fa-arrow-circle-right"></i>
-      </button>
-    </form>
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Applications <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>   </form>
   </div>
 </div>
 
@@ -224,9 +232,11 @@ $applicationCount1 = $stmt->fetchColumn();
     </div>
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-      <button type="submit" class="small-box-footer">
-        --<i class="fas fa-arrow-circle-right"></i>
-      </button>
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
     </form>
   </div>
 </div>
@@ -243,9 +253,11 @@ $applicationCount1 = $stmt->fetchColumn();
     </div>
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-      <button type="submit" class="small-box-footer">
-        --<i class="fas fa-arrow-circle-right"></i>
-      </button>
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
     </form>
   </div>
 </div>
@@ -262,9 +274,11 @@ $applicationCount1 = $stmt->fetchColumn();
     </div>
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
-      <button type="submit" class="small-box-footer">
-        -- <i class="fas fa-arrow-circle-right"></i>
-      </button>
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
     </form>
   </div>
 </div>
