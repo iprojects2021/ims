@@ -516,6 +516,9 @@
     document.getElementById('modal-plan-type').textContent = planType;
     document.getElementById('modal-amount').textContent = amount;
     document.getElementById('modal-duration').textContent = duration;
+    
+    // Remove commas and non-digit characters for form submission
+    const numericAmount = amount.replace(/\D/g, '');
 
     // Also update the hidden input values (for form submission)
     document.getElementById('hidden-plan-type').value = planType;

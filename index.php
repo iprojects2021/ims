@@ -131,7 +131,7 @@ $role = $_SESSION['user']['role'] ?? null;
         
         .service-desc {
             color: #64748b;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .btn {
@@ -155,7 +155,7 @@ $role = $_SESSION['user']['role'] ?? null;
       background-repeat: no-repeat;
       background-position: center;
       background-color: #fff;
-      margin: 0 auto;
+      margin: 2rem auto;
       max-width: 1500px;
     }
 
@@ -377,7 +377,7 @@ $role = $_SESSION['user']['role'] ?? null;
                 <div class="service-icon">
                     <i class="fas fa-laptop-code"></i>
                 </div>
-                <h3 class="service-title">College Final Year Projects Development </h3>
+                <h3 class="service-title">College Final Year Projects Development</h3>
                 <p class="service-desc">
                     End-to-end project development from concept to execution with documentation support.
                 </p>
