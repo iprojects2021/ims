@@ -367,7 +367,7 @@ $role = $_SESSION['user']['role'] ?? null;
             <li><a href="student/logout.php">Logout</a></li>
 
         <?php else: ?>
-<li><a href="index.php">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li><a href="student/register.php">Register</a></li>
             <li><a href="student/login.php">Login</a></li>
                     <?php endif; ?>
