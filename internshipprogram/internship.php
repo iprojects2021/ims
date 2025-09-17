@@ -200,9 +200,9 @@
   <nav class="navbar">
     <div class="logo">INDSAC SOFTECH</div>
     <ul class="nav-links">
-      <li><a href="">Home</a></li>
-      <li><a href="student/register.php">Register</a></li>
-      <li><a href="student/login.php">Login</a></li>
+      <li><a href="/ims/index.php">Home</a></li>
+      <li><a href="/ims/student/register.php">Register</a></li>
+      <li><a href="/ims/student/login.php">Login</a></li>
     </ul>
   </nav>
   

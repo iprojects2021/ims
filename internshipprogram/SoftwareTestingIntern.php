@@ -87,13 +87,13 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 id="program-title">Software Testing Internship</h1>
-                    <p class="lead" id="program-short-desc">3-month remote internship to build real Software Testing projects with mentorship</p>
+                    <p class="lead" id="program-short-desc">1-6 months remote internship to build real Software Testing projects with mentorship</p>
                 </div>
              <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
-                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">3 months</span></span>
+                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
                         <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
-                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Stipend: <span id="program-stipend">₹10,000/month</span></span>
+                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Amount: <span id="program-stipend">₹10,000/month</span></span>
                         <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
                     </div>
                 </div>
@@ -442,7 +442,7 @@
             // In a real app, you would fetch this from your API
             const programData = {
                 title: "Software Testing Internship",
-                shortDesc: "3-month remote internship to build real Software Testing projects with mentorship",
+                shortDesc: "1-6 months remote internship to build real Software Testing projects with mentorship",
                 description: "Gain hands-on experience in ensuring software quality by performing manual and automated testing. Learn to design test cases, execute test plans, identify bugs, and work with development teams to improve application performance and reliability.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 duration: "1 - 6 months",
