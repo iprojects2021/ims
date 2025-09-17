@@ -28,6 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
 
 {
   $_SESSION['UserID'] = $app['UserID'];
+  $_SESSION['email1'] = $app['email'];
+
 }
 //count for task
 $stmt = $db->prepare("SELECT COUNT(*) FROM task WHERE studentid = :studentid");
@@ -54,6 +56,11 @@ $stmt->bindParam(':studentid', $_SESSION['UserID'], PDO::PARAM_INT);
 $stmt->execute();
 $referralCountdata = $stmt->fetchColumn();
 
+// Count for application
+$stmt = $db->prepare("SELECT COUNT(*) FROM application WHERE email = :email1");
+$stmt->bindParam(':email1', $_SESSION['email1'], PDO::PARAM_STR); // use PARAM_STR for strings
+$stmt->execute();
+$applicationCount1 = $stmt->fetchColumn();
 
    
   }
@@ -112,7 +119,7 @@ $referralCountdata = $stmt->fetchColumn();
   
     <!-- Referral Count -->
     <div class="col-lg-3 col-6">
-      <div class="small-box bg-secondary">
+      <div class="small-box bg-light">
         <div class="inner">
           <h3><?php echo $referralCountdata ?></h3>
           <p>Total Referral Count</p>
@@ -131,7 +138,7 @@ $referralCountdata = $stmt->fetchColumn();
 
     <!-- Document Count -->
     <div class="col-lg-3 col-6">
-      <div class="small-box bg-secondary">
+      <div class="small-box bg-light">
         <div class="inner">
           <h3><?php echo $documentCount ?></h3>
           <p>Total Document Count</p>
@@ -150,7 +157,7 @@ $referralCountdata = $stmt->fetchColumn();
 
     <!-- Task Count -->
     <div class="col-lg-3 col-6">
-      <div class="small-box bg-secondary">
+      <div class="small-box bg-light">
         <div class="inner">
           <h3><?php echo $taskCount ?></h3>
           <p>Total Task Count</p>
@@ -169,7 +176,7 @@ $referralCountdata = $stmt->fetchColumn();
 
     <!-- Ticket Count -->
     <div class="col-lg-3 col-6">
-      <div class="small-box bg-secondary">
+      <div class="small-box bg-light">
         <div class="inner">
           <h3><?php echo $ticketCount ?></h3>
           <p>Total Ticket Count</p>
@@ -188,16 +195,16 @@ $referralCountdata = $stmt->fetchColumn();
      <!-- Ticket Count -->
     <!-- Application Count Box 1 -->
 <div class="col-lg-3 col-6">
-  <div class="small-box bg-secondary">
+  <div class="small-box bg-light">
     <div class="inner">
       <h3><?php echo $applicationCount1 ?? '--'; ?></h3>
-      <p>--</p>
+      <p>Total Application Count</p>
     </div>
     <div class="icon">
       <i class="fas fa-hourglass-half"></i>
     </div>
-    <form action="#" method="POST">
-      <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+    <form action="application.php" method="POST">
+      <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
       <button type="submit" class="small-box-footer">
         View Application<i class="fas fa-arrow-circle-right"></i>
       </button>
@@ -207,7 +214,7 @@ $referralCountdata = $stmt->fetchColumn();
 
 <!-- Application Count Box 2 -->
 <div class="col-lg-3 col-6">
-  <div class="small-box bg-secondary">
+  <div class="small-box bg-light">
     <div class="inner">
       <h3><?php echo $applicationCount2 ?? '--'; ?></h3>
       <p>--</p>
@@ -218,7 +225,7 @@ $referralCountdata = $stmt->fetchColumn();
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
       <button type="submit" class="small-box-footer">
-        View  Application<i class="fas fa-arrow-circle-right"></i>
+        --<i class="fas fa-arrow-circle-right"></i>
       </button>
     </form>
   </div>
@@ -226,7 +233,7 @@ $referralCountdata = $stmt->fetchColumn();
 
 <!-- Application Count Box 3 -->
 <div class="col-lg-3 col-6">
-  <div class="small-box bg-secondary">
+  <div class="small-box bg-light">
     <div class="inner">
       <h3><?php echo $applicationCount3 ?? '--'; ?></h3>
       <p>--</p>
@@ -237,7 +244,7 @@ $referralCountdata = $stmt->fetchColumn();
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
       <button type="submit" class="small-box-footer">
-        View Application<i class="fas fa-arrow-circle-right"></i>
+        --<i class="fas fa-arrow-circle-right"></i>
       </button>
     </form>
   </div>
@@ -245,7 +252,7 @@ $referralCountdata = $stmt->fetchColumn();
 
 <!-- Application Count Box 4 -->
 <div class="col-lg-3 col-6">
-  <div class="small-box bg-secondary">
+  <div class="small-box bg-light">
     <div class="inner">
       <h3><?php echo $applicationCount4 ?? '--'; ?></h3>
       <p>--</p>
@@ -256,7 +263,7 @@ $referralCountdata = $stmt->fetchColumn();
     <form action="#" method="POST">
       <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
       <button type="submit" class="small-box-footer">
-        View Application <i class="fas fa-arrow-circle-right"></i>
+        -- <i class="fas fa-arrow-circle-right"></i>
       </button>
     </form>
   </div>

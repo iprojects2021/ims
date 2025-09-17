@@ -17,18 +17,7 @@ catch(Exception $e)
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
 // Fetch application data filtered by user email or ID (depending on your schema)
-try
-{
-$sql="SELECT * FROM application";
-$stmt = $db->prepare($sql);
 
-$stmt->execute(['email' => $email]);
-$applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
 include("../panel/util/statuscolour.php");
 try{
 // Fetch current user data by ID securely
@@ -54,7 +43,32 @@ try {
     // Optional: Log the error
 }
 ?>
+<?php
 
+
+if (isset($_POST['email'])) {
+  $email = $_POST['email'];
+    try {
+      $sql = "SELECT * FROM application WHERE email = :email"; // Fixed syntax error
+      $stmt = $db->prepare($sql);
+      $stmt->bindParam(':email', $email, PDO::PARAM_STR); // Use PARAM_STR for email
+      $stmt->execute();
+      $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   } catch (Exception $e) {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
+  }
+} else {
+  try {
+      $sql = "SELECT * FROM application";
+      $stmt = $db->prepare($sql);
+      $stmt->execute();
+      $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
+  }
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">

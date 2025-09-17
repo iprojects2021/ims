@@ -141,6 +141,7 @@ try {
                   <th>Experience</th>
                   <th>Reffered By</th>
                   <th>Refer Code</th>
+                  <th>Create Date</th>
               
                 </tr>
               </thead>
@@ -154,10 +155,11 @@ try {
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['role']) ?></td>
                     <td> <?php if (!empty($row['resumepath'])): ?>
-  <a href="download2.php?file=<?= urlencode(basename($row['resumepath'])) ?>" target="_blank">Download Resume</a>
+  <a href="upload/resume/download3.php?file=<?= urlencode(basename($row['resumepath'])) ?>" target="_blank">Download Resume</a>
 <?php else: ?>
   <em>No file</em>
 <?php endif; ?>
+
 
 </td>
                     <td><?= htmlspecialchars($row['skills']) ?></td>
@@ -165,6 +167,7 @@ try {
                     <td><?= htmlspecialchars($row['experience']) ?></td>
                     <td><?= htmlspecialchars($row['referredby']) ?></td>
                     <td><?= htmlspecialchars($row['refercode']) ?></td>
+                    <td><?= htmlspecialchars($row['createdDate']) ?></td>
                     
                   </tr>
                 <?php endforeach; ?>
@@ -184,6 +187,7 @@ try {
                   <th>Experience</th>
                   <th>Reffered By</th>
                   <th>Refer Code</th>
+                  <th>Create Date</th>
                   </tr>
               </tfoot>
             </table>
