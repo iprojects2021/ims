@@ -4,20 +4,19 @@ include("../panel/util/session.php");
 $studentName = htmlspecialchars($_SESSION["user"]["name"]);
 $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];
+
 try
 {
-// Fetch user data securely
-$sql="SELECT * FROM users WHERE email = :email LIMIT 1";
+$sql="SELECT * FROM users";
 $stmt = $db->prepare($sql);
+
 $stmt->execute(['email' => $email]);
-$userData = $stmt->fetch(PDO::FETCH_ASSOC);
+$applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch(Exception $e)
 {
   $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
 }
-// Fetch application data filtered by user email or ID (depending on your schema)
-
 include("../panel/util/statuscolour.php");
 try{
 // Fetch current user data by ID securely
@@ -43,32 +42,7 @@ try {
     // Optional: Log the error
 }
 ?>
-<?php
 
-
-if (isset($_POST['email'])) {
-  $email = $_POST['email'];
-    try {
-      $sql = "SELECT * FROM application WHERE email = :email"; // Fixed syntax error
-      $stmt = $db->prepare($sql);
-      $stmt->bindParam(':email', $email, PDO::PARAM_STR); // Use PARAM_STR for email
-      $stmt->execute();
-      $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-   } catch (Exception $e) {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
-  }
-} else {
-  try {
-      $sql = "SELECT * FROM application";
-      $stmt = $db->prepare($sql);
-      $stmt->execute();
-      $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  } catch (Exception $e) {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
-  }
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +105,7 @@ if (isset($_POST['email'])) {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-              <li class="breadcrumb-item active">Application</li>
+              <li class="breadcrumb-item active">User Details</li>
             </ol>
           </div>
         </div>
@@ -148,38 +122,73 @@ if (isset($_POST['email'])) {
         <!-- Applications table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Applications</h3>
+            <h3 class="card-title">User Details </h3>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Project</th>
-                  <th>Outcome</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th>Created Date</th>
+                  <th>Id</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>College</th>
+                  <th>Course</th>
+                  <th>Role</th>
+                  <th>Resume</th>
+                  <th>Skills</th>
+                  <th>Image</th>
+                  <th>Experience</th>
+                  <th>Reffered By</th>
+                  <th>Refer Code</th>
+                  <th>Create Date</th>
+              
                 </tr>
               </thead>
               <tbody>
                 <?php foreach ($applicationData as $row): ?>
-                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
-                    <td><?= htmlspecialchars($row['project']) ?></td>
-                    <td><?= htmlspecialchars($row['outcome']) ?></td>
-                    <td><?= getStatusBadge($row['status']) ?></td>
-                    <td><?= htmlspecialchars($row['type']) ?></td>
-                    <td><?= htmlspecialchars($row['createddate']) ?></td>
+                    <td><?= htmlspecialchars($row['id']) ?></td>
+                    <td><?= htmlspecialchars($row['full_name']) ?></td>
+                    <td><?= getStatusBadge($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['contact']) ?></td>
+                    <td><?= htmlspecialchars($row['college']) ?></td>
+                    <td><?= htmlspecialchars($row['course']) ?></td>
+                    <td><?= htmlspecialchars($row['role']) ?></td>
+                    <td> <?php if (!empty($row['resumepath'])): ?>
+  <a href="upload/resume/download3.php?file=<?= urlencode(basename($row['resumepath'])) ?>" target="_blank">Download Resume</a>
+<?php else: ?>
+  <em>No file</em>
+<?php endif; ?>
+
+
+</td>
+                    <td><?= htmlspecialchars($row['skills']) ?></td>
+                    <td><?= htmlspecialchars($row['image_path']) ?></td>
+                    <td><?= htmlspecialchars($row['experience']) ?></td>
+                    <td><?= htmlspecialchars($row['referredby']) ?></td>
+                    <td><?= htmlspecialchars($row['refercode']) ?></td>
+                    <td><?= htmlspecialchars($row['createdDate']) ?></td>
+                    
                   </tr>
                 <?php endforeach; ?>
               </tbody>
               <tfoot>
                 <tr>
-                  <th>Project</th>
-                  <th>Outcome</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th>Created Date</th>
-                </tr>
+                <th>Id</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>College</th>
+                  <th>Course</th>
+                  <th>Role</th>
+                  <th>Resume</th>
+                  <th>Skills</th>
+                  <th>Image</th>
+                  <th>Experience</th>
+                  <th>Reffered By</th>
+                  <th>Refer Code</th>
+                  <th>Create Date</th>
+                  </tr>
               </tfoot>
             </table>
           </div>
@@ -238,6 +247,19 @@ if (isset($_POST['email'])) {
     });
   });
 </script>
+<style>
+  /* Hide the + icon cell if it somehow still appears */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child::before,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child::before {
+    display: none !important;
+  }
+
+  /* Prevent the extra column for the + icon */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child {
+    padding-left: 8px !important;
+  }
+</style>
 
 </body>
 </html>

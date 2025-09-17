@@ -290,17 +290,30 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
     <!-- Show ONLY for Admin -->
     <li class="nav-item">
       <a href="admin_dashboard.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
+      <i class="nav-icon fas fa-tachometer-alt"></i>
+
         <p>
           Dashboard
          <!-- <span class="right badge badge-danger">New</span>-->
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="userinfo.php" class="nav-link">
+      <i class="nav-icon fas fa-user"></i> 
+   
+        <p>
+          User Details
+         <!-- <span class="right badge badge-danger">New</span>-->
+        </p>
+      </a>
+    </li>
+
 
     <li class="nav-item has-treeview">
   <a href="#" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
+  <i class="nav-icon fas fa-code"></i>
+
     <p>
       Programs
       <i class="right fas fa-angle-left"></i> <!-- Dropdown arrow -->
@@ -324,7 +337,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 <!-- Tickets Menu Item -->
 <li class="nav-item">
   <a href="admintickets.php" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
+  <i class="nav-icon fas fa-ticket-alt"></i>
+
     <p>
       Tickets
       <?php if ($notificationCounts['tickets'] > 0): ?>
@@ -337,7 +351,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 </li>
 <li class="nav-item">
   <a href="application.php" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
+  <i class="nav-icon fas fa-briefcase"></i>
+
     <p>
       Application
       <?php if ($notificationCounts['application'] > 0): ?>
@@ -351,7 +366,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 
 <li class="nav-item">
   <a href="admintasks.php" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
+  <i class="nav-icon fas fa-tasks"></i>
+
     <p>
       Task
       <?php if ($notificationCounts['task'] > 0): ?>
@@ -364,7 +380,7 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 </li>
 <li class="nav-item">
   <a href="admindocument.php" class="nav-link">
-    <i class="nav-icon fas fa-th"></i>
+  <i class="nav-icon fas fa-file-alt"></i>
     <p>
       Document
       <?php if ($notificationCounts['document'] > 0): ?>
@@ -379,7 +395,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 
     <li class="nav-item">
       <a href="adminreferral.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
+      <i class="nav-icon fas fa-user-friends"></i>
+
         <p>
         Referral Dashboard
      
@@ -389,8 +406,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
     </li>
    <li class="nav-item">
        <a href="verificationpage.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
+       <i class="nav-icon fas fa-money-check-alt"></i>
+  <p>
           PaymentVerification
          <!-- <span class="right badge badge-danger">New</span>-->
         </p>
@@ -399,8 +416,8 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
   
     <li class="nav-item">
       <a href="adminlogout.php" class="nav-link">
-        <i class="nav-icon fas fa-th"></i>
-        <p>
+      <i class="nav-icon fas fa-sign-out-alt"></i>
+   <p>
           LogOut
           
         </p>

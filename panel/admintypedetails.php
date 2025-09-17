@@ -2,6 +2,11 @@
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
+
+
+
+
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
   try{
@@ -18,6 +23,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $stmt->execute([$id]);
   $applicationdata = $stmt->fetchAll();
   //print_r($applicationdata);die;
+
+  foreach ($applicationdata as $app)
+
+{
+  $_SESSION['UserID'] = $app['UserID'];
+  $_SESSION['email1'] = $app['email'];
+
+}
+//count for task
+$stmt = $db->prepare("SELECT COUNT(*) FROM task WHERE studentid = :studentid");
+$stmt->bindParam(':studentid', $_SESSION['UserID'], PDO::PARAM_INT);
+$stmt->execute();
+$taskCount = $stmt->fetchColumn();
+
+
+//count for document
+$stmt = $db->prepare("SELECT COUNT(*) FROM documents WHERE studentid = :studentid");
+$stmt->bindParam(':studentid', $_SESSION['UserID'], PDO::PARAM_INT);
+$stmt->execute();
+$documentCount = $stmt->fetchColumn();
+
+//count for ticket
+$stmt = $db->prepare("SELECT COUNT(*) FROM ticket WHERE studentid = :studentid");
+$stmt->bindParam(':studentid', $_SESSION['UserID'], PDO::PARAM_INT);
+$stmt->execute();
+$ticketCount = $stmt->fetchColumn();
+
+//count for referal
+$stmt = $db->prepare("SELECT COUNT(*) FROM referrals WHERE userid = :studentid");
+$stmt->bindParam(':studentid', $_SESSION['UserID'], PDO::PARAM_INT);
+$stmt->execute();
+$referralCountdata = $stmt->fetchColumn();
+
+// Count for application
+$stmt = $db->prepare("SELECT COUNT(*) FROM application WHERE email = :email1");
+$stmt->bindParam(':email1', $_SESSION['email1'], PDO::PARAM_STR); // use PARAM_STR for strings
+$stmt->execute();
+$applicationCount1 = $stmt->fetchColumn();
+
    
   }
   catch(Exception $e)
@@ -31,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Application | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
   <!-- AdminLTE Styles -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
@@ -70,8 +114,179 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
       </h3>
     </div>
     <div class="card-body">
+  <!-- Stat boxes -->
+  <div class="row">
+  
+    <!-- Referral Count -->
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-light">
+        <div class="inner">
+          <h3><?php echo $referralCountdata ?></h3>
+          <p>Total Referral Count</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <form action="adminreferral.php" method="POST">
+          <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Referrals <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+  </form>
+      </div>
+    </div>
 
-      <!-- Top Summary Info -->
+    <!-- Document Count -->
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-light">
+        <div class="inner">
+          <h3><?php echo $documentCount ?></h3>
+          <p>Total Document Count</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <form action="admindocument.php" method="POST">
+          <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Documents <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Task Count -->
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-light">
+        <div class="inner">
+          <h3><?php echo $taskCount ?></h3>
+          <p>Total Task Count</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <form action="admintasks.php" method="POST">
+          <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Tasks <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>  </form>
+      </div>
+    </div>
+
+    <!-- Ticket Count -->
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-light">
+        <div class="inner">
+          <h3><?php echo $ticketCount ?></h3>
+          <p>Total Ticket Count</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-ticket-alt"></i>
+        </div>
+        <form action="admintickets.php" method="POST">
+          <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+          <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Tickets <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+        </form>
+      </div>
+    </div>
+     <!-- Ticket Count -->
+    <!-- Application Count Box 1 -->
+<div class="col-lg-3 col-6">
+  <div class="small-box bg-light">
+    <div class="inner">
+      <h3><?php echo $applicationCount1 ?? '--'; ?></h3>
+      <p>Total Application Count</p>
+    </div>
+    <div class="icon">
+      <i class="fas fa-hourglass-half"></i>
+    </div>
+    <form action="application.php" method="POST">
+      <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    View Applications <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>   </form>
+  </div>
+</div>
+
+<!-- Application Count Box 2 -->
+<div class="col-lg-3 col-6">
+  <div class="small-box bg-light">
+    <div class="inner">
+      <h3><?php echo $applicationCount2 ?? '--'; ?></h3>
+      <p>--</p>
+    </div>
+    <div class="icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <form action="#" method="POST">
+      <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+    </form>
+  </div>
+</div>
+
+<!-- Application Count Box 3 -->
+<div class="col-lg-3 col-6">
+  <div class="small-box bg-light">
+    <div class="inner">
+      <h3><?php echo $applicationCount3 ?? '--'; ?></h3>
+      <p>--</p>
+    </div>
+    <div class="icon">
+      <i class="fas fa-search"></i>
+    </div>
+    <form action="#" method="POST">
+      <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+    </form>
+  </div>
+</div>
+
+<!-- Application Count Box 4 -->
+<div class="col-lg-3 col-6">
+  <div class="small-box bg-light">
+    <div class="inner">
+      <h3><?php echo $applicationCount4 ?? '--'; ?></h3>
+      <p>--</p>
+    </div>
+    <div class="icon">
+      <i class="fas fa-times-circle"></i>
+    </div>
+    <form action="#" method="POST">
+      <input type="hidden" name="userid" value="<?php echo htmlspecialchars($app['UserID']); ?>">
+      <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+  <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+    -- <i class="fas fa-arrow-circle-right"></i>
+  </button>
+</div>
+    </form>
+  </div>
+</div>
+
+  </div>
+</div>
+
+   <!-- Top Summary Info -->
       <div class="row">
         <div class="col-md-4">
           <div class="info-box bg-gradient-info">
@@ -152,6 +367,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
       </div>
     </div>
   </div>
+  
   <?php endforeach; ?>
     </section>
   </div>

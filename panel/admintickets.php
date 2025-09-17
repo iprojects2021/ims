@@ -8,73 +8,73 @@ $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
 
 // Handle form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $subject = trim($_POST["subject"]);
-    $message = trim($_POST["message"]);
-    $status = "New"; // Default status
+// if ($_SERVER["REQUEST_METHOD"] === "POST") {
+//     $subject = trim($_POST["subject"]);
+//     $message = trim($_POST["message"]);
+//     $status = "New"; // Default status
 
-    $filename = null;
+//     $filename = null;
 
-    // Handle file upload if a file was uploaded
-    if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
-        $uploadDir = "../uploads/tickets/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+//     // Handle file upload if a file was uploaded
+//     if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
+//         $uploadDir = "../uploads/tickets/";
+//         if (!is_dir($uploadDir)) {
+//             mkdir($uploadDir, 0777, true);
+//         }
 
-        $originalName = basename($_FILES["file"]["name"]);
-        $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName); // sanitize filename
-        $targetPath = $uploadDir . $filename;
+//         $originalName = basename($_FILES["file"]["name"]);
+//         $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName); // sanitize filename
+//         $targetPath = $uploadDir . $filename;
 
-        if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
-            echo "<div class='alert alert-danger'>Failed to upload file.</div>";
-            exit();
-        }
-    }
-   try{
-    // Prepare SQL statement
-    $sql="INSERT INTO ticket 
-    (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-    VALUES
-    (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
-";
-    $stmt = $db->prepare($sql);
+//         if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
+//             echo "<div class='alert alert-danger'>Failed to upload file.</div>";
+//             exit();
+//         }
+//     }
+//    try{
+//     // Prepare SQL statement
+//     $sql="INSERT INTO ticket 
+//     (studentid, subject, message, status, assignedto, filename, createdate, createdby)
+//     VALUES
+//     (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
+// ";
+//     $stmt = $db->prepare($sql);
 
-    $result = $stmt->execute([
-        ':studentid' => $studentId,
-        ':subject' => $subject,
-        ':message' => $message,
-        ':status' => $status,
-        ':assignedto' => null,       // Ticket not yet assigned
-        ':filename' => $filename,
-        ':createdby' => $createdBy
-    ]);
-  }
-  catch(Exception $e)
-  {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-  }
+//     $result = $stmt->execute([
+//         ':studentid' => $studentId,
+//         ':subject' => $subject,
+//         ':message' => $message,
+//         ':status' => $status,
+//         ':assignedto' => null,       // Ticket not yet assigned
+//         ':filename' => $filename,
+//         ':createdby' => $createdBy
+//     ]);
+//   }
+//   catch(Exception $e)
+//   {
+//     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+//   }
 
-    if ($result) {
-      echo '<div class="alert alert-success alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-check"></i> Alert!</h5>
-      Data saved successfully
-    </div>';
-    echo '<script type="text/javascript">
-    setTimeout(function() {
-        window.location.href = "studenthelp.php"; 
-    }, 2000); // Redirect after 2 seconds
-  </script>';
+//     if ($result) {
+//       echo '<div class="alert alert-success alert-dismissible">
+//       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+//       <h5><i class="icon fas fa-check"></i> Alert!</h5>
+//       Data saved successfully
+//     </div>';
+//     echo '<script type="text/javascript">
+//     setTimeout(function() {
+//         window.location.href = "studenthelp.php"; 
+//     }, 2000); // Redirect after 2 seconds
+//   </script>';
 
-    } else {
-      echo '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h5><i class="icon fas fa-times"></i> Error!</h5>
-      There was an error updating the data.
-    </div>';
-    }
-}
+//     } else {
+//       echo '<div class="alert alert-danger alert-dismissible">
+//       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+//       <h5><i class="icon fas fa-times"></i> Error!</h5>
+//       There was an error updating the data.
+//     </div>';
+//     }
+// }
 ?>
 <?php
 try {
@@ -152,24 +152,34 @@ try {
 
 
 
-<?php
+      <?php
+if (isset($_POST['userid'])) {
+    $id = $_POST['userid'];
 
-
-
-try{
-
-
-// Fetch ticket data
-$sql="SELECT * FROM ticket ORDER BY createdate DESC";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$tickets = $stmt->fetchAll();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
+    try {
+        $sql = "SELECT * FROM ticket WHERE studentid = :id ORDER BY createdate DESC";
+        $stmt = $db->prepare($sql); // This was missing
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Use PARAM_STR if studentid is not always numeric
+        $stmt->execute();
+        $tickets = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
+    }
+} else {
+    try {
+        $sql = "SELECT * FROM ticket ORDER BY createdate DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $tickets = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
+    }
 }
 ?>
+
+
+
+
 
 <!-- AdminLTE Card with Table -->
 <div class="card">
@@ -183,6 +193,7 @@ catch(Exception $e)
       <thead>
         <tr>
           <th>ID</th>
+          <th>User Id</th>
           <th>Subject</th>
           <th>Message</th>
           <th>Status</th>
@@ -197,6 +208,7 @@ catch(Exception $e)
           <?php foreach ($tickets as $ticket): ?>
             <tr class="clickable-row" data-id="<?= $ticket['id'] ?>">
               <td><?= htmlspecialchars($ticket['id']) ?></td>
+              <td><?= htmlspecialchars($ticket['studentid']) ?></td>
               <td><?= htmlspecialchars($ticket['subject']) ?></td>
               <td><?= nl2br(htmlspecialchars($ticket['message'])) ?></td>
               <td>
