@@ -4,65 +4,97 @@
 include("../includes/db.php");
 include("../panel/util/session.php");
 
-$userid = $_SESSION['user']['id'];
+$userid = $_SESSION['user']['id'] ?? 0;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
-    $title       = $_POST['title'] ?? '';
-    $description = $_POST['description'] ?? '';
-    $technology  = $_POST['technology'] ?? null;
-    $tags        = $_POST['tags'] ?? null;
-    $links       = $_POST['links'] ?? null;
+$ideadata = [];
 
-    $attachmentPath = null;
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
+    $id = $_POST['id'];
+    try {
+        $sql = "SELECT * FROM innovationideas WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+        $ideadata = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
+        echo "<div class='alert alert-danger'>Failed to fetch innovation idea data.</div>";
+    }
+}
 
-    // Handle File Upload
-    if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+    // Get values from form
+    $id = $_POST['id'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $technology = $_POST['technology'];
+    $tags = $_POST['tags'];
+    $links = $_POST['links'];
+
+    // Use consistent userid from session
+    $userid = $_SESSION['user']['id'] ?? 0;
+
+    // Handle file upload
+    $attachments = null;
+    if (!empty($_FILES['attachment']['name'])) {
+        $file_tmp = $_FILES['attachment']['tmp_name'];
+        $file_name = basename($_FILES['attachment']['name']);
+        // Sanitize filename
+        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name);
+        $target_dir = "uploads/";
+        
+        // Make sure uploads directory exists
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0755, true);
         }
 
-        $originalName = basename($_FILES['attachment']['name']);
-        $safeName = preg_replace("/[^A-Z0-9._-]/i", "_", $originalName); // Sanitize file name
-        $filePath = $uploadDir . time() . '_' . $safeName;
+        $target_file = $target_dir . time() . "_" . $file_name;
 
-        if (move_uploaded_file($_FILES['attachment']['tmp_name'], $filePath)) {
-            $attachmentPath = 'uploads/' . time() . '_' . $safeName;
+        if (move_uploaded_file($file_tmp, $target_file)) {
+            $attachments = $target_file;
         } else {
-            die("Error uploading the file.");
+            echo "<div class='alert alert-warning'>Failed to upload attachment.</div>";
         }
     }
 
+    // Prepare the update query
+    $sql = "UPDATE innovationideas 
+            SET title = :title, 
+                description = :description, 
+                technology = :technology, 
+                tags = :tags, 
+                links = :links";
+
+    if ($attachments !== null) {
+        $sql .= ", attachments = :attachments";
+    }
+
+    $sql .= " WHERE id = :id";
+
     try {
-        // Insert innovation idea
-        $sql = "INSERT INTO innovationideas 
-                (intern_id, title, description, technology, tags, attachments, links) 
-                VALUES 
-                (:intern_id, :title, :description, :technology, :tags, :attachments, :links)";
-
         $stmt = $db->prepare($sql);
-        $result = $stmt->execute([
-            ':intern_id'   => $userid,
-            ':title'       => $title,
-            ':description' => $description,
-            ':technology'  => $technology,
-            ':tags'        => $tags,
-            ':attachments' => $attachmentPath,
-            ':links'       => $links,
-        ]);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':technology', $technology);
+        $stmt->bindParam(':tags', $tags);
+        $stmt->bindParam(':links', $links);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-        if ($result) {
-           // echo "<div class='alert alert-success'>Innovation idea submitted successfully!</div>";
+        if ($attachments !== null) {
+            $stmt->bindParam(':attachments', $attachments);
+        }
+
+        if ($stmt->execute()) {
+           // echo "<div class='alert alert-success'>Innovation idea updated successfully!</div>";
            $showAlert = 'success';
-            // ✅ Add Notification for Admin
+            // Add Notification for Admin
             $menuItem = 'innovationideas';
-            $notificationMessage = "New innovation idea submitted by Student ID: " . $userid;
+            $notificationMessage = "Innovation idea updated by Student ID: " . $userid;
             $createdBy = $userid;
 
             try {
                 $notifSql = "INSERT INTO notification 
                             (userid, menu_item, isread, message, createdBy) 
-                             VALUES 
+                            VALUES 
                             ('admin', :menu_item, 0, :message, :createdBy)";
 
                 $notifStmt = $db->prepare($notifSql);
@@ -75,14 +107,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
                 error_log('Notification Insert Failed: ' . $e->getMessage());
             }
         } else {
-            echo "<div class='alert alert-danger'>Failed to submit innovation idea.</div>";
+            echo "<div class='alert alert-danger'>Failed to update innovation idea.</div>";
         }
-
-    } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
+    } catch (Exception $e) {
+        error_log("Update failed: " . $e->getMessage());
+        echo "<div class='alert alert-danger'>Failed to update innovation idea.</div>";
     }
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
       <!-- AdminLTE Card Wrapper -->
 <div class="card card-primary">
   <div class="card-header">
-    <h3 class="card-title">InnovationIdeas</h3>
+    <h3 class="card-title">Edit InnovationIdeas</h3>
   </div>
   <!-- /.card-header -->
   
@@ -154,57 +189,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
 
 <!-- form start -->
     <!-- form start -->
-    <form  method="post" enctype="multipart/form-data">
-        <div class="card-body py-2">
-            <div class="form-row">
-                <!-- <div class="form-group col-md-4 mb-2">
-                    <label for="intern_id" class="mb-1">Intern ID</label>
-                    <input type="number" name="intern_id" class="form-control form-control-sm" id="intern_id" required>
-                </div> -->
+    <form method="post" enctype="multipart/form-data">
+    <div class="card-body py-2">
 
-                <div class="form-group col-md-8 mb-2">
-                    <label for="title" class="mb-1">Title</label>
-                    <input type="text" name="title" class="form-control form-control-sm" id="title" required>
-                </div>
-            </div>
+        <?php if (!empty($ideadata)): ?>
+            <?php foreach ($ideadata as $data): ?>
+                <div class="form-row">
+                    <!-- Hidden input for the idea id -->
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($data['id']); ?>">
 
-            <div class="form-group mb-2">
-                <label for="description" class="mb-1">Description</label>
-                <textarea name="description" class="form-control form-control-sm" id="description" rows="2" required></textarea>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6 mb-2">
-                    <label for="technology" class="mb-1">Technology</label>
-                    <input type="text" name="technology" class="form-control form-control-sm" id="technology">
-                </div>
-
-                <div class="form-group col-md-6 mb-2">
-                    <label for="tags" class="mb-1">Tags</label>
-                    <input type="text" name="tags" class="form-control form-control-sm" id="tags">
-                </div>
-            </div>
-
-            <div class="form-group mb-2">
-                <label for="attachment" class="mb-1">Attachment</label>
-                <div class="input-group input-group-sm">
-                    <div class="custom-file">
-                        <input type="file" name="attachment" class="custom-file-input" id="attachment">
-                        <label class="custom-file-label" for="attachment">Choose file</label>
+                    <div class="form-group col-md-8 mb-2">
+                        <label for="title" class="mb-1">Title</label>
+                        <input type="text" name="title" value="<?php echo htmlspecialchars($data['title']); ?>" class="form-control form-control-sm" id="title" required>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group mb-2">
-                <label for="links" class="mb-1">Links</label>
-                <textarea name="links" class="form-control form-control-sm" id="links" rows="2"></textarea>
-            </div>
-        </div>
+                <div class="form-group mb-2">
+                    <label for="description" class="mb-1">Description</label>
+                    <textarea name="description" class="form-control form-control-sm" id="description" rows="2" required><?php echo htmlspecialchars($data['description']); ?></textarea>
+                </div>
 
-        <div class="card-footer py-2">
-        <button type="submit" name="add" class="btn btn-primary">Submit</button>
-  </div>
-    </form>
+                <div class="form-group mb-2">
+                    <label for="feedback" class="mb-1">Feedback</label>
+                    <textarea class="form-control form-control-sm" id="feedback" rows="2" readonly><?php echo htmlspecialchars($data['feedback']); ?></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="technology" class="mb-1">Technology</label>
+                        <input type="text" name="technology" value="<?php echo htmlspecialchars($data['technology']); ?>" class="form-control form-control-sm" id="technology">
+                    </div>
+
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="tags" class="mb-1">Tags</label>
+                        <input type="text" name="tags" value="<?php echo htmlspecialchars($data['tags']); ?>" class="form-control form-control-sm" id="tags">
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="reviewed_at" class="mb-1">reviewed_at</label>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewed_at']); ?>" class="form-control form-control-sm" id="reviewed_at" readonly>
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="reviewer_id" class="mb-1">reviewer_id</label>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewer_id']); ?>" class="form-control form-control-sm" id="reviewer_id" readonly>
+                    </div>
+
+
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="status" class="mb-1">Status</label>
+                        <input type="text" value="<?php echo htmlspecialchars($data['status']); ?>" class="form-control form-control-sm" id="status" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="attachment" class="mb-1">Attachment</label>
+                    <div class="input-group input-group-sm">
+                        <div class="custom-file">
+                            <input type="file" name="attachment" class="custom-file-input" id="attachment">
+                            <label class="custom-file-label" for="attachment">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="links" class="mb-1">Links</label>
+                    <textarea name="links" class="form-control form-control-sm" id="links" rows="2"><?php echo htmlspecialchars($data['links']); ?></textarea>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No innovation idea selected.</p>
+        <?php endif; ?>
+    </div>
+
+    <div class="card-footer py-2">
+        <button type="submit" name="update" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
 <!-- AdminLTE Card with Table -->
 
   <!-- /.card-body -->

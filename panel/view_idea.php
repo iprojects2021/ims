@@ -32,25 +32,14 @@ if (isset($_POST['userid'])) {
 
 
 ?>
-<?php
 
+<?php
+$useriddata=$_SESSION['user']['id'];
 try {
     $sql = "UPDATE notification 
             SET isread = 1 
-            WHERE userid ='admin' 
+            WHERE userid =$useriddata 
               AND menu_item = 'innovationideas'";
-    $db->query($sql);
-} catch (Exception $e) {
-    // Optional: Log the error
-}
-?>
-<?php
-
-try {
-    $sql = "UPDATE notification 
-            SET isread = 1 
-            WHERE userid ='admin' 
-              AND menu_item = 'task'";
     $db->query($sql);
 } catch (Exception $e) {
     // Optional: Log the error
@@ -156,7 +145,9 @@ try {
     <?php else: ?>
         <em>No file</em>
     <?php endif; ?>
-</td>  <td><?= htmlspecialchars($innovationideasdata['links']) ?></td>
+</td>
+
+                  <td><?= htmlspecialchars($innovationideasdata['links']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['status']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['submitted_at']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['reviewed_at']) ?></td>
@@ -229,7 +220,7 @@ try {
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="adminideadetails.php" style="display:none;">
+<form id="postForm" method="POST" action="studentideadetails.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>
