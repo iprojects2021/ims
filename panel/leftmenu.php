@@ -520,8 +520,8 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
    </p>
       </a>
     </li>
-    <li class="nav-item has-treeview <?php echo ($page == 'Submit Idea' || $page == 'Submited Idea') ? 'menu-open' : ''; ?>">
-  <a href="#" class="nav-link <?php echo ($page == 'Submit Idea' || $page == 'Submited Idea') ? 'active' : ''; ?>">
+    <li class="nav-item has-treeview <?php echo ($page == 'Create Idea' || $page == 'View Idea') ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?php echo ($page == 'Create Idea' || $page == 'View Idea') ? 'active' : ''; ?>">
   <i class="nav-icon fas fa-lightbulb"></i>
        <p>
     InnovationIdeas
@@ -535,15 +535,15 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
   </a>
   <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="innovationideas.php" class="nav-link <?php echo ($page == 'Submit Idea') ? 'active' : ''; ?>">
+      <a href="innovationideas.php" class="nav-link <?php echo ($page == 'Create Idea') ? 'active' : ''; ?>">
         <i class="far fa-circle nav-icon"></i>
-        <p>Submit Idea</p>
+        <p>Create Idea</p>
       </a>
     </li>
     <li class="nav-item">
-      <a href="view_idea.php" class="nav-link <?php echo ($page == 'Submited Idea') ? 'active' : ''; ?>">
+      <a href="view_idea.php" class="nav-link <?php echo ($page == 'View Idea') ? 'active' : ''; ?>">
         <i class="far fa-circle nav-icon"></i>
-        <p>Submited Ideas</p>
+        <p>View Ideas</p>
       </a>
     </li>
   </ul>

@@ -379,7 +379,13 @@ if (isset($_GET['id'])) {
                   <b class="d-block"><?php echo htmlspecialchars($applications['assignedto']); ?></b>
                 </p>
                 <p class="text-sm">FileName
-                  <b class="d-block"><?php echo htmlspecialchars($applications['filename']); ?></b>
+                  <b class="d-block"> <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/', '', $applications['filename']);
+?>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+</b>
                 </p>
                 <p class="text-sm">CreateDate
  

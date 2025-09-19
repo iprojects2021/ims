@@ -149,15 +149,13 @@ try {
               <td><?= htmlspecialchars($documentdata['id']) ?></td>
               <td><?= htmlspecialchars($documentdata['studentid']) ?></td>
               <td><?= htmlspecialchars($documentdata['education_level']) ?></td>
-              <td> <?php if (!empty($documentdata['file_path'])): ?>
-    <?php
-        // Extract just the filename
-        $filename = basename($documentdata['file_path']);
-    ?>
-    <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
-<?php else: ?>
-    <em>No file</em>
-<?php endif; ?>
+              <td> <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/', '', $documentdata['file_path']);
+?>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+
                   </td>
               <td><?= htmlspecialchars($documentdata['remark']) ?></td>
               <td><?= htmlspecialchars($documentdata['status']) ?>

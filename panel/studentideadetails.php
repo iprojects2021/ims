@@ -21,101 +21,121 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    // Get values from form
-    $id = $_POST['id'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $technology = $_POST['technology'];
-    $tags = $_POST['tags'];
-    $links = $_POST['links'];
 
-    // Use consistent userid from session
-    $userid = $_SESSION['user']['id'] ?? 0;
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
+  // Get form data
+  $id = $_POST['id'];
+  $title = $_POST['title'];
+  $description = $_POST['description'];
+  $technology = $_POST['technology'];
+  $tags = $_POST['tags'];
+  $links = $_POST['links'];
 
-    // Handle file upload
-    $attachments = null;
-    if (!empty($_FILES['attachment']['name'])) {
-        $file_tmp = $_FILES['attachment']['tmp_name'];
-        $file_name = basename($_FILES['attachment']['name']);
-        // Sanitize filename
-        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name);
-        $target_dir = "uploads/";
-        
-        // Make sure uploads directory exists
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0755, true);
-        }
+  // Get user ID from session, fallback 0
+  $userid = $_SESSION['user']['id'] ?? 0;
 
-        $target_file = $target_dir . time() . "_" . $file_name;
+  $attachmentPath = null;
 
-        if (move_uploaded_file($file_tmp, $target_file)) {
-            $attachments = $target_file;
-        } else {
-            echo "<div class='alert alert-warning'>Failed to upload attachment.</div>";
-        }
-    }
+  // Define base upload folder and ideas subfolder (use DIRECTORY_SEPARATOR for portability)
+  $ideasSubfolder = $uploadFolder . DIRECTORY_SEPARATOR . 'ideas' . DIRECTORY_SEPARATOR;
 
-    // Prepare the update query
-    $sql = "UPDATE innovationideas 
-            SET title = :title, 
-                description = :description, 
-                technology = :technology, 
-                tags = :tags, 
-                links = :links";
+  // Ensure base uploads folder exists
+  if (!is_dir($uploadFolder)) {
+      if (!mkdir($uploadFolder, 0755, true)) {
+          die("Failed to create base folder: uploads");
+      }
+  }
 
-    if ($attachments !== null) {
-        $sql .= ", attachments = :attachments";
-    }
+  // Ensure ideas subfolder exists
+  if (!is_dir($ideasSubfolder)) {
+      if (!mkdir($ideasSubfolder, 0755, true)) {
+          die("Failed to create folder: uploads/ideas");
+      }
+  }
 
-    $sql .= " WHERE id = :id";
+  // Handle file upload if provided
+  if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+      $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
+      if (!in_array($_FILES['attachment']['type'], $allowedTypes)) {
+          echo "<div class='alert alert-danger'>Invalid file type uploaded.</div>";
+          exit;
+      }
 
-    try {
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':technology', $technology);
-        $stmt->bindParam(':tags', $tags);
-        $stmt->bindParam(':links', $links);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      // Sanitize original filename
+      $originalName = basename($_FILES['attachment']['name']);
+      $safeName = preg_replace("/[^a-zA-Z0-9.\-_]/", "_", $originalName);
+      $uniqueName = time() . "_" . $safeName;
+      $fullPath = $ideasSubfolder . $uniqueName;
 
-        if ($attachments !== null) {
-            $stmt->bindParam(':attachments', $attachments);
-        }
+      // Move uploaded file
+      if (move_uploaded_file($_FILES['attachment']['tmp_name'], $fullPath)) {
+          // Save relative path for DB/web access
+          $attachmentPath = 'uploads/ideas/' . $uniqueName;
+      } else {
+          die("Error uploading the file.");
+      }
+  }
 
-        if ($stmt->execute()) {
-           // echo "<div class='alert alert-success'>Innovation idea updated successfully!</div>";
-           $showAlert = 'success';
-            // Add Notification for Admin
-            $menuItem = 'innovationideas';
-            $notificationMessage = "Innovation idea updated by Student ID: " . $userid;
-            $createdBy = $userid;
+  // Build SQL query
+  $sql = "UPDATE innovationideas 
+          SET title = :title, 
+              description = :description, 
+              technology = :technology, 
+              tags = :tags, 
+              links = :links";
 
-            try {
-                $notifSql = "INSERT INTO notification 
-                            (userid, menu_item, isread, message, createdBy) 
-                            VALUES 
-                            ('admin', :menu_item, 0, :message, :createdBy)";
+  if ($attachmentPath !== null) {
+      $sql .= ", attachments = :attachments";
+  }
 
-                $notifStmt = $db->prepare($notifSql);
-                $notifStmt->execute([
-                    ':menu_item' => $menuItem,
-                    ':message'   => $notificationMessage,
-                    ':createdBy' => $createdBy
-                ]);
-            } catch (Exception $e) {
-                error_log('Notification Insert Failed: ' . $e->getMessage());
-            }
-        } else {
-            echo "<div class='alert alert-danger'>Failed to update innovation idea.</div>";
-        }
-    } catch (Exception $e) {
-        error_log("Update failed: " . $e->getMessage());
-        echo "<div class='alert alert-danger'>Failed to update innovation idea.</div>";
-    }
+  $sql .= " WHERE id = :id";
+
+  try {
+      $stmt = $db->prepare($sql);
+      $stmt->bindParam(':title', $title);
+      $stmt->bindParam(':description', $description);
+      $stmt->bindParam(':technology', $technology);
+      $stmt->bindParam(':tags', $tags);
+      $stmt->bindParam(':links', $links);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+      if ($attachmentPath !== null) {
+          $stmt->bindParam(':attachments', $attachmentPath);
+      }
+
+      if ($stmt->execute()) {
+          $showAlert = 'success';
+
+          // Insert notification for admin
+          $menuItem = 'innovationideas';
+          $notificationMessage = "Innovation idea updated by Student ID: " . $userid;
+          $createdBy = $userid;
+
+          try {
+              $notifSql = "INSERT INTO notification 
+                           (userid, menu_item, isread, message, createdBy) 
+                           VALUES 
+                           ('admin', :menu_item, 0, :message, :createdBy)";
+
+              $notifStmt = $db->prepare($notifSql);
+              $notifStmt->execute([
+                  ':menu_item' => $menuItem,
+                  ':message'   => $notificationMessage,
+                  ':createdBy' => $createdBy
+              ]);
+          } catch (Exception $e) {
+              error_log('Notification Insert Failed: ' . $e->getMessage());
+          }
+      } else {
+          echo "<div class='alert alert-danger'>Failed to update innovation idea.</div>";
+      }
+  } catch (Exception $e) {
+      error_log("Update failed: " . $e->getMessage());
+      echo "<div class='alert alert-danger'>An error occurred while updating the idea.</div>";
+  }
 }
-?>
 
+?>
 
 
 
@@ -181,7 +201,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
       <!-- AdminLTE Card Wrapper -->
 <div class="card card-primary">
   <div class="card-header">
-    <h3 class="card-title">Edit InnovationIdeas</h3>
+    <h3 class="card-title">Edit Innovation Ideas</h3>
+    <p id="quote" class="quote visible">Think beyond fixes—create what doesn’t exist yet.</p>
+
   </div>
   <!-- /.card-header -->
   
@@ -379,3 +401,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     e.target.nextElementSibling.innerText = fileName;
   });
 </script>
+<style>
+    .card-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .quote {
+      font-size: 18px;
+      font-style: italic;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .hidden {
+      opacity: 0;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+
+
+
+
+  </style>
+  
+  <script>
+    const quotes = [
+      "Think beyond fixes—create what doesn’t exist yet.",
+      "🌱 Innovation starts where routine ends.",
+      "🚀 Don’t just do tasks, design tomorrow.",
+      "🧩 Your ideas can be the missing piece of the future.",
+      "⚡ Challenge the normal, spark the new.",
+      "✨ Don’t follow the path—draw the map."
+    ];
+
+    let currentIndex = 0;
+    const quoteElement = document.getElementById('quote');
+
+    setInterval(() => {
+      // Fade out
+      quoteElement.classList.remove('visible');
+      quoteElement.classList.add('hidden');
+
+      setTimeout(() => {
+        // Change quote
+        currentIndex = (currentIndex + 1) % quotes.length;
+        quoteElement.textContent = quotes[currentIndex];
+
+        // Fade in
+        quoteElement.classList.remove('hidden');
+        quoteElement.classList.add('visible');
+      }, 500); // match the CSS transition duration
+    }, 5000);
+  </script>

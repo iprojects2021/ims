@@ -96,10 +96,10 @@ try {
     <div class="content-header">
       <div class="container-fluid"><ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">InnovationIdeas</li>
+              <li class="breadcrumb-item active">Innovation Ideas</li>
             </ol>
         
-        <h1 class="m-0"> InnovationIdeas List</h1>
+        <h1 class="m-0"> Innovation Ideas List</h1>
         
       </div>
     </div>
@@ -113,7 +113,7 @@ try {
         <!-- Task Table -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">InnovationIdeas List</h3>
+            <h3 class="card-title">Innovation Ideas List</h3>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
@@ -147,15 +147,13 @@ try {
                   <td><?= htmlspecialchars($innovationideasdata['technology']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['tags']) ?></td>
                   <td>
-    <?php if (!empty($innovationideasdata['attachments'])): ?>
-        <?php
-        // Extract just the filename
-        $filename = basename($innovationideasdata['attachments']);
-        ?>
-        <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
-    <?php else: ?>
-        <em>No file</em>
-    <?php endif; ?>
+                  <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments']);
+?>
+
+<a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+
 </td>  <td><?= htmlspecialchars($innovationideasdata['links']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['status']) ?></td>
                   <td><?= htmlspecialchars($innovationideasdata['submitted_at']) ?></td>

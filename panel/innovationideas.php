@@ -6,7 +6,10 @@ include("../panel/util/session.php");
 
 $userid = $_SESSION['user']['id'];
 
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
+    // Collect form data
     $title       = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
     $technology  = $_POST['technology'] ?? null;
@@ -15,26 +18,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
 
     $attachmentPath = null;
 
-    // Handle File Upload
-    if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+    // Ensure base uploads folder exists
+    if (!is_dir($uploadFolder)) {
+        if (!mkdir($uploadFolder, 0755, true)) {
+            die("Failed to create base folder: uploads");
         }
+    }
 
+    // Create 'uploads/ideas' subfolder
+    $ideasSubfolder = $uploadFolder . "\\ideas\\";
+    if (!is_dir($ideasSubfolder)) {
+        if (!mkdir($ideasSubfolder, 0755, true)) {
+            die("Failed to create folder: uploads/ideas");
+        }
+    }
+
+    // Handle file upload
+    if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
         $originalName = basename($_FILES['attachment']['name']);
-        $safeName = preg_replace("/[^A-Z0-9._-]/i", "_", $originalName); // Sanitize file name
-        $filePath = $uploadDir . time() . '_' . $safeName;
+        $safeName = preg_replace("/[^A-Z0-9._-]/i", "_", $originalName); // Sanitize
+        $uniqueName = time() . '_' . $safeName;
+        $fullPath = $ideasSubfolder . $uniqueName;
 
-        if (move_uploaded_file($_FILES['attachment']['tmp_name'], $filePath)) {
-            $attachmentPath = 'uploads/' . time() . '_' . $safeName;
+        if (move_uploaded_file($_FILES['attachment']['tmp_name'], $fullPath)) {
+            // Save relative path for DB/web access
+            $attachmentPath = 'uploads/ideas/' . $uniqueName;
         } else {
             die("Error uploading the file.");
         }
     }
 
     try {
-        // Insert innovation idea
+        // Insert idea into database
         $sql = "INSERT INTO innovationideas 
                 (intern_id, title, description, technology, tags, attachments, links) 
                 VALUES 
@@ -52,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
         ]);
 
         if ($result) {
-           // echo "<div class='alert alert-success'>Innovation idea submitted successfully!</div>";
-           $showAlert = 'success';
-            // ✅ Add Notification for Admin
+            $showAlert = 'success';
+
+            // Add admin notification
             $menuItem = 'innovationideas';
             $notificationMessage = "New innovation idea submitted by Student ID: " . $userid;
             $createdBy = $userid;
@@ -62,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
             try {
                 $notifSql = "INSERT INTO notification 
                             (userid, menu_item, isread, message, createdBy) 
-                             VALUES 
+                            VALUES 
                             ('admin', :menu_item, 0, :message, :createdBy)";
 
                 $notifStmt = $db->prepare($notifSql);
@@ -82,8 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
         echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
     }
 }
-?>
 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,7 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
       <!-- AdminLTE Card Wrapper -->
 <div class="card card-primary">
   <div class="card-header">
-    <h3 class="card-title">InnovationIdeas</h3>
+    <h3 class="card-title">Innovation Ideas</h3>
+    <p id="quote" class="quote visible">Think beyond fixes—create what doesn’t exist yet.</p>
+
   </div>
   <!-- /.card-header -->
   
@@ -319,3 +337,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
     e.target.nextElementSibling.innerText = fileName;
   });
 </script>
+<style>
+    .card-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .quote {
+      font-size: 18px;
+      font-style: italic;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .hidden {
+      opacity: 0;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+
+
+
+
+  </style>
+  <script>
+    const quotes = [
+      "Think beyond fixes—create what doesn’t exist yet.",
+      "🌱 Innovation starts where routine ends.",
+      "🚀 Don’t just do tasks, design tomorrow.",
+      "🧩 Your ideas can be the missing piece of the future.",
+      "⚡ Challenge the normal, spark the new.",
+      "✨ Don’t follow the path—draw the map."
+    ];
+
+    let currentIndex = 0;
+    const quoteElement = document.getElementById('quote');
+
+    setInterval(() => {
+      // Fade out
+      quoteElement.classList.remove('visible');
+      quoteElement.classList.add('hidden');
+
+      setTimeout(() => {
+        // Change quote
+        currentIndex = (currentIndex + 1) % quotes.length;
+        quoteElement.textContent = quotes[currentIndex];
+
+        // Fade in
+        quoteElement.classList.remove('hidden');
+        quoteElement.classList.add('visible');
+      }, 500); // match the CSS transition duration
+    }, 5000);
+  </script>

@@ -7,7 +7,8 @@ $port = 3306; // or 3306
 $user = "root";
 $pass = "";
 $dbname = "internship_db";
-$uploadFolder ="upload";
+$uploadFolder = "C:\\xampp\\htdocs\\uploads";
+
 
 try {
     $db = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $user, $pass);

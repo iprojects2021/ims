@@ -278,12 +278,12 @@ $stmt->execute([$status, $feedback, $createdBy, $date, $id]);
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>innovationideas Details</h1>
+            <h1>innovation ideas Details</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">innovationideas Details</li>
+              <li class="breadcrumb-item active">innovation ideas Details</li>
             </ol>
           </div>
         </div>
@@ -378,7 +378,7 @@ $stmt->execute([$status, $feedback, $createdBy, $date, $id]);
             </div>
             <?php foreach ($allideadetails as $applications): ?>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <h3 class="text-primary"><i class="fas fa-paint-brush"></i>innovationideas Details</h3>
+              <h3 class="text-primary"><i class="fas fa-paint-brush"></i>innovation ideas Details</h3>
               <div class="text-muted">
               <p class="text-sm">Id
                   <b class="d-block"><?php echo htmlspecialchars($applications['id']); ?></b>
@@ -401,15 +401,13 @@ $stmt->execute([$status, $feedback, $createdBy, $date, $id]);
                 </p>
 
                 <p class="text-sm">Attachments<br>
-                <?php if (!empty($applications['attachments'])): ?>
-        <?php
-        // Extract just the filename
-        $filename = basename($applications['attachments']);
-        ?>
-        <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
-    <?php else: ?>
-        <em>No file</em>
-    <?php endif; ?>                </p>
+                <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/ideas/', '', $applications['attachments']);
+?>
+
+<a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+                </p>
                 <p class="text-sm">Links
                   <b. class="d-block"><?php echo htmlspecialchars($applications['links']); ?></b>
                 </p>

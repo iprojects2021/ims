@@ -17,14 +17,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Handle file upload
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
-        $uploadDir = "../uploads/tickets/";
+        //$uploadDir = "../uploads/tickets/";
+        $uploadDir = $uploadFolder;
+   
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
         $originalName = basename($_FILES["file"]["name"]);
         $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName);
-        $targetPath = $uploadDir . $filename;
+       // $targetPath = $uploadDir . $filename;
+       $targetPath = $uploadDir . DIRECTORY_SEPARATOR . $filename;
 
         if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
             echo "<div class='alert alert-danger'>Failed to upload file.</div>";

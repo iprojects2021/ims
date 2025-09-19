@@ -139,12 +139,13 @@ try {
               </td>
               <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
               <td>
-              <?php if (!empty($ticket['filename'])): ?>
-  <!-- Update link to redirect to download.php instead of the direct file path -->
-  <a href="../uploads/download.php?file=<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
-<?php else: ?>
-  <em>No file</em>
-<?php endif; ?>
+              <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/', '', $ticket['filename']);
+?>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+
 </td>
               <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
               <td><?= htmlspecialchars($ticket['createdby']) ?></td>
