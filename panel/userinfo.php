@@ -154,11 +154,13 @@ try {
                     <td><?= htmlspecialchars($row['college']) ?></td>
                     <td><?= htmlspecialchars($row['course']) ?></td>
                     <td><?= htmlspecialchars($row['role']) ?></td>
-                    <td> <?php if (!empty($row['resumepath'])): ?>
-  <a href="upload/resume/download3.php?file=<?= urlencode(basename($row['resumepath'])) ?>" target="_blank">Download Resume</a>
-<?php else: ?>
-  <em>No file</em>
-<?php endif; ?>
+                    <td>  <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/', '', $row['resumepath']);
+?>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+
 
 
 </td>

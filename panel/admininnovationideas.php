@@ -1,44 +1,68 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-$studentId = $_SESSION["user"]["id"];
-$createdBy = $studentId; // Assuming student created the ticket
+
+$studentId = $_SESSION["user"]["id"] ?? null;
+if (!$studentId) {
+    die("Unauthorized access.");
+}
+
+// Fetch Tasks
+if (isset($_POST['userid'])) {
+  $id = $_POST['userid'];
+  try {
+      $stmt = $db->prepare("SELECT * FROM task WHERE studentid = :id");
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Use PARAM_STR if it's not an integer
+      $stmt->execute();
+      $innovationideas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $error = "Error fetching tasks: " . $e->getMessage();
+      $innovationideas = [];
+  }
+} else {
+  try {
+      $stmt = $db->prepare("SELECT * FROM innovationideas");
+      $stmt->execute();
+      $innovationideas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) {
+      $error = "Error fetching tasks: " . $e->getMessage();
+      $innovationideas = [];
+  }
+}
+
+
 ?>
 <?php
-try{
-// Fetch ticket data
-$sql="SELECT * FROM ticket ORDER BY createdate DESC";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$tickets = $stmt->fetchAll();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
-?>
-<?php
-$useriddata=$_SESSION['user']['id'];
+
 try {
     $sql = "UPDATE notification 
             SET isread = 1 
-            WHERE userid =$useriddata 
-              AND menu_item = 'tickets'";
+            WHERE userid ='admin' 
+              AND menu_item = 'innovationideas'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
+<?php
+
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid ='admin' 
+              AND menu_item = 'task'";
     $db->query($sql);
 } catch (Exception $e) {
     // Optional: Log the error
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Portal | INDSAC SOFTECH</title>
+  <title>Admin-Task  | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -68,120 +92,91 @@ try {
 
   <?php include("leftmenu.php"); ?>
 
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+      <div class="container-fluid"><ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Support</li>
+              <li class="breadcrumb-item active">Innovation Ideas</li>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+        
+        <h1 class="m-0"> Innovation Ideas List</h1>
+        
+      </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
 
-      <!-- AdminLTE Card Wrapper -->
-  <!-- /.card-header -->
-  
-  <!-- form start -->
+      
+        </div>
 
-<!-- form start -->
-
-
-<!-- AdminLTE Card with Table -->
-<div class="card">
-  <div class="card-header">
-    <h3 class="card-title">Ticket List</h3>
-  </div>
-
-  <!-- /.card-header -->
-  <div class="card-body table-responsive">
-    <table id="example1" class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Subject</th>
-          <th>Message</th>
-          <th>Status</th>
-          <th>Assigned To</th>
-          <th>File</th>
-          <th>Created Date</th>
-          <th>Created By</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($tickets): ?>
-          <?php foreach ($tickets as $ticket): ?>
-            <tr class="clickable-row" data-id="<?= $ticket['id'] ?>">
-              <td><?= htmlspecialchars($ticket['id']) ?></td>
-              <td><?= htmlspecialchars($ticket['subject']) ?></td>
-              <td><?= nl2br(htmlspecialchars($ticket['message'])) ?></td>
-              <td>
-                <?php if ($ticket['status'] == 'Open'): ?>
-                  <span class="badge badge-success">Open</span>
-                <?php elseif ($ticket['status'] == 'In Progress'): ?>
-                  <span class="badge badge-warning">In Progress</span>
-                <?php else: ?>
-                  <span class="badge badge-secondary"><?= htmlspecialchars($ticket['status']) ?></span>
-                <?php endif; ?>
-              </td>
-              <td><?= $ticket['assignedto'] ?? '<em>Not assigned</em>' ?></td>
-              <td>
-              <?php
+        <!-- Task Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Innovation Ideas List</h3>
+          </div>
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>User ID</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Technology</th>
+                  <th>Tags</th>
+                  <th>Attachments</th>
+                  <th>Links</th>
+                  <th>Status</th>
+                  <th>Submitted_at</th>
+                  <th>Reviewed_at</th>
+                  <th>Reviewer_id</th>
+                  <th>Feedback</th>
+                  <th>Is_featured</th>
+                  <th>Views_count</th>
+                   
+                </tr>
+              </thead>
+              <tbody>
+              <?php foreach ($innovationideas as $innovationideasdata): ?>
+                <tr class="clickable-row" data-id="<?= $innovationideasdata['id'] ?>">
+                  <td><?= htmlspecialchars($innovationideasdata['id']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['intern_id']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['title']) ?></td>
+                  <td><?= nl2br(htmlspecialchars($innovationideasdata['description'])) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['technology']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['tags']) ?></td>
+                  <td>
+                  <?php
 // Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/', '', $ticket['filename']);
+$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments']);
 ?>
 
-<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+<a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
 
-</td>
-              <td><?= date("Y-m-d H:i", strtotime($ticket['createdate'])) ?></td>
-              <td><?= htmlspecialchars($ticket['createdby']) ?></td>
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="8" class="text-center">No tickets found.</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-  <!-- /.card-body -->
-</div>
-<!-- /.card -->
+</td>  <td><?= htmlspecialchars($innovationideasdata['links']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['status']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['submitted_at']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['reviewed_at']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['reviewer_id']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['feedback']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['is_featured']) ?></td>
+                  <td><?= htmlspecialchars($innovationideasdata['views_count']) ?></td>
+                                   
+                </tr>
+              <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-
-
-</div>
-<!-- /.card -->
-
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
- <?php include("footer.php"); ?>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+  <?php include("footer.php"); ?>
+
 </div>
-<!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -230,10 +225,9 @@ $fileName = str_replace('uploads/', '', $ticket['filename']);
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-</body>
-</html>
+
 <!-- Hidden form to send POST -->
-<form id="postForm" method="POST" action="studenttypehelp.php" style="display:none;">
+<form id="postForm" method="POST" action="adminideadetails.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>
@@ -263,3 +257,6 @@ $fileName = str_replace('uploads/', '', $ticket['filename']);
     });
   });
 </script>
+<?php include("../panel/util/alert.php");?>
+</body>
+</html>

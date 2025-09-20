@@ -418,15 +418,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                   <b class="d-block"><?php echo htmlspecialchars($applications['education_level']); ?></b>
                 </p>
                 <p class="text-sm">File
-                <b class="d-block"> <?php if (!empty($applications['file_path'])): ?>
-    <?php
-        // Extract just the filename
-        $filename = basename($applications['file_path']);
-    ?>
-    <a href="uploads/download1.php?file=<?= htmlspecialchars($filename) ?>" target="_blank">View</a>
-<?php else: ?>
-    <em>No file</em>
-<?php endif; ?></b>
+                <b class="d-block"> <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/', '', $applications['file_path']);
+?>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+</b>
                 </p>
                 <p class="text-sm">Remark
                   <b class="d-block"><?php echo htmlspecialchars($applications['remark']); ?></b>

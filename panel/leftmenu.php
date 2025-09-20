@@ -66,8 +66,9 @@ $notificationCounts = [
     'application'    => getNotificationCount($db, $userid, 'application', $role),
     'task'    => getNotificationCount($db, $userid, 'task', $role),
     'document'    => getNotificationCount($db, $userid, 'document', $role),
+    'innovationideas'    => getNotificationCount($db, $userid, 'innovationideas', $role),
 ];
-$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document'];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document']+$notificationCounts['innovationideas'];
 
 // Notification messages
 $ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
@@ -75,6 +76,7 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
 $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
 $documentMessages   = getUnreadNotifications($db, $userid, 'document', $role);
 $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
+$innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationideas', $role);
 
 ?>
 
@@ -211,6 +213,15 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($document['createdAt'])) ?></span>
             </a>
         <?php endforeach; ?>
+<!-- ideas Messages -->
+<?php foreach ($innovationideasMessages as $innovation): ?>
+            <a href="admininnovationideas.php" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($innovation['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($innovation['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
 
 <!-- application Messages -->
 <?php foreach ($applicationMessages as $apllication): ?>
@@ -404,6 +415,17 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="admininnovationideas.php" class="nav-link">
+      <i class="nav-icon fas fa-lightbulb"></i>
+        <p>InnovationIdeas <?php if ($notificationCounts['innovationideas'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['innovationideas']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
+      </a>
+    </li>
    <li class="nav-item">
        <a href="verificationpage.php" class="nav-link">
        <i class="nav-icon fas fa-money-check-alt"></i>
@@ -498,6 +520,46 @@ $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $ro
    </p>
       </a>
     </li>
+    <li class="nav-item has-treeview <?php echo ($page == 'Create Idea' || $page == 'View Idea') ? 'menu-open' : ''; ?>">
+  <a href="#" class="nav-link <?php echo ($page == 'Create Idea' || $page == 'View Idea') ? 'active' : ''; ?>">
+  <i class="nav-icon fas fa-lightbulb"></i>
+       <p>
+    InnovationIdeas
+      <?php if ($notificationCounts['innovationideas'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['innovationideas']; ?>
+        </span>
+      <?php endif; ?>
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="innovationideas.php" class="nav-link <?php echo ($page == 'Create Idea') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Create Idea</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="view_idea.php" class="nav-link <?php echo ($page == 'View Idea') ? 'active' : ''; ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p>View Ideas</p>
+      </a>
+    </li>
+  </ul>
+</li>
+    <!-- <li class="nav-item">
+      <a href="innovationideas.php" class="nav-link">
+      <i class="nav-icon fas fa-lightbulb"></i>
+        <p>InnovationIdeas <?php if ($notificationCounts['innovationideas'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['innovationideas']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
+      </a>
+    </li> -->
+
 
     <li class="nav-item">
       <a href="evaluations.php" class="nav-link">

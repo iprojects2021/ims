@@ -2,222 +2,86 @@
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
+$application = null;
+$allideadetails[] = null;
+$ticketdata[]=null;
+$comments = [];
+$taskid = $_GET['id'] ?? $_POST['id'] ?? null;
+$id = $_GET['id'] ?? $_POST['id'] ?? null;
+$createdBy = $_SESSION["user"]["id"] ?? null;
+
+//fetch admin task details
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
 {
   $id = $_POST['id'];
   try{
-    $sql="SELECT * FROM ticket WHERE id = ?";
+  $sql="SELECT * FROM innovationideas WHERE id = ?";
   $stmt = $db->prepare($sql);
   $stmt->execute([$id]);
-  $applicationdata = $stmt->fetchAll();
-  // Store studentid in session
-//  $useriddata=$_SESSION['studentid'] = $applicationdata[0]['studentid'];
-  //print_r($useriddata);die;
+  $allideadetails = $stmt->fetchAll();
   }
   catch(Exception $e)
   {
     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
   }
-  //echo "<pre>";print_r($applicationdata);die;
-    // Fetch ticket comments for this ticket
-    try{
-    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $ticketdata = $stmt->fetchAll();
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
+  
 } 
 ?>
 
-<?php
-
-
-// Fetch ticket comments
-try{
-$sql="SELECT * FROM ticketstatushistory";  
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$statushistorydata = $stmt->fetchAll();
-}
-catch(Exception $e)
-{
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-}
-if (isset($_GET['id'])) {
-  $ticketid = $_GET['id'];
-   try
-   {
-  // Fetch ticket details
-  $sql="SELECT * FROM ticket WHERE id = ?";
-  $stmt = $db->prepare($sql);
-  $stmt->execute([$ticketid]);
-  $applicationdata = $stmt->fetchAll();
-   }
-   catch(Exception $e)
-   {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-   }
-  // Fetch ticket comments
-  try{
-  $sql="SELECT * FROM ticketstatushistory WHERE ticketid = ?";  
-  $stmt = $db->prepare($sql);
-  $stmt->execute([$ticketid]);
-  $statushistorydata = $stmt->fetchAll();
-  }
-  catch(Exception $e)
-  {
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-  }
-} 
-?>
 
 <?php
+// Handle new comment submission
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['add'])) {
+    $id     = trim($_POST["id"]);
+    $studentid  = trim($_POST["studentid"]);
+    $status     = trim($_POST["new_status"]);
+    $feedback   = trim($_POST["comment"]);
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
- // Fetch ticket details
- try{
- $sql="SELECT * FROM ticket WHERE id = ?";  
- $stmt = $db->prepare($sql);
- $stmt->execute([$id]);
- $applicationdata = $stmt->fetchAll();
- }
- catch(Exception $e)
- {
-  $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
- }
-    try{
-    // Fetch ticket comments for this ticket
-    $sql="SELECT * FROM ticketcomment WHERE ticketid = ? ORDER BY createdate ASC";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $ticketdata = $stmt->fetchAll();
-    }
-    catch(Exception $e)
-    {
-      $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-    }
-}
-
-?>
-<?php
-$userId = $_SESSION['user']['id'] ?? null;
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && $userId) {
-    $ticketId = (int) $_POST['id'];
+    
+    $createdBy  = $_SESSION['user']['id']; 
+     date_default_timezone_set('Asia/Kolkata'); 
+     $date = date('Y-m-d H:i:s');
 
     try {
-
-        // Prepare and execute the update query
-        $stmt = $db->prepare("UPDATE ticket SET assignedto = :assignedto WHERE id = :id");
-        $stmt->bindParam(':assignedto', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':id', $ticketId, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-          //  echo "Ticket assigned to you successfully.";
-        } else {
-            echo "Failed to assign ticket.";
-        }
-
-    } catch (PDOException $e) {
-        echo "Database error: " . htmlspecialchars($e->getMessage());
+      $stmt = $db->prepare("UPDATE innovationideas 
+      SET status = ?, feedback = ?, reviewer_id = ?, reviewed_at = ? 
+      WHERE id = ?");
+$stmt->execute([$status, $feedback, $createdBy, $date, $id]);
+} catch (Exception $e) {
+        echo '<div class="alert alert-danger">Failed to update application: ' . htmlspecialchars($e->getMessage()) . '</div>';
     }
-} else {
-   // echo "Invalid request or user not logged in.";
-}
-?>
-<?php
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
-    $ticketid = $_POST['ticketid'];
-    $studentid = $_POST['studentid'];
-    $new_status = $_POST['new_status'];
-    $comment = $_POST['comment'];
-    $changed_by = $_SESSION['user']['id'];
-
-    try {
-        // Insert into ticket status history
-        $sql = "INSERT INTO ticketstatushistory (ticketid, new_status, comment, changed_by) 
-                VALUES (?, ?, ?, ?)";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$ticketid, $new_status, $comment, $changed_by]);
-
-    } catch (Exception $e) {
-        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage());
-    }
-
+    $showAlert = 'success';
     if ($stmt->rowCount() > 0) {
-        // ✅ Notification setup
-        $menuItem = 'tickets';
-        $notificationMessage = "Ticket ID #{$ticketid} status changed to '{$new_status}' by User ID: {$changed_by}";
-        $recipient =$studentid; // You can replace this with dynamic logic to notify specific users
-        $createdBy = $changed_by;
+        // ✅ Send Notification
+        $menuItem = 'innovationideas';
+        $notificationMessage = "innovationideas Updated By Admin innovationideas id is #$id";
+        $recipient = $studentid;
 
         try {
             $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
                          VALUES (:userid, :menu_item, 0, :message, :createdBy)";
             $notifStmt = $db->prepare($notifSql);
             $notifStmt->execute([
-                ':userid' => $recipient,
+                ':userid'    => $recipient,
                 ':menu_item' => $menuItem,
-                ':message' => $notificationMessage,
+                ':message'   => $notificationMessage,
                 ':createdBy' => $createdBy
             ]);
-           // print_r($notifStmt);die;
         } catch (Exception $e) {
             $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
         }
-
-        // ✅ Success alert and redirect
-        echo '
-        <div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
-                    z-index: 1050; width: 400px; max-width: 90%;">
-            <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-check"></i> Success!</h5>
-                Status updated successfully.
-            </div>
-        </div>
-        <script type="text/javascript">
-            setTimeout(function() {
-                window.location.href = "adminticketdetails.php?id=' . $ticketid . '";
-            }, 2000);
-        </script>';
     } else {
-        // ❌ Failure alert
-        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="statusAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-times"></i> Error!</h5>
-                There was an error updating the data.
-              </div>';
+        echo '<div class="alert alert-warning">No changes made.</div>';
     }
-
-    // Auto-dismiss script
-    echo "<script>
-        setTimeout(function() {
-            var alert = document.getElementById('statusAlert');
-            if (alert) {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-                setTimeout(function() {
-                    alert.remove();
-                }, 500); // Wait for fade-out animation
-            }
-        }, 3000); // 3 seconds
-    </script>";
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin-Ticket | INDSAC SOFTECH</title>
+  <title>Admin-Task  | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
 
@@ -414,12 +278,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Ticket Details</h1>
+            <h1>innovation ideas Details</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Ticket Details</li>
+              <li class="breadcrumb-item active">innovation ideas Details</li>
             </ol>
           </div>
         </div>
@@ -432,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title"><?php foreach ($applicationdata as $applications): ?></h3>
+          <h3 class="card-title"><?php foreach ($allideadetails as $applications): ?></h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -458,20 +322,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                 <div class="col-12 col-sm-4">
   <div class="info-box bg-light">
     <div class="info-box-content">
-      <span class="info-box-text text-center text-muted">Assigned TO</span>
-      <?php if (empty($applications['assignedto'])): ?>
-        <div class="text-center">
-        <form method="post">
-  <input type="hidden" name="id" value="<?php echo htmlspecialchars($applications['id']); ?>"> 
-  <button type="submit" class="btn btn-primary btn-sm">Assign to Me</button>
-</form>
-   </div>
-      <?php else: ?>
-        <span class="info-box-number text-center text-muted mb-0">
-          <?php echo htmlspecialchars($applications['assignedto']); ?>
-        </span>
-      <?php endif; ?>
-    </div>
+      <span class="info-box-text text-center text-muted">--</span>
+       </div>
   </div>
 </div>
 <div class="col-12 col-sm-4">
@@ -486,121 +338,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
               <?php endforeach; ?>
               <div class="row">
                 <div class="col-12">
-                  <h4>Recent Activity</h4>
+                  <h4></h4>
                     <div class="post">
-                    <?php foreach ($applicationdata as $applications): ?>
-
-                      <div class="user-block">
-                        <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
-                        <span class="username">
-                          <a href="#"><?php echo htmlspecialchars($applications['subject']); ?></a>
-                        </span>
-                        <span class="description"><?php echo htmlspecialchars($applications['createdate']); ?></span>
-                      </div>
-                      <!-- /.user-block -->
-                      <p>
-                      <?php echo htmlspecialchars($applications['message']); ?>
-                      </p>
-
-                      <p>
-                      <?php if (!empty($applications['filename'])): ?>
-                  <a href="../uploads/tickets/<?= urlencode($applications['filename']) ?>" target="_blank">View</a>
-                <?php else: ?>
-                  <em>No file</em>
-                <?php endif; ?>
-                <?php endforeach; ?> </p>
-
-
-                <?php foreach ($ticketdata as $ticket): ?>
-
-<div class="user-block">
-  <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
-  <span class="username">
-    <a href="#"><?php echo htmlspecialchars($ticket['createdby']); ?></a>
-  </span>
-  <span class="description"><?php echo htmlspecialchars($ticket['createdate']); ?></span>
-</div>
-<!-- /.user-block -->
-<p>
-<?php echo htmlspecialchars($ticket['message']); ?>
-</p>
-
-<p>
-<?php if (!empty($ticket['filename'])): ?>
-<a href="../uploads/tickets/<?= urlencode($ticket['filename']) ?>" target="_blank">View</a>
-<?php else: ?>
-<em>No file</em>
-<?php endif; ?>
-<?php endforeach; ?> </p>
-
+                    
 
 
 
                     </div>
-                    
-                    <form method="post" action="ticketcommet.php">
-  <input type="hidden" name="ticketid" value="<?php echo htmlspecialchars($applications['id']); ?>">
-  <input type="hidden" name="studentid" value="<?php echo htmlspecialchars($applications['studentid']); ?>">
-  <div class="form-group">
-    <textarea name="message" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
-  </div>
-  <div class="form-group">
-      <label for="file">Upload File</label>
-      <input type="file" class="form-control-file" id="file" name="file">
-    </div>
-
-  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-</form>
-<?php
 
 
-
-
-?>
 
 <!-- AdminLTE Card with Table -->
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">Status History</h3>
+    <h3 class="card-title"></h3>
   </div>
 
   <!-- /.card-header -->
   <div class="card-body table-responsive">
-    <table id="example1" class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Ticket Id</th>
-          <th>Changed By</th>
-          <th>Previous Status</th>
-          <th>New Status</th>
-          <th>Comment</th>
-          <th>Changed At</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <?php if ($statushistorydata): ?>
-          <?php foreach ($statushistorydata as $statusdata): ?>
-            <tr class="clickable-row" data-id="<?= $statusdata['id'] ?>">
-              <td><?= htmlspecialchars($statusdata['id']) ?></td>
-              <td><?php echo htmlspecialchars($statusdata['ticketid']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['changed_by']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['previous_status']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['new_status']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['comment']); ?></td>
-              <td><?php echo htmlspecialchars($statusdata['changed_at']); ?></td>
-              
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="8" class="text-center">No tickets found.</td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
+    </div>
   <!-- /.card-body -->
 </div>
 <!-- /.card -->
@@ -620,93 +376,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                 </div>
               </div>
             </div>
-            <?php foreach ($applicationdata as $applications): ?>
+            <?php foreach ($allideadetails as $applications): ?>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Ticket details</h3>
+              <h3 class="text-primary"><i class="fas fa-paint-brush"></i>innovation ideas Details</h3>
               <div class="text-muted">
-                <p class="text-sm">Id
+              <p class="text-sm">Id
                   <b class="d-block"><?php echo htmlspecialchars($applications['id']); ?></b>
                 </p>
+                
+                <p class="text-sm">Title
+                  <b class="d-block"><?php echo htmlspecialchars($applications['title']); ?></b>
+                </p>
                 <p class="text-sm">Student Id
-                  <b class="d-block"><?php echo htmlspecialchars($applications['studentid']); ?></b>
+                  <b class="d-block"><?php echo htmlspecialchars($applications['intern_id']); ?></b>
                 </p>
-                <!--<p class="text-sm">Subject
-                  <b class="d-block"><?php echo htmlspecialchars($applications['subject']); ?></b>
+                <p class="text-sm">Description
+                  <b class="d-block"><?php echo htmlspecialchars($applications['description']); ?></b>
                 </p>
-                <p class="text-sm">Message
-                  <b class="d-block"><?php echo htmlspecialchars($applications['message']); ?></b>
-                </p>-->
-                <p class="text-sm mb-1">
-  Status
-  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status']); ?></b>
-</p>
+                <p class="text-sm">Technology
+                  <b class="d-block"><?php echo htmlspecialchars($applications['technology']); ?></b>
+                </p>
+                <p class="text-sm">Tags
+                  <b class="d-block"><?php echo htmlspecialchars($applications['tags']); ?></b>
+                </p>
 
+                <p class="text-sm">Attachments<br>
+                <?php
+// Remove the prefix 'uploads/ideas/' to get only the file name
+$fileName = str_replace('uploads/ideas/', '', $applications['attachments']);
+?>
 
+<a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+                </p>
+                <p class="text-sm">Links
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['links']); ?></b>
+                </p>
+                <p class="text-sm">Submitted At
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['submitted_at']); ?></b>
+                </p>
+                <p class="text-sm">Reviewed At
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewed_at']); ?></b>
+                </p>
+                <p class="text-sm">Reviewer Id
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewer_id']); ?></b>
+                </p>
+                <p class="text-sm">Is Featured
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['is_featured']); ?></b>
+                </p>
+                <p class="text-sm">Views Count
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['views_count']); ?></b>
+                </p>
+ 
 <form  method="post">
-  <div class="form-group">
-    <label for="statusSelect">Change Status</label>
-    <select class="form-control" id="statusSelect" name="new_status">
-      <option value="New">New</option>
-      <option value="Open">Open</option>
-      <option value="In-Progress">In-Progress</option>
-      <option value="ReOpen">ReOpen</option>
-      <option value="Close">Close</option>
-    </select>
-  </div>
+<div class="form-group">
+  <label for="statusSelect">Change Status</label>
+  <select class="form-control" id="statusSelect" name="new_status">
+    <option value="Pending"  <?php if ($applications['status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+    <option value="Approved" <?php if ($applications['status'] == 'Approved') echo 'selected'; ?>>Approved</option>
+    <option value="Rejected" <?php if ($applications['status'] == 'Rejected') echo 'selected'; ?>>Rejected</option>
+  </select>
+</div>
+
 
   <div class="form-group">
-    <label for="comment">Comment</label>
-    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."></textarea>
+    <label for="comment">FeedBack</label>
+    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."><?php echo htmlspecialchars($applications['feedback']); ?></textarea>
   </div>
 
   <!-- Include application ID as hidden input if needed -->
-  <input type="hidden" name="ticketid" value="<?php echo $applications['id']; ?>">
-  <input type="hidden" name="studentid" value="<?php echo $applications['studentid']; ?>">
-
+  <input type="hidden" name="id" value="<?php echo $applications['id']; ?>">
+  <input type="hidden" name="studentid" value="<?php echo $applications['intern_id']; ?>">
+ 
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>
-  <p class="text-sm">AssignedTo
-                  <b class="d-block"><?php echo htmlspecialchars($applications['assignedto']); ?></b>
-                </p>
-                <p class="text-sm">FileName
-                  <b class="d-block"> <?php
-// Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/', '', $applications['filename']);
-?>
 
-<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
-</b>
-                </p>
-                <p class="text-sm">CreateDate
- 
-                  <b class="d-block"><?php echo htmlspecialchars($applications['createdate']); ?></b>
-                </p>
-                <p class="text-sm">CreatedBy
-                  <b class="d-block"><?php echo htmlspecialchars($applications['createdby']); ?></b>
+
+
                  </div>
 
-              <h5 class="mt-5 text-muted">Project files</h5>
-              <ul class="list-unstyled">
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
-                </li>
-              </ul>
+              <h5 class="mt-5 text-muted"></h5>
+             
               <div class="text-center mt-5 mb-3">
-                <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-              </div>
+               </div>
             </div>
             <?php endforeach; ?>
           </div>
@@ -787,6 +538,8 @@ $fileName = str_replace('uploads/', '', $applications['filename']);
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<?php include("../panel/util/alert.php");?>
+
 </body>
 </html>
 <script>

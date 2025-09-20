@@ -408,14 +408,16 @@ if (isset($_POST['upload']) && !empty($_POST['upload'])) {
     if (isset($_FILES['resume_file']) && !empty($_FILES['resume_file']['name'])) {
 
         // File upload config
-        $targetDir = "../".$uploadFolder ."/resume/";
+        //$targetDir = "../".$uploadFolder ."/resume/";
+        $targetDir =$uploadFolder;
         $baseFileName = basename($_FILES['resume_file']['name']);
         $fileType = strtolower(pathinfo($baseFileName, PATHINFO_EXTENSION));
         $fileSize = $_FILES['resume_file']['size'];
 
         // Filename should be unique and student-specific
         $fileName =  time();
-        $targetFilePath = $targetDir . $fileName . '.' . $fileType;
+       // $targetFilePath = $targetDir . $fileName . '.' . $fileType;
+       $targetFilePath = rtrim($targetDir, '/\\') . DIRECTORY_SEPARATOR . $fileName . '.' . $fileType;
 
         // Validate file
         if ($fileSize > 1153433) {
