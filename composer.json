@@ -1,0 +1,17 @@
+{
+    "name": "admin/ims",
+    "autoload": {
+        "psr-4": {
+            "Admin\\Ims\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sachinskadam250",
+            "email": "sachinskadam250@gmail.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.19"
+    }
+}
