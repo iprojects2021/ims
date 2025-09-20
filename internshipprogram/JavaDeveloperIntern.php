@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -307,7 +307,7 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Enterprise Resource Planning (ERP) System </h5>
+                                <h5 class="card-title">AI-Enterprise Resource Planning (ERP) System </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Core Java, Servlets/JSP, JDBC, MySQL</h6>
                                 <p class="card-text">Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.</p>
                                 <ul class="list-group list-group-flush mb-3">
@@ -477,7 +477,7 @@
                         ]
                     },
                     { 
-                        title: "Enterprise Resource Planning (ERP) System", 
+                        title: "AI-Enterprise Resource Planning (ERP) System", 
                         tech: "Core Java, Servlets/JSP, JDBC, MySQL", 
                         desc: "Build a full-stack ERP system to manage inventory, HR, finance, procurement and reporting with role-based access and centralized data.",
                         features: [

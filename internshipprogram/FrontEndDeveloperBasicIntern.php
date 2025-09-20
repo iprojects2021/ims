@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -308,7 +308,7 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Interactive Personal Portfolio with Theme Switcher</h5>
+                                <h5 class="card-title">AI-Interactive Personal Portfolio with Theme Switcher</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">HTML5, CSS3, JavaScript</h6>
                                 <p class="card-text">Build a fully responsive portfolio showcasing skills, projects, and resume with interactive features like light/dark mode and animated project cards.</p>
                                 <ul class="list-group list-group-flush mb-3">
@@ -479,7 +479,7 @@
                         ]
                     },
                     { 
-                        title: "Interactive Personal Portfolio with Theme Switcher", 
+                        title: "AI-Interactive Personal Portfolio with Theme Switcher", 
                         tech: "HTML5, CSS3, JavaScript", 
                         desc: "Build a fully responsive portfolio showcasing skills, projects, and resume with interactive features like light/dark mode and animated project cards.",
                         features: [

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -308,7 +308,7 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Crop Disease Detection System </h5>
+                                <h5 class="card-title">AI-Crop Disease Detection System </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Python, CNN, TensorFlow, OpenCV</h6>
                                 <p class="card-text">Develop a computer vision model that identifies plant diseases from leaf images.</p>
                                 <ul class="list-group list-group-flush mb-3">
@@ -478,7 +478,7 @@
                         ]
                     },
                     { 
-                        title: "Crop Disease Detection System", 
+                        title: "AI-Crop Disease Detection System", 
                         tech: "Python, CNN, TensorFlow, OpenCV", 
                         desc: "Develop a computer vision model that identifies plant diseases from leaf images.",
                         features: [
