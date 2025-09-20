@@ -74,6 +74,9 @@ $stmt->execute([
   //exit();
 }?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +119,13 @@ $stmt->execute([
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+               <div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="m-0">Dashboard</h1>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+    Add Program
+  </button>
+</div>
+
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -241,6 +250,32 @@ $stmt->execute([
     <button type="submit" class="btn btn-sm btn-primary">Submit Program</button>
   </div>
 </form>
+<!-- Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Program File</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="upload_programs.php" method="POST" enctype="multipart/form-data">
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="programFile">Choose file</label>
+            <input type="file" class="form-control-file" id="programFile" name="program_file" required>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" >Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 </div>
 <!-- /.card -->

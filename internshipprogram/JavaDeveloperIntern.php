@@ -1,3 +1,41 @@
+<?php
+include("../includes/db.php");
+$sql = "SELECT * FROM programs WHERE title='Java Developer Intern' AND status='upcoming'";
+$stmt = $db->query($sql); // $db is your PDO connection
+
+if ($stmt) {
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all rows into an array
+  // echo "<pre>"; print_r($rows);die;
+    if (count($rows) > 0) {
+        foreach ($rows as $row) {
+        if($row['amount']==='1000')
+        {
+            $programidbasic1000=$row['program_id'];
+         }
+         else if($row['amount']==='2000')
+         {
+            $programidadvance2000=$row['program_id'];
+       
+         } 
+         else if($row['amount']==='5000')
+         {
+            $programidprofessional5000=$row['program_id'];
+       
+          }
+         else if($row['amount']==='8000')
+         {
+            $programidelite8000=$row['program_id'];
+       
+         }
+        }
+    } else {
+        echo "No results found";
+    }
+} else {
+    echo "Query failed.";
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,14 +125,18 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 id="program-title">Java Development Internship</h1>
+                    
+
                     <p class="lead" id="program-short-desc">1-6 months remote internship to build real Java projects with mentorship</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
                         <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
-                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
+                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date1"><?php echo htmlspecialchars($row['start_date']); ?></span></span>
                         <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i>Amount: <span id="program-stipend">₹10,000/month</span></span>
-                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
+                        
+                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">Apply Now</button>
+
                     </div>
                 </div>
             </div>
@@ -260,11 +302,12 @@
                                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i> Application Deadline</h5>
                             </div>
                             <div class="card-body text-center">
-                                <h4 id="program-deadline">Nov 03, 2025</h4>
+                                <h4 id="program-deadline"><?php echo htmlspecialchars($row['application_deadline']); ?></h4>
                                 <div class="progress mt-3">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 65%">65% seats filled</div>
                                 </div>
-                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow('₹ 8000/-','Elite','6 Months')">
+                                
+                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">
                                     <i class="fas fa-paper-plane me-2"></i> Apply Now
                                 </button>
                             </div>
@@ -422,6 +465,9 @@
                 <div class="modal-body">
                     <!-- Plan details section -->
                     <form id="applicationForm" action="../programpayment.php" method="post">
+                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($details[0]['program_id']); ?>" id="program_basic">
+
+
     <div class="plan-details">
         <h6>Program Details</h6>
         <div class="row">
@@ -554,7 +600,7 @@
             // You would continue populating other sections similarly...
         }
 
-        function applyNow(amount, planType, duration) {
+        function applyNow(amount, planType, duration, programid) {
     // Set the values in the modal text
     document.getElementById('modal-program-title').textContent = planType;
     document.getElementById('modal-plan-type').textContent = planType;
@@ -567,6 +613,8 @@
     document.getElementById('hidden-plan-type').value = planType;
     document.getElementById('hidden-amount').value = amount;
     document.getElementById('hidden-duration').value = duration;
+    document.getElementById("hidden-program_id").value = programid;
+
 
     // Show the modal
     const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));
@@ -578,6 +626,34 @@
         // Load program data when page loads
         window.addEventListener('DOMContentLoaded', loadProgramData);
     </script>
-    
+    <!-- <script>
+function updateProgramId(planType) {
+    document.getElementById('modal-plan-type').textContent = planType;
+
+    let selectedProgramId = '';
+
+    switch (planType.toLowerCase()) {
+        case 'basic':
+            selectedProgramId = document.getElementById('program_basic').value;
+            break;
+        case 'advanced':
+            selectedProgramId = document.getElementById('program_advanced').value;
+            break;
+        case 'professional':
+            selectedProgramId = document.getElementById('program_professional').value;
+            break;
+        case 'elite':
+            selectedProgramId = document.getElementById('program_elite').value;
+            break;
+        default:
+            console.warn('Unknown plan type:', planType);
+    }
+
+    document.getElementById('selected_program_id').value = selectedProgramId;
+}
+
+
+
+        </script> -->
 </body>
 </html>

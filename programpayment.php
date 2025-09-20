@@ -1,5 +1,6 @@
 <?php
 // Start session if not already started
+//print_r($_POST);die;
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
