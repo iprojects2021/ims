@@ -9,7 +9,7 @@ $role = $_SESSION['user']['role'] ?? null;
 <html lang="en">
 <head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
-<title>Software Development Internship Training | INDSAC SOFTECH</title>
+<title>t Internship Training & Live Project Training | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -374,7 +374,7 @@ $role = $_SESSION['user']['role'] ?? null;
     </ul>
 </nav> <div class="container">
         <header>
-            <h1>Software Development Internship Training</h1>
+            <h1>Internship Training & Live Project Training</h1>
             <p class="tagline">Gain real-world experience and build your portfolio with hands-on projects in cutting-edge technologies</p>
             <a href="internshipliveproject.php" class="cta-button">Apply Now</a>
         </header>

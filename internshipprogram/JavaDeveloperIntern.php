@@ -131,9 +131,9 @@ if ($stmt) {
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
-                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
+                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">15 days to 6 months</span></span>
                         <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date1"><?php echo htmlspecialchars($row['start_date']); ?></span></span>
-                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i>Amount: <span id="program-stipend">₹10,000/month</span></span>
+                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i>Amount: <span id="program-stipend">₹1000 to ₹8000</span></span>
                         
                         <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">Apply Now</button>
 
@@ -173,16 +173,20 @@ if ($stmt) {
                         <h3 class="mt-5 mb-4">What You'll Do</h3>
                         <div id="responsibilities-list">
                             <div class="responsibility-item">
-                                <h5><i class="fas fa-code me-2"></i> Develop and maintain Java-based applications.</h5>
-                                <p>Build scalable backend systems using modern Java practices.</p>
+                                <h5><i class="fas fa-code me-2"></i> Develop and maintain Microservice Java-based applications.</h5>
+                                <p>Build scalable, fault tolerant, low latency, high throughput backend systems using modern Java practices.</p>
                             </div>
                             <div class="responsibility-item">
                                 <h5><i class="fas fa-bug me-2"></i> Debug and optimize existing Java applications.</h5>
-                                <p>Learn to identify performance bottlenecks and security issues..</p>
+                                <p>Learn to identify performance bottlenecks and security issues.</p>
                             </div>
                             <div class="responsibility-item">
                                 <h5><i class="fas fa-database me-2"></i> Integrate MySQL databases with Core Java applications.</h5>
                                 <p>Design database schemas and integrate with Java using JDBC.</p>
+                            </div>
+                            <div class="responsibility-item">
+                                <h5><i class="fas fa-users me-2"></i> Team Collaboration (Daily Scrum Meeting).</h5>
+                                <p>Use Git/GitHub for version control. Work in a simulated Agile team environment.</p>
                             </div>
                         </div>
 
@@ -226,6 +230,10 @@ if ($stmt) {
                                         <span><i class="fas fa-graduation-cap me-2"></i> Certificate</span>
                                         <span class="badge bg-success rounded-pill">Yes</span>
                                     </li>
+                                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><i class="fas fa-clock me-2"></i> Work Time</span>
+                                        <span class="badge bg-success rounded-pill">Flexible working time</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -246,7 +254,7 @@ if ($stmt) {
                                     </div>
                                     <div class="d-flex mb-2">
                                         <i class="fas fa-check text-success me-2 mt-1"></i>
-                                        <span>Personal laptop with VS Code installed</span>
+                                        <span>Personal laptop with Intellij installed</span>
                                     </div>
                                 </div>
                             </div>
@@ -337,6 +345,14 @@ if ($stmt) {
                             <div class="outcome-item mb-3">
                                 <h5>Implement Multithreading in Java</h5>
                                 <p>Create and manage multiple threads to execute tasks concurrently.</p>
+                            </div>
+                            <div class="outcome-item mb-3">
+                                <h5>Ability to understand</h5>
+                                <p>Monolith, Microservices, API, Refactoring, Technical Debt, Boilerplate Code, POC, Hotfix.</p>
+                            </div>
+                             <div class="outcome-item mb-3">
+                                <h5>Expertise on</h5>
+                                <p>Unit Test, End-to-End Test (E2E), Code Coverage, UAT (User Acceptance Testing), Sprint, Epic, Containerization, Monitoring & Observability.</p>
                             </div>
                         </div>
                     </div>
@@ -533,7 +549,7 @@ if ($stmt) {
             const programData = {
                 title: "Java Development Internship",
                 shortDesc: "1-6 months remote internship to build real Java projects with mentorship",
-                description: "This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
+                description: "Transform your academic knowledge into industry-ready skills with our flexible internship training program. Work on live projects with expert mentors.\n\n This intensive program offers hands-on experience with Java and MySQL through real-world projects. It is designed for aspiring backend developers who want to strengthen their practical skills and industry knowledge.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
                 stipend: "₹1000/- to ₹8000/-",
@@ -542,7 +558,10 @@ if ($stmt) {
                 responsibilities: [
                     { title: "Develop and maintain Java-based applications.", desc: "Build scalable backend systems using modern Professional Java practices." },
                     { title: "Debug and optimize existing Java applications.", desc: "Learn to identify performance bottlenecks and security issues." },
-                    { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." }
+                    { title: "Integrate MySQL databases with Core Java applications.", desc: "Design database schemas and integrate with Java using JDBC." },
+                    { title: "Team Collaboration.", desc: "Use Git/GitHub for version control. Work in a simulated Agile team environment." }
+                
+                
                 ],
                 schedule: [
                     { time: "9:30 AM", activity: "Daily standup call with team" },
