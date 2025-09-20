@@ -195,6 +195,51 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i> Exciting Rewards</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="eligibility-list">
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Certificates of Excellence</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Gift Vouchers</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Spotlight Feature</span>
+                                    </div>
+                                     <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Mentorship</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Flexible Project Ownership</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Swag & Goodies</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Conference / Event Passes</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Skill Badges</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <i class="fas fa-check text-success me-2 mt-1"></i>
+                                        <span>Tech Gadgets (for top performers)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card shadow-sm">
                             <div class="card-header bg-light">
