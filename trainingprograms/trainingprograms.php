@@ -218,23 +218,23 @@ include('../pageinclude/chooseplan.php');
       <div class="footer-row">
         <div class="footer-col">
           <ul>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">We're hiring</a></li>
+            <li><a href="https://indsac.com/about.html">About us</a></li>
+            <li><a href="https://indsac.com/pge/ca/career.html">We're hiring</a></li>
             <li><a href="referralworkflow.php">Referral Program</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <ul>
-            <li><a href="#">Team Diary</a></li>
+            <li><a href="https://indsac.com/about.html">Team Diary</a></li>
             <li><a href="#">Blog</a></li>
-            <li><a href="#">Our Services</a></li>
+            <li><a href="https://indsac.com/services.html">Our Services</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <ul>
-            <li><a href="#">Terms & Conditions</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Contact us</a></li>
+            <li><a href="https://indsac.com/termsandconditions.html">Terms & Conditions</a></li>
+            
+            <li><a href="https://indsac.com/contact.html">Contact us</a></li>
           </ul>
         </div>
       </div>
@@ -248,7 +248,7 @@ include('../pageinclude/chooseplan.php');
           <a href="#"><i class="fab fa-facebook-f"></i></a>
           <a href="#"><i class="fab fa-twitter"></i></a>
           <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://www.linkedin.com/company/indsac-softech/"><i class="fab fa-linkedin-in"></i></a>
         </div>
       </div>
 
