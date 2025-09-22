@@ -70,7 +70,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+<?php
+$stmt = $db->prepare("SELECT * FROM application WHERE program_id = :id");
+$stmt->execute(['id' => $id]);
+$applicationData = $stmt->fetchAll();
+$totdalcount=count($applicationData);
 
+$stmt = $db->prepare("SELECT * FROM programs WHERE program_id = :id");
+$stmt->execute(['id' => $id]);
+$programsdata = $stmt->fetch();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,26 +89,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <title>Student Portal | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   <!-- Google Font: Source Sans Pro -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
   <!-- iCheck -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css" />
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="dist/css/adminlte.min.css" />
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css" />
   <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css" />
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -132,9 +146,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- AdminLTE Card Wrapper -->
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">Edit Program</h3>
-          </div>
+          <h3 class="card-title">
+          <a data-bs-toggle="collapse" href="#editProgramForm" role="button" aria-expanded="false" aria-controls="editProgramForm" id="editProgramToggle">
+    Edit Program- 
+    <?php foreach ($editprogramsdata as $row): ?>
+        <?= htmlspecialchars($row['title']) ?>
+    <?php endforeach; ?>
+    <i class="bi bi-chevron-down" id="editProgramIcon"></i>
+</a>
+
+</h3>
+ </div>
           <!-- /.card-header -->
+            <div class="collapse" id="editProgramForm">
 
           <!-- form start -->
           <?php if (!empty($editprogramsdata) && is_array($editprogramsdata)): ?>
@@ -250,11 +274,156 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <?php else: ?>
             <!-- You can add a message here like "Select a program to edit" -->
           <?php endif; ?>
-
+          </div>
         </div>
         <!-- /.card -->
 
       </div><!-- /.container-fluid -->
+      <div class="row">
+  <!-- Box 1 -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-light">
+      <div class="inner">
+        <h3><?php echo $totdalcount ?? '--'; ?></h3>
+        <p>Total Student Count</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-hourglass-half"></i>
+      </div>
+      <form action="application.php" method="POST">
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
+        <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+          <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+            View Applications <i class="fas fa-arrow-circle-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Box 2 -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-light">
+      <div class="inner">
+        <h3><?php echo $applicationCount1 ?? '--'; ?></h3>
+        <p>Total Completed Task</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-hourglass-half"></i>
+      </div>
+      <form action="application.php" method="POST">
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
+        <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+          <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+            View Applications <i class="fas fa-arrow-circle-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Box 3 -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-light">
+      <div class="inner">
+        <h3><?php echo $programsdata['mentorid'] ?? '--'; ?></h3>
+        <p>Mentor Assigned</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-hourglass-half"></i>
+      </div>
+      <form action="application.php" method="POST">
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
+        <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+          <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+            View Applications <i class="fas fa-arrow-circle-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Box 4 -->
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-light">
+      <div class="inner">
+        <h3></h3>
+        <p>Start Date:<?php echo $programsdata['start_date'] ?? '--'; ?><br> Duration:<?php echo $programsdata['duration'] ?? '--'; ?><br>Program Status:<?php echo $programsdata['status'] ?? '--'; ?></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-hourglass-half"></i>
+      </div>
+      <form action="application.php" method="POST">
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($app['email']); ?>">
+        <div class="card-footer p-2 text-center small-box-footer" style="background-color: #f4f6f9; border-top: 1px solid #ddd;">
+          <button type="submit" class="btn btn-link p-0" style="width: 100%; text-align: center;">
+            View Applications <i class="fas fa-arrow-circle-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Student Details</h3>
+          </div>
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Program Id</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Project</th>
+                  <th>Type</th>
+                  <th>Excepted Start Date</th>
+                  <th>Status</th>
+                  <th>Create Date</th>
+                  <th>Amount</th>
+                  <th>Duration</th>
+                  <th>Payment Verification Id</th>
+                  <th>Mentor</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($applicationData as $row): ?>
+                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
+                    <td><?= htmlspecialchars($row['program_id']) ?></td>
+                    <td><?= htmlspecialchars($row['fullname']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['project']) ?></td>
+                    <td><?= htmlspecialchars($row['type']) ?></td>
+                    <td><?= htmlspecialchars($row['expected_start_date']) ?></td>
+                    <td><?= htmlspecialchars($row['status']) ?></td>
+                    <td><?= htmlspecialchars($row['createddate']) ?></td>
+                    <td><?= htmlspecialchars($row['amount']) ?></td>
+                    <td><?= htmlspecialchars($row['duration']) ?></td>
+                    <td><?= htmlspecialchars($row['paymentverificationid']) ?></td>
+                    <td><?= htmlspecialchars($row['mentorid']) ?></td>
+                       </tr>
+                <?php endforeach; ?>
+              </tbody>
+              <tfoot>
+                <tr>
+                <th>Program Id</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Project</th>
+                  <th>Type</th>
+                  <th>Excepted Start Date</th>
+                  <th>Status</th>
+                  <th>Create Date</th>
+                  <th>Amount</th>
+                  <th>Duration</th>
+                  <th>Payment Verification Id</th>
+                  <th>Mentor</th>
+                
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
     </section>
     <!-- /.content -->
   </div>
@@ -303,6 +472,91 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+<!-- jQuery (required by Bootstrap 4) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap 4 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap 5 Bundle JS (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 <?php include("../panel/util/alert.php");?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('editProgramToggle');
+    const icon = document.getElementById('editProgramIcon');
+    const collapseElement = document.getElementById('editProgramForm');
+
+    collapseElement.addEventListener('show.bs.collapse', function () {
+        icon.classList.remove('bi-chevron-down');
+        icon.classList.add('bi-chevron-up');
+    });
+
+    collapseElement.addEventListener('hide.bs.collapse', function () {
+        icon.classList.remove('bi-chevron-up');
+        icon.classList.add('bi-chevron-down');
+    });
+});
+</script>
+<!-- JS Includes -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    // Clickable rows redirect
+    $('.clickable-row').on('click', function () {
+      const id = $(this).data('id');
+      $('<form>', {
+        'method': 'POST',
+        'action': 'admintypedetails.php'
+      }).append($('<input>', {
+        'type': 'hidden',
+        'name': 'id',
+        'value': id
+      })).appendTo('body').submit();
+    });
+  });
+</script>
+<style>
+  /* Hide the + icon cell if it somehow still appears */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child::before,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child::before {
+    display: none !important;
+  }
+
+  /* Prevent the extra column for the + icon */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child {
+    padding-left: 8px !important;
+  }
+</style>
+
+
 </body>
 </html>
