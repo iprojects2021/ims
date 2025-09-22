@@ -393,7 +393,8 @@ $role = $_SESSION['user']['role'] ?? null;
                 <p class="service-desc">
                     Industry-aligned certification courses and hands-on workshops on emerging technologies.
                 </p>
-                <a href="trainingprograms.php" class="btn">Learn More</a>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+                <!-- <a href="trainingprograms.php" class="btn">Learn More</a> -->
             </div>                     
             
             <!-- Service 3 -->
@@ -405,7 +406,8 @@ $role = $_SESSION['user']['role'] ?? null;
                 <p class="service-desc">
                     Resume building, mock interviews, and coding bootcamps to make you job-ready.
                 </p>
-                <a href="interviewpreparation.php" class="btn">Learn More</a>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+                <!-- <a href="interviewpreparation.php" class="btn">Learn More</a> -->
             </div>
                    <!-- Service 1 -->
             <div class="service-card">
