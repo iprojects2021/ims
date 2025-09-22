@@ -79,12 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['program_file']) ) {
             title, slug, short_description, detailed_description, duration,
             start_date, end_date, is_remote, location, timezone,
             stipend_amount, stipend_currency, is_paid, application_deadline,
-            max_applicants, is_active, SuperProgram, status, programtype, amount
+            max_applicants, is_active, SuperProgram, status, programtype, amount, mentorid
         ) VALUES (
             :title, :slug, :short_description, :detailed_description, :duration,
             :start_date, :end_date, :is_remote, :location, :timezone,
             :stipend_amount, :stipend_currency, :is_paid, :application_deadline,
-            :max_applicants, :is_active, :SuperProgram, :status, :programtype, :amount
+            :max_applicants, :is_active, :SuperProgram, :status, :programtype, :amount, :mentorid
         )";
 
         $stmt = $db->prepare($sql);
@@ -110,7 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['program_file']) ) {
                 ':SuperProgram' => $row[16],
                 ':status' => $row[17],
                 ':programtype' => $row[18],
-                ':amount' => $row[19]
+                ':amount' => $row[19],
+                ':mentorid' => $row[20]
+
             ]);  
         }
 

@@ -393,7 +393,8 @@ $role = $_SESSION['user']['role'] ?? null;
                 <p class="service-desc">
                     Industry-aligned certification courses and hands-on workshops on emerging technologies.
                 </p>
-                <a href="trainingprograms.php" class="btn">Learn More</a>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+                <!-- <a href="trainingprograms.php" class="btn">Learn More</a> -->
             </div>                     
             
             <!-- Service 3 -->
@@ -405,7 +406,8 @@ $role = $_SESSION['user']['role'] ?? null;
                 <p class="service-desc">
                     Resume building, mock interviews, and coding bootcamps to make you job-ready.
                 </p>
-                <a href="interviewpreparation.php" class="btn">Learn More</a>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+                <!-- <a href="interviewpreparation.php" class="btn">Learn More</a> -->
             </div>
                    <!-- Service 1 -->
             <div class="service-card">
@@ -456,38 +458,35 @@ $role = $_SESSION['user']['role'] ?? null;
       <div class="footer-row">
         <div class="footer-col">
           <ul>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">We're hiring</a></li>
+            <li><a href="https://indsac.com/about.html">About us</a></li>
+            <li><a href="https://indsac.com/pge/ca/career.html">We're hiring</a></li>
             <li><a href="referralworkflow.php">Referral Program</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <ul>
-            <li><a href="#">Team Diary</a></li>
+            <li><a href="https://indsac.com/about.html">Team Diary</a></li>
             <li><a href="#">Blog</a></li>
-            <li><a href="#">Our Services</a></li>
+            <li><a href="https://indsac.com/services.html">Our Services</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <ul>
-            <li><a href="#">Terms & Conditions</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Contact us</a></li>
+            <li><a href="https://indsac.com/termsandconditions.html">Terms & Conditions</a></li>
+            
+            <li><a href="https://indsac.com/contact.html">Contact us</a></li>
           </ul>
         </div>
       </div>
 
       <!-- Bottom -->
       <div class="footer-bottom-row">
-        <div class="app-badges">
-          <img src="assets/images/play-store.png" alt="Play Store">
-          <img src="assets/images/app-store.png" alt="App Store">
-        </div>
+        
         <div class="social-icons">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
           <a href="#"><i class="fab fa-twitter"></i></a>
           <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://www.linkedin.com/company/indsac-softech/"><i class="fab fa-linkedin-in"></i></a>
         </div>
       </div>
 
