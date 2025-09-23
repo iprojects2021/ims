@@ -27,6 +27,12 @@ $data = $stmt->fetch();
   <meta charset="UTF-8">
   <title>College Projects Form | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS (make sure this is v4 or v5, whichever you're using) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -248,12 +254,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Commit transaction
         $db->commit();
 
-        // Success Message
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
-            <h5><i class="icon fas fa-check"></i> Success!</h5>
-            INDSAC Team will review your details and contact you within 24–48 hours.
-        </div>';
+        echo '
+        <div id="statusContainer" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                    z-index: 1050; width: 400px; max-width: 90%;">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert" style="box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                
+                INDSAC Team will review your details and contact you within 24–48 hours
 
+
+            </div>
+        </div>
+        <script type="text/javascript">
+            setTimeout(function() {
+                var alert = document.getElementById("statusAlert");
+                if (alert) {
+                    $(alert).alert("close");
+                }
+            }, 2500);
+        </script>';
+    
     } catch (Exception $e) {
         // Rollback transaction on error
         $db->rollBack();

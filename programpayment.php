@@ -577,8 +577,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>Program Details</h2>
                 <form id="payment-form">
                 <div class="form-group">
-        <label for="card-name">Program Id</label>
-        <input type="text" id="card-name" name="program_id" placeholder="program_id" required 
+        <label for="card-name"></label>
+        <input type="hidden" id="card-name" name="program_id" placeholder="program_id" required 
                value="<?php echo htmlspecialchars($_SESSION['application_data']['program_id'] ?? '', ENT_QUOTES); ?>">
     </div>
     
