@@ -376,12 +376,12 @@ $role = $_SESSION['user']['role'] ?? null;
         <header>
             <h1>Internship Training & Live Project Training</h1>
             <p class="tagline">Gain real-world experience and build your portfolio with hands-on projects in cutting-edge technologies</p>
-            <a href="internshipliveproject.php" class="cta-button">Apply Now</a>
+            <a href="#internship-tracks" class="cta-button">Apply Now</a>
         </header>
         
         <h2 style="text-align: center; margin-bottom: 2rem; color: var(--dark);">Choose Your Specialization Track</h2>
         
-        <div class="internship-tracks">
+        <div class="internship-tracks" id="internship-tracks">
             <!-- Backend Development -->
             <div class="track-card">
                 <div class="track-header">

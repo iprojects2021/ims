@@ -263,7 +263,13 @@ $role = $_SESSION['user']['role'] ?? null;
             align-items: center;
             gap: 0.5rem;
         }
-        
+        .hero-section {
+            background: linear-gradient(135deg, #6c63ff 0%, #4a3fcf 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
     /* Footer */
     .footer {
       background-color: #222;
@@ -443,6 +449,12 @@ $role = $_SESSION['user']['role'] ?? null;
             
           
         </div>
+          <!-- Hero Section -->
+        <div class="hero-section text-center" id="contact">
+            <h1 style="text-align: center;  margin-bottom: 1rem;"><i class="fas fa-graduation-cap"></i> Your Career & Interview Preparation Starts Here!</h1>
+            <h3 style="text-align: center; color:  margin-bottom: 1rem;" class="my-3">Premium Quality at <span class="price-tag">₹5,000  Only</span></h3>
+            <p style="text-align: center; color:  margin-bottom: 1rem;" class="lead">Lowest price guaranteed or we’ll match it! ⚡</p>
+        </div>
         
         <div class="features-section">
             <h2 style="text-align: center; color: var(--dark); margin-bottom: 1rem;">Our Unique Approach</h2>
@@ -484,7 +496,7 @@ $role = $_SESSION['user']['role'] ?? null;
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <span>careers@indsac.com</span>
+                    <span>internships@indsac.com</span>
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-phone"></i>

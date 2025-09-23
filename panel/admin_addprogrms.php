@@ -34,12 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     title, slug, short_description, detailed_description, duration,
     start_date,end_date ,is_remote, location, timezone,
     stipend_amount, stipend_currency, is_paid,
-    application_deadline, max_applicants, is_active
+    application_deadline, max_applicants, is_active, status, mentorid, SuperProgram
 ) VALUES (
     :title, :slug, :short_description, :detailed_description, :duration,
     :start_date,:end_date, :is_remote, :location, :timezone,
     :stipend_amount, :stipend_currency, :is_paid,
-    :application_deadline, :max_applicants, :is_active
+    :application_deadline, :max_applicants, :is_active, :status, :mentorid, :SuperProgram
 )");
 
 // Bind parameters from POST
@@ -59,7 +59,11 @@ $stmt->execute([
     ':is_paid' => $_POST['is_paid'],
     ':application_deadline' => $_POST['application_deadline'],
     ':max_applicants' => $_POST['max_applicants'],
-    ':is_active' => $_POST['is_active']
+    ':is_active' => $_POST['is_active'],
+    ':status' =>"new",
+    ':mentorid' =>"admin",
+    ':SuperProgram' =>$_POST['SuperProgram']
+    
 ]);
 
 
@@ -129,7 +133,7 @@ $stmt->execute([
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
               <li class="breadcrumb-item active">Add Programs</li>
             </ol>
           </div><!-- /.col -->
@@ -157,6 +161,10 @@ $stmt->execute([
       <div class="col-md-6 mb-2">
         <label for="title" class="form-label">Program Title</label>
         <input type="text" class="form-control form-control-sm" id="title" name="title" placeholder="e.g., Internship in Web Dev" required>
+      </div>
+      <div class="col-md-6 mb-2">
+        <label for="SuperProgram" class="form-label">SuperProgram</label>
+        <input type="text" class="form-control form-control-sm" id="SuperProgram" name="SuperProgram" placeholder="e.g., Internship in Web Dev" required>
       </div>
 
       <div class="col-md-6 mb-2">
