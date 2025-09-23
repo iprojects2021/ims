@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -87,13 +87,13 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 id="program-title">AI Developer Internship</h1>
-                    <p class="lead" id="program-short-desc">3-month remote internship to build real AI projects with mentorship</p>
+                    <p class="lead" id="program-short-desc">1-6 months remote internship to build real AI projects with mentorship</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
-                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">3 months</span></span>
+                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
                         <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
-                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Stipend: <span id="program-stipend">₹10,000/month</span></span>
+                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Amount: <span id="program-stipend">₹10,000/month</span></span>
                         <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
                     </div>
                 </div>
@@ -308,7 +308,7 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Crop Disease Detection System </h5>
+                                <h5 class="card-title">AI-Crop Disease Detection System </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Python, CNN, TensorFlow, OpenCV</h6>
                                 <p class="card-text">Develop a computer vision model that identifies plant diseases from leaf images.</p>
                                 <ul class="list-group list-group-flush mb-3">
@@ -442,7 +442,7 @@
             // In a real app, you would fetch this from your API
             const programData = {
                 title: "AI Developer Internship",
-                shortDesc: "1 to 6 months remote internship to build real AI projects with mentorship available",
+                shortDesc: "1-6 months remote internship to build real AI projects with mentorship",
                 description: "This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
@@ -478,7 +478,7 @@
                         ]
                     },
                     { 
-                        title: "Crop Disease Detection System", 
+                        title: "AI-Crop Disease Detection System", 
                         tech: "Python, CNN, TensorFlow, OpenCV", 
                         desc: "Develop a computer vision model that identifies plant diseases from leaf images.",
                         features: [

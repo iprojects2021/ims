@@ -147,22 +147,13 @@ $role = $_SESSION['user']['role'] ?? null;
         .btn:hover {
             background: var(--secondary);
         }
-    /* Hero */
-    .hero {
-      height: 440px;
-      background-image: url("assets/images/banner1.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #fff;
-      margin: 0 auto;
-      max-width: 1500px;
-    }
+
+    
 
     /* Internships */
     .internships {
       background-color: #fff;
-      padding: 40px 20px;
+      padding: 60px 20px;
     }
 
     .internships h2 {
@@ -372,6 +363,18 @@ $role = $_SESSION['user']['role'] ?? null;
     </div>
   </div>
 <div class="services-grid">
+            <!-- Service 4 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="service-title">Internship & Live Project Support</h3>
+                <p class="service-desc">
+                    Real-world project experience with mentorship from industry professionals.
+                </p>
+                <a href="developmentinternships.php" class="btn">Learn More</a>
+            </div>
+
             <!-- Service 1 -->
             <div class="service-card">
                 <div class="service-icon">
@@ -383,31 +386,7 @@ $role = $_SESSION['user']['role'] ?? null;
                 </p>
                 <a href="collegeprojects.php" class="btn">Learn More</a>
             </div>
-            
-            <!-- Service 2 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                <h3 class="service-title">Professional Training Program</h3>
-                <p class="service-desc">
-                    Industry-aligned certification courses and hands-on workshops on emerging technologies.
-                </p>
-                <a href="trainingprograms.php" class="btn">Learn More</a>
-            </div>
-
-             <!-- Service 4 -->
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <h3 class="service-title">Internship & Live Project Support</h3>
-                <p class="service-desc">
-                    Real-world project experience with mentorship from industry professionals.
-                </p>
-                <a href="developmentinternships.php" class="btn">Learn More</a>
-            </div>
-            
+             
             <!-- Service 3 -->
             <div class="service-card">
                 <div class="service-icon">
@@ -419,11 +398,22 @@ $role = $_SESSION['user']['role'] ?? null;
                 </p>
                 <a href="interviewpreparation.php" class="btn">Learn More</a>
             </div>
+
+            <!-- Service 2 -->
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="service-title">Professional Training Program</h3>
+                <p class="service-desc">
+                    Industry-aligned certification courses and hands-on workshops on emerging technologies.
+                </p>
+                <a href="trainingprograms.php" class="btn">Learn More</a>
+            </div>
             
            
         </div>
-  <!-- 📢 Hero Section -->
-  <div class="hero"></div>
+  
 
   <!-- 📍 Popular Cities -->
   <section class="internships">

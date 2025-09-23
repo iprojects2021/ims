@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -87,13 +87,13 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 id="program-title">Python Backend Development Inrernship</h1>
-                    <p class="lead" id="program-short-desc">3-month remote internship to build real Python Backend projects with mentorship</p>
+                    <p class="lead" id="program-short-desc">1-6 months remote internship to build real Python Backend projects with mentorship</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
-                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">3 months</span></span>
+                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
                         <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
-                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Stipend: <span id="program-stipend">₹10,000/month</span></span>
+                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Amount: <span id="program-stipend">₹10,000/month</span></span>
                         <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
                     </div>
                 </div>
@@ -309,7 +309,7 @@
                         <div class="card h-100 shadow-sm">
                             <img src="https://via.placeholder.com/600x400?text=API+Migration" class="card-img-top" alt="Project Screenshot">
                             <div class="card-body">
-                                <h5 class="card-title">Online Exam & Anti-Cheating Backend </h5>
+                                <h5 class="card-title">AI-Online Exam & Anti-Cheating Backend </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Flask, PostgreSQL</h6>
                                 <p class="card-text">Build a backend system for managing online exams with secure verification.</p>
                                 <ul class="list-group list-group-flush mb-3">
@@ -443,12 +443,12 @@
             // In a real app, you would fetch this from your API
             const programData = {
                 title: "Python Backend Development Internship",
-                shortDesc: "3-month remote internship to build real Python Backend projects with mentorship",
+                shortDesc: "1-6 months remote internship to build real Python Backend projects with mentorship",
                 description: "Gain hands-on experience in developing and maintaining backend systems using Python, Django, and REST APIs. Work with relational databases like MySQL/PostgreSQL, implement authentication and security, and optimize application performance. Learn to debug, test, and deploy APIs, while collaborating on real-world full-stack projects.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
-                stipend: "₹3000/- to ₹8000/-",
+                stipend: "₹1000/- to ₹8000/-",
                 format: "Remote",
                 deadline: "Nov 3, 2025",
                 responsibilities: [
@@ -482,7 +482,7 @@
                         ]
                     },
                     { 
-                        title: "Online Exam & Anti-Cheating Backend", 
+                        title: "AI-Online Exam & Anti-Cheating Backend", 
                         tech: "Flask, PostgreSQL", 
                         desc: "Build a backend system for managing online exams with secure verification.",
                         features: [

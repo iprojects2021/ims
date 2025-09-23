@@ -236,7 +236,7 @@
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
                 
-                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹1,000/-','Basic','15 Days')">Apply Now</button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('1,000/-','Basic','15 Days')">Apply Now</button>
                 
             </div>
             <div class="plan">
@@ -250,7 +250,7 @@
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
                 
-                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹2,000/-','Advanced','1 Month')">Apply Now</button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('2,000/-','Advanced','1 Month')">Apply Now</button>
                 
             </div>
             
@@ -266,7 +266,7 @@
                     <li><i class="fas fa-check"></i> Resume & LinkedIn review</li>
                     <li><i class="fas fa-check"></i> Job assistance</li>
                 </ul>
-                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹5,000/-','Professional','3 Months')">Apply Now</button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('5,000/-','Professional','3 Months')">Apply Now</button>
             </div>
             
             <!-- Pro Plan (Most Popular) -->
@@ -281,7 +281,7 @@
                     <li><i class="fas fa-check"></i> Real Time AI Project</li>
                     <li><i class="fas fa-check"></i> Placement assistance</li>
                 </ul>
-                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
+                <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('8000/-','Elite','6 Months')">Apply Now</button>
                 
             </div>
         </div>
