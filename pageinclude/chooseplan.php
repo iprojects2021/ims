@@ -231,7 +231,7 @@
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Live Meetings</li>
                     <li><i class="fas fa-check"></i> Learning: Quick exposure Projects</li>
-                    <li><i class="fas fa-check"></i> 2 hands-on projects</li>
+                    <li><i class="fas fa-check"></i> 2 hands-on projects task</li>
                     <li><i class="fas fa-check"></i> Email support</li>
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
@@ -247,7 +247,7 @@
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Learning: Intensive Learning</li>
-                    <li><i class="fas fa-check"></i> 2 hands-on projects</li>
+                    <li><i class="fas fa-check"></i> 4 hands-on projects task</li>
                     <li><i class="fas fa-check"></i> Email support</li>
                     <li><i class="fas fa-check"></i> Certificate of completion</li>
                 </ul>
@@ -262,11 +262,11 @@
                 <div class="price">₹5,000 <span>/ 3 months</span></div>
                 <ul class="features">
                     
-                    <li><i class="fas fa-check"></i> 5+ mentor-guided projects</li>
+                    <li><i class="fas fa-check"></i> 10+ mentor-guided projects task</li>
                     <li><i class="fas fa-check"></i> Learning: Structured Learning</li>
-                    <li><i class="fas fa-check"></i> 24/7 doubt-solving</li>
+                    <li><i class="fas fa-check"></i> GitHub portfolio review & optimization</li>
                     <li><i class="fas fa-check"></i> Resume & LinkedIn review</li>
-                    <li><i class="fas fa-check"></i> Job assistance</li>
+                    <li><i class="fas fa-check"></i> Advanced AI Project assistance</li>
                 </ul>
                 <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('5,000/-','Professional','3 Months',<?php echo $programidprofessional5000?>)">Apply Now</button>
             </div>
@@ -278,9 +278,10 @@
                 <ul class="features">
                     <li><i class="fas fa-check"></i> 1:1 mentorship</li>
                     <li><i class="fas fa-check"></i> Learning: Deep Learning</li>
-                    <li><i class="fas fa-check"></i> Real-world industry projects</li>
-                    
+                    <li><i class="fas fa-check"></i> Real-world industry projects</li>                    
                     <li><i class="fas fa-check"></i> Real Time AI Project</li>
+                    <li><i class="fas fa-check"></i> Priority support</li>
+                    <li><i class="fas fa-check"></i> Freelancing guidance (earn from skills while studying)</li>    
                     <li><i class="fas fa-check"></i> Placement assistance</li>
                 </ul>
                 <button class="btn btn-light btn-lg apply-btn" onclick="applyNow('8,000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">Apply Now</button>
