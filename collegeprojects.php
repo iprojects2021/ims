@@ -569,7 +569,7 @@ $role = $_SESSION['user']['role'] ?? null;
             <div class="hero-content">
                 <h1>Ethical Academic Project Guidance</h1>
                 <p>We help you succeed by providing expert guidance, not by doing the work for you. Gain the skills and confidence to excel in your academic projects.</p>
-                <a href="#contact" class="btn">Get Started Today</a>
+                <a href="collegeprojectsform.php" class="btn">Get Started Today</a>
             </div>
         </div>
     </section>
