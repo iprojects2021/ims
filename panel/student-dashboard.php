@@ -321,15 +321,15 @@ catch(Exception $e)
                 
                 <div class="referral-stats">
                     <div class="stat-item">
-                        <div class="stat-number">8</div>
+                        <div class="stat-number">0</div>
                         <div class="stat-label">Referred</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">3</div>
+                        <div class="stat-number">0</div>
                         <div class="stat-label">Enrolled</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">$150</div>
+                        <div class="stat-number">0</div>
                         <div class="stat-label">Earned</div>
                     </div>
                 </div>
