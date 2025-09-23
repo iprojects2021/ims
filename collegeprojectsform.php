@@ -12,6 +12,13 @@ foreach ($clients as $client) {
 }
 
 ?>
+
+<?php
+
+$stmt = $db->prepare("SELECT * FROM programs WHERE title='college project' AND status='new'");
+$stmt->execute();
+$data = $stmt->fetch();
+?>
 <!DOCTYPE html>
 
 
@@ -179,32 +186,32 @@ foreach ($clients as $client) {
 </head>
 <body>
 <?php
-// Make sure database connection ($db) is already established here
-// Example: $db = new PDO('mysql:host=localhost;dbname=yourdbname', 'username', 'password');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect form data
     $mobile = $_POST['mobile'] ?? '';
     $email = $_POST['email'] ?? '';
     $project = $_POST['project'] ?? '';
-    $expected_due_date = $_POST['expected_due_date'] ?? '';
+    $expected_start_date = $_POST['expected_start_date'] ?? '';
     $outcome = $_POST['outcome'] ?? '';
+    $program_id = $_POST['program_id'] ?? '';
 
     try {
         // Start transaction
         $db->beginTransaction();
 
         // 1. Insert into application table
-        $stmt = $db->prepare("INSERT INTO application (mobile, email, project, expected_due_date, outcome, status, type) 
-                              VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO application (mobile, email, project, expected_start_date, outcome, status, type, program_id) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $mobile,
             $email,
             $project,
-            $expected_due_date,
+            $expected_start_date,
             $outcome,
-            "Submited",
-            "College Final Year Projects Development"
+            "Submitted",
+            "College Final Year Projects Development",
+            $program_id
         ]);
 
         // 2. Check if email or mobile exists in referrals table
@@ -224,16 +231,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateReferralStmt->execute([$referralid]);
         }
 
+        // ✅ 6. Insert Notification for Admin
+        $menuItem = 'application'; // Adjust to appropriate section name
+        $notificationMessage = "New application submitted by email: " . $email;
+        $createdBy = $email; // or use a fixed value like 'system' or 'webform'
+
+        $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                     VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+        $notifStmt = $db->prepare($notifSql);
+        $notifStmt->execute([
+            ':menu_item' => $menuItem,
+            ':message' => $notificationMessage,
+            ':createdBy' => $createdBy
+        ]);
+
         // Commit transaction
         $db->commit();
 
         // Success Message
-        $showAlert = 'success';
-         } catch (Exception $e) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            INDSAC Team will review your details and contact you within 24–48 hours.
+        </div>';
+
+    } catch (Exception $e) {
         // Rollback transaction on error
         $db->rollBack();
-        $showAlert = 'error';
-       }
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h5><i class="icon fas fa-times"></i> Error!</h5>
+            Something went wrong while processing your application. Please try again.
+        </div>';
+        // Optionally log error: error_log($e->getMessage());
+    }
 }
 ?>
 
@@ -297,9 +326,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Due Date -->
                         <div class="mb-3">
-                            <label for="duedate" class="form-label">Expected Due Date*</label>
-                            <input type="date" name="expected_due_date" class="form-control" id="duedate" required>
+                            <label for="expected_start_date" class="form-label">Expected Start Date*</label>
+                            <input type="date" name="expected_start_date" class="form-control" id="expected_start_date" required>
                         </div>
+                        <input type="hidden" name="program_id" value="<?php echo $data['program_id']?>">
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary btn-submit">Submit Enquiry</button>

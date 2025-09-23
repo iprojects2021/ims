@@ -99,6 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
             $updateReferralStmt->execute([$referralid]);
         }
+        // ✅ 6. Insert Notification for Admin
+        $menuItem = 'application'; // Adjust to appropriate section name
+        $notificationMessage = "New application submitted by email: " . $email;
+        $createdBy = $email; // or use a fixed value like 'system' or 'webform'
+
+        $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
+                     VALUES ('admin', :menu_item, 0, :message, :createdBy)";
+        $notifStmt = $db->prepare($notifSql);
+        $notifStmt->execute([
+            ':menu_item' => $menuItem,
+            ':message' => $notificationMessage,
+            ':createdBy' => $createdBy
+        ]);
 
         // Commit all changes
         $db->commit();
