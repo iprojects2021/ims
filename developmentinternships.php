@@ -9,7 +9,7 @@ $role = $_SESSION['user']['role'] ?? null;
 <html lang="en">
 <head><link rel="shortcut icon" href="favico.png" type="image/x-icon" />
   <meta charset="UTF-8">
-<title>t Internship Training & Live Project Training | INDSAC SOFTECH</title>
+<title>Internship Training & Live Project Training | INDSAC SOFTECH</title>
   <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>

@@ -1,11 +1,49 @@
+<?php
+include("../includes/db.php");
+$sql = "SELECT * FROM programs WHERE title='AI Developer Intern' AND status='upcoming'";
+$stmt = $db->query($sql); // $db is your PDO connection
 
+if ($stmt) {
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all rows into an array
+  // echo "<pre>"; print_r($rows);die;
+    if (count($rows) > 0) {
+        foreach ($rows as $row) {
+        if($row['amount']==='1000')
+        {
+            $programidbasic1000=$row['program_id'];
+         }
+         else if($row['amount']==='2000')
+         {
+            $programidadvance2000=$row['program_id'];
+       
+         } 
+         else if($row['amount']==='5000')
+         {
+            $programidprofessional5000=$row['program_id'];
+       
+          }
+         else if($row['amount']==='8000')
+         {
+            $programidelite8000=$row['program_id'];
+       
+         }
+        }
+    } else {
+        echo "No results found";
+    }
+} else {
+    echo "Query failed.";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" href="favico.png" type="image/x-icon" />
     <meta charset="UTF-8">
+    <title>AI Developer Intern | INDSAC SOFTECH </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internship Program Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .program-hero {
@@ -91,10 +129,12 @@
                 </div>
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
-                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">1-6 months</span></span>
-                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date">July 15, 2024</span></span>
-                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i> Amount: <span id="program-stipend">₹10,000/month</span></span>
-                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months')">Apply Now</button>
+                        <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">15 days to 6 months</span></span>
+                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date1"><?php echo htmlspecialchars($row['start_date']); ?></span></span>
+                        <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i>Amount: <span id="program-stipend">₹1000 to ₹8000</span></span>
+                        
+                        <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">Apply Now</button>
+
                     </div>
                 </div>
             </div>
@@ -142,6 +182,10 @@
                                 <h5><i class="fas fa-database me-2"></i> Integrate AI models into applications through REST APIs.</h5>
                                 <p>Deploy AI solutions on cloud platforms for scalability and real-world usage.</p>
                             </div>
+                            <div class="responsibility-item">
+                                <h5><i class="fas fa-users me-2"></i> Team Collaboration (Daily Scrum Meeting).</h5>
+                                <p>Use Git/GitHub for version control. Work in a simulated Agile team environment.</p>
+                            </div>
                         </div>
 
                         <h3 class="mt-5 mb-4">Daily Schedule</h3>
@@ -183,6 +227,10 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span><i class="fas fa-graduation-cap me-2"></i> Certificate</span>
                                         <span class="badge bg-success rounded-pill">Yes</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><i class="fas fa-clock me-2"></i> Work Time</span>
+                                        <span class="badge bg-success rounded-pill">Flexible working time</span>
                                     </li>
                                 </ul>
                             </div>
@@ -260,11 +308,12 @@
                                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i> Application Deadline</h5>
                             </div>
                             <div class="card-body text-center">
-                                <h4 id="program-deadline">Nov 03, 2025</h4>
+                                
                                 <div class="progress mt-3">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 65%">65% seats filled</div>
                                 </div>
-                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow('₹ 8000/-','Elite','6 Months')">
+                                
+                                <button class="btn apply-btn w-100 mt-3" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">
                                     <i class="fas fa-paper-plane me-2"></i> Apply Now
                                 </button>
                             </div>
@@ -294,6 +343,14 @@
                             <div class="outcome-item mb-3">
                                 <h5>Model Deployment & Integration</h5>
                                 <p>Deploy trained AI/ML models into real-world applications using REST APIs and cloud services.</p>
+                            </div>
+                            <div class="outcome-item mb-3">
+                                <h5>Ability to understand</h5>
+                                <p>Monolith, Microservices, API, Refactoring, Technical Debt, Boilerplate Code, POC, Hotfix.</p>
+                            </div>
+                             <div class="outcome-item mb-3">
+                                <h5>Expertise on</h5>
+                                <p>Unit Test, End-to-End Test (E2E), Code Coverage, UAT (User Acceptance Testing), Sprint, Epic, Containerization, Monitoring & Observability.</p>
                             </div>
                         </div>
                     </div>
@@ -423,6 +480,7 @@
                 <div class="modal-body">
                     <!-- Plan details section -->
                     <form id="applicationForm" action="../programpayment.php" method="post">
+                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($details[0]['program_id']); ?>" id="program_basic">
     <div class="plan-details">
         <h6>Program Details</h6>
         <div class="row">
@@ -488,7 +546,7 @@
             const programData = {
                 title: "AI Developer Internship",
                 shortDesc: "1 to 6 months remote internship to build real AI projects with mentorship available",
-                description: "This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
+                description: "Transform your academic knowledge into industry-ready skills with our flexible internship training program. Work on live projects with expert mentors.\n\n This internship focuses on building intelligent applications using Artificial Intelligence and Machine Learning. Interns will gain hands-on experience in developing AI models, training datasets, implementing Natural Language Processing (NLP), Computer Vision, and integrating AI solutions into real-world applications. The program emphasizes Python and deployment of AI models through APIs and cloud platforms.\n\nYou'll work directly with senior developers, participate in code reviews, and build portfolio-worthy projects that solve actual business problems.",
                 duration: "1 - 6 months",
                 startDate: "Nov 7, 2025",
                 stipend: "₹1000/- to ₹8000/-",
@@ -555,20 +613,20 @@
             // You would continue populating other sections similarly...
         }
 
-        function applyNow(amount, planType, duration) {
+        function applyNow(amount, planType, duration, programid) {
     // Set the values in the modal text
     document.getElementById('modal-program-title').textContent = planType;
     document.getElementById('modal-plan-type').textContent = planType;
     document.getElementById('modal-amount').textContent = amount;
     document.getElementById('modal-duration').textContent = duration;
-    
-    // Remove commas and non-digit characters for form submission
+
     const numericAmount = amount.replace(/\D/g, '');
 
     // Also update the hidden input values (for form submission)
     document.getElementById('hidden-plan-type').value = planType;
     document.getElementById('hidden-amount').value = amount;
     document.getElementById('hidden-duration').value = duration;
+    document.getElementById("hidden-program_id").value = programid;
 
     // Show the modal
     const applicationModal = new bootstrap.Modal(document.getElementById('applicationModal'));

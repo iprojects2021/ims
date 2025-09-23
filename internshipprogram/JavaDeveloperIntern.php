@@ -40,9 +40,11 @@ if ($stmt) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="favico.png" type="image/x-icon" />
+    <title>Java Developer Intern | INDSAC SOFTECH</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internship Program Details</title>
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -310,7 +312,7 @@ if ($stmt) {
                                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i> Application Deadline</h5>
                             </div>
                             <div class="card-body text-center">
-                                <h4 id="program-deadline"><?php echo htmlspecialchars($row['application_deadline']); ?></h4>
+                                
                                 <div class="progress mt-3">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 65%">65% seats filled</div>
                                 </div>
