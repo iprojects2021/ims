@@ -1,7 +1,7 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/alerts.php");
-session_start();
+include("../panel/util/session.php");
 $useriddata=$_SESSION['user']['id'];
 ?>
 <?php

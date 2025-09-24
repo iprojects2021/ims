@@ -1,7 +1,8 @@
 <?php
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
+
 $taskId = $application['id'] ?? '';
 //print_r($_SESSION);die;
 $application = null;

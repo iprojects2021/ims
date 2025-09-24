@@ -1,9 +1,13 @@
 <?php
+include 'includes/db.php';
+include('panel/util/PdoSessionHandler.php');
+// Use the custom session handler
+$handler = new PdoSessionHandler($db);
+session_set_save_handler($handler, true);
 session_start();
-
-// Example: Assume the role is stored in session
 $role = $_SESSION['user']['role'] ?? null;
 ?>
+
 <!DOCTYPE html>
 
 <html lang="en">

@@ -18,6 +18,45 @@ catch(Exception $e)
 }
 ?>
 
+<?php
+$userid = $_SESSION['user']['id'];
+
+// Get count of all statuses
+$stmt = $db->prepare("
+    SELECT status, COUNT(*) AS status_count 
+    FROM referrals 
+    WHERE userid = :id  
+    GROUP BY status
+");
+$stmt->execute(['id' => $userid]);
+$referralCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Initialize variables
+$pendingCount = 0;
+$paidCount = 0;
+$enrolledCount = 0;
+$totalCount = 0;
+
+// Map results
+foreach ($referralCounts as $row) {
+    $status = $row['status'];
+    $count = $row['status_count'];
+    $totalCount += $count;
+
+    switch ($status) {
+        case 'Pending':
+            $pendingCount = $count;
+            break;
+        case 'Paid':
+            $paidCount = $count;
+            break;
+        case 'Enrolled':
+            $enrolledCount = $count;
+            break;
+    }
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -321,15 +360,15 @@ catch(Exception $e)
                 
                 <div class="referral-stats">
                     <div class="stat-item">
-                        <div class="stat-number">0</div>
+                        <div class="stat-number"><?php echo $totalCount; ?></div>
                         <div class="stat-label">Referred</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">0</div>
+                        <div class="stat-number"><?php echo $enrolledCount; ?></div>
                         <div class="stat-label">Enrolled</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">0</div>
+                        <div class="stat-number"><?php echo $paidCount; ?></div>
                         <div class="stat-label">Earned</div>
                     </div>
                 </div>
