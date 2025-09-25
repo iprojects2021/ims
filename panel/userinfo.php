@@ -7,10 +7,10 @@ $userId = $_SESSION['user']['id'];
 
 try
 {$applicationData = $applicationData ?? [];
-$sql="SELECT * FROM users";
-$stmt = $db->prepare($sql);
-
-$stmt->execute(['email' => $email]);
+  $sql = "SELECT * FROM users";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();  // <-- no parameters
+  
 $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch(Exception $e)

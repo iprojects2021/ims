@@ -22,7 +22,7 @@ try
 $sql="SELECT * FROM application";
 $stmt = $db->prepare($sql);
 
-$stmt->execute(['email' => $email]);
+$stmt->execute();
 $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch(Exception $e)
