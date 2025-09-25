@@ -1,10 +1,6 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-
-// Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
 

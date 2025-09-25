@@ -6,7 +6,7 @@ $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];
 
 try
-{
+{$applicationData = $applicationData ?? [];
 $sql="SELECT * FROM users";
 $stmt = $db->prepare($sql);
 

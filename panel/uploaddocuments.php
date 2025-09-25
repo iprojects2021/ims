@@ -1,6 +1,6 @@
 <?php
 include("../includes/db.php");
-include("../panel/util/alerts.php");
+include("../panel/util/session.php");
 session_start();
 
 $useriddata=$_SESSION['user']['id'];

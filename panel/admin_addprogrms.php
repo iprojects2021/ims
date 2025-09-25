@@ -1,9 +1,6 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-// Fetch the name from session
 $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
 ?>
 <?php
@@ -11,12 +8,8 @@ $email = $_SESSION['user']['email'];
 $stmt = $db->prepare("SELECT *FROM users WHERE email = :email");
 $stmt->execute(['email' => $email]);
 $enuiry_data = $stmt->fetchAll();
-
 ?>
 <?php
-
-
-
 include("../panel/util/statuscolour.php");
 
 
