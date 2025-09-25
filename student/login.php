@@ -1,3 +1,12 @@
+<?php
+include("../includes/db.php");
+include(__DIR__ . "/../panel/util/PdoSessionHandler.php");
+// Use the custom session handler
+$handler = new PdoSessionHandler($db);
+session_set_save_handler($handler, true);
+session_start();
+// Cookie fix for cPanel
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,14 +153,25 @@
   <h2>Login to Internship Portal</h2>
 
   <?php
-include("../includes/db.php");
-include(__DIR__ . "/../panel/util/PdoSessionHandler.php");
-// Use the custom session handler
-$handler = new PdoSessionHandler($db);
-session_set_save_handler($handler, true);
+ 
 
-session_start();
+ echo "<table border='1' cellpadding='5' cellspacing='0'>";
+echo "<tr><th>Setting</th><th>Value</th></tr>";
 
+$settings = [
+    "session.save_handler",
+    "session.gc_maxlifetime",
+    "session.auto_start"
+];
+
+foreach ($settings as $setting) {
+    echo "<tr><td>{$setting}</td><td>" . ini_get($setting) . "</td></tr>";
+}
+
+echo "</table>";
+echo "Current handler: " . ini_get("session.save_handler") . "<br>";
+
+echo "Active handler (runtime): " . session_module_name();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Sanitize and get input
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
@@ -176,9 +196,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Redirect based on role
         if ($user["role"] === "admin") {
+            $redirectUrl = "https://indsac.com/ims/panel/admin_dashboard.php";
+
+// Instead of header(), output JS
+echo "<script type='text/javascript'>
+        window.location.href = '$redirectUrl';
+      </script>";
+
             header("Location: ../panel/admin_dashboard.php");
+            exit;
         } else {
+            $redirectUrl1 = "https://indsac.com/ims/panel/student-dashboard.php";
+
+// Instead of header(), output JS
+echo "<script type='text/javascript'>
+        window.location.href = '$redirectUrl1';
+      </script>";
             header("Location: ../panel/student-dashboard.php");
+             exit;
         }
         exit;
     } else {
