@@ -153,26 +153,7 @@ session_start();
   <h2>Login to Internship Portal</h2>
 
   <?php
- 
-
- echo "<table border='1' cellpadding='5' cellspacing='0'>";
-echo "<tr><th>Setting</th><th>Value</th></tr>";
-
-$settings = [
-    "session.save_handler",
-    "session.gc_maxlifetime",
-    "session.auto_start"
-];
-
-foreach ($settings as $setting) {
-    echo "<tr><td>{$setting}</td><td>" . ini_get($setting) . "</td></tr>";
-}
-
-echo "</table>";
-echo "Current handler: " . ini_get("session.save_handler") . "<br>";
-
-echo "Active handler (runtime): " . session_module_name();
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Sanitize and get input
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
     $password = $_POST["sifre"];
