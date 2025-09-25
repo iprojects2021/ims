@@ -1,5 +1,4 @@
 <?php
-
 include("../includes/db.php");
 include("../panel/util/session.php");
 $useriddata=$_SESSION['user']['id'];
@@ -168,7 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
 
                 <p class="text-muted">
-                  <span class="tag tag-danger"><?php echo htmlspecialchars($client['skills']); ?></span>
+                  <span class="tag tag-danger"><?php echo htmlspecialchars($client['skills'] ?? ''); ?>
+</span>
                   <!--<span class="tag tag-success">Coding</span>
                   <span class="tag tag-info">Javascript</span>
                   <span class="tag tag-warning">PHP</span>
@@ -330,7 +330,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <div class="form-group row">
                         <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
                         <div class="col-sm-10">
-                          <textarea class="form-control" name="experience"  id="inputExperience" placeholder="Experience"><?php echo htmlspecialchars($client['experience']); ?></textarea>
+                          <textarea class="form-control" name="experience"  id="inputExperience" placeholder="Experience"><?php echo htmlspecialchars($client['experience'] ?? ''); ?>
+</textarea>
                         </div>
                       </div>
                       <div class="form-group row">
@@ -348,7 +349,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <div class="form-group row">
                         <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
                         <div class="col-sm-10">
-                          <input type="text" name="skills" class="form-control" id="inputSkills" value="<?php echo htmlspecialchars($client['skills']); ?>">
+                          <input type="text" name="skills" class="form-control" id="inputSkills" value="<?php echo htmlspecialchars($client['skills'] ?? ''); ?>
+">
                         </div>
                       </div>
                       <!--<div class="form-group row">

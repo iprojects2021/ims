@@ -199,7 +199,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
 
         <!-- Ticket Messages -->
         <?php foreach ($ticketMessages as $ticket): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($ticket['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($ticket['createdAt'])) ?></span>
@@ -207,7 +207,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 <!-- document Messages -->
 <?php foreach ($documentMessages as $document): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($document['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($document['createdAt'])) ?></span>
@@ -215,7 +215,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 <!-- ideas Messages -->
 <?php foreach ($innovationideasMessages as $innovation): ?>
-            <a href="admininnovationideas.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($innovation['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($innovation['createdAt'])) ?></span>
@@ -225,7 +225,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
 
 <!-- application Messages -->
 <?php foreach ($applicationMessages as $apllication): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($apllication['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($apllication['createdAt'])) ?></span>
@@ -235,7 +235,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         
 <!-- task Messages -->
 <?php foreach ($taskMessages as $task): ?>
-            <a href="studenthelp.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-life-ring mr-2"></i>
                 <?= htmlspecialchars($task['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($task['createdAt'])) ?></span>
@@ -243,7 +243,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 
         <div class="dropdown-divider"></div>
-        <a href="all-notifications.php" class="dropdown-item dropdown-footer">See All Notifications</a>
+        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
     </div>
 </li>
 

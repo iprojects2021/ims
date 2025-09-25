@@ -1,9 +1,6 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-
 $userid = $_SESSION['user']['id'];
 
 

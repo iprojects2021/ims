@@ -1,6 +1,5 @@
 <?php
 include("../includes/db.php");
-include("../panel/util/alerts.php");
 include("../panel/util/session.php");
 $useriddata=$_SESSION['user']['id'];
 ?>
@@ -245,6 +244,8 @@ $fileName = str_replace('uploads/', '', $documentdata['file_path']);
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<?php include("../panel/util/alerts.php");?>
+
 </body>
 </html>
 <!-- Script to show file upload when dropdown is selected -->
