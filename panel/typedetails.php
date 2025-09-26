@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+          <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
           <li class="breadcrumb-item active">Application Type</li>
         </ol>
       </div>

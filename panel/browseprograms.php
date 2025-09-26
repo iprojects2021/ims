@@ -107,7 +107,7 @@ $studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "S
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Programs</li>
             </ol>
           </div><!-- /.col -->

@@ -106,7 +106,8 @@ try {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">Document</li>
             </ol>
           </div><!-- /.col -->

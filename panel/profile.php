@@ -38,11 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  // Check if the query was successful
  if ($stmt->rowCount() > 0) {
   // Success: Show alert and redirect
-  echo '<div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <h5><i class="icon fas fa-check"></i> Alert!</h5>
-          Profile updated successfully
-        </div>';
+  echo '
+<div style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1050; width: 400px; max-width: 90%;">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h5><i class="icon fas fa-check"></i> Success!</h5>
+        Profile updated successfully.
+    </div>
+</div>
+';
 
   // Redirect using JavaScript after displaying the success message
   echo '<script type="text/javascript">
@@ -98,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Profile</li>
             </ol>
           </div>
