@@ -689,7 +689,8 @@ if (!empty($row['logouttime'])) {
                     <td><?php echo htmlspecialchars($row['id']); ?></td>
                     <td><?php echo htmlspecialchars($row['createdat']); ?></td>                               
                     <td><?php echo htmlspecialchars($row['logintime']); ?></td>
-                    <td><?php echo htmlspecialchars($row['logouttime']); ?></td>
+                    <td><?php echo htmlspecialchars($row['logouttime'] ?? ''); ?>
+</td>
                     <td><?php
 // Set the timezone
 date_default_timezone_set('Asia/Kolkata');
