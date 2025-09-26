@@ -84,7 +84,7 @@ try {
   <div class="content-wrapper">
     <div class="content-header">
       <div class="container-fluid"><ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Innovation Ideas</li>
             </ol>
         

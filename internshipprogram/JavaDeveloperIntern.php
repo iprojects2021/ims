@@ -1,6 +1,6 @@
 <?php
 include("../includes/db.php");
-$sql = "SELECT * FROM programs WHERE title='Java Developer Intern' AND status='upcoming'";
+$sql = "SELECT * FROM programs WHERE title='Java Developer Intern' AND status='new'";
 $stmt = $db->query($sql); // $db is your PDO connection
 
 if ($stmt) {

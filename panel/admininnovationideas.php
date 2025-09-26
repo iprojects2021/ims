@@ -95,7 +95,8 @@ try {
   <div class="content-wrapper">
     <div class="content-header">
       <div class="container-fluid"><ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">Innovation Ideas</li>
             </ol>
         
@@ -149,7 +150,7 @@ try {
                   <td>
                   <?php
 // Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments']);
+$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments'] ?? '');
 ?>
 
 <a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
