@@ -197,8 +197,8 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><strong>ID:</strong> <?= htmlspecialchars($applicationData['id']) ?></li>
                   <li class="list-group-item"><strong>User ID:</strong> <?= htmlspecialchars($applicationData['userid']) ?></li>
-                  <li class="list-group-item"><strong>Referred Email:</strong> <?= htmlspecialchars($applicationData['referred_email']) ?></li>
-                  <li class="list-group-item"><strong>Referred Phone:</strong> <?= htmlspecialchars($applicationData['referred_phone']) ?></li>
+                  <li class="list-group-item"><strong>Referred Email:</strong> <?= htmlspecialchars(($applicationData['referred_email'] ?? '') && strtolower($applicationData['referred_email']) !== 'null' ? $applicationData['referred_email'] : '--') ?></li>
+                  <li class="list-group-item"><strong>Referred Phone:</strong> <?= htmlspecialchars(($applicationData['referred_phone'] ?? '') && strtolower($applicationData['referred_phone']) !== 'null' ? $applicationData['referred_phone'] : '--') ?></li>
                   <li class="list-group-item"><strong>Status:</strong> <?= htmlspecialchars($applicationData['status']) ?></li>
                   <li class="list-group-item"><strong>Created At:</strong> <?= htmlspecialchars($applicationData['created_at']) ?></li>
                 </ul>

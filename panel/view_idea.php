@@ -138,7 +138,8 @@ try {
                   <td>
                   <?php
 // Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments']);
+$fileName = str_replace('uploads/ideas/', '', $innovationideasdata['attachments'] ?? '');
+
 ?>
 
 <a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>

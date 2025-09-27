@@ -242,10 +242,12 @@ $fileName = str_replace('uploads/ideas/', '', $applications['attachments']);
                   <b. class="d-block"><?php echo htmlspecialchars($applications['submitted_at']); ?></b>
                 </p>
                 <p class="text-sm">Reviewed At
-                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewed_at']); ?></b>
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewed_at'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</b>
                 </p>
                 <p class="text-sm">Reviewer Id
-                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewer_id']); ?></b>
+                  <b. class="d-block"><?php echo htmlspecialchars($applications['reviewer_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</b>
                 </p>
                 <p class="text-sm">Is Featured
                   <b. class="d-block"><?php echo htmlspecialchars($applications['is_featured']); ?></b>
@@ -267,7 +269,8 @@ $fileName = str_replace('uploads/ideas/', '', $applications['attachments']);
 
   <div class="form-group">
     <label for="comment">FeedBack</label>
-    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."><?php echo htmlspecialchars($applications['feedback']); ?></textarea>
+    <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Enter your comment here..."><?php echo htmlspecialchars($applications['feedback'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</textarea>
   </div>
 
   <!-- Include application ID as hidden input if needed -->
