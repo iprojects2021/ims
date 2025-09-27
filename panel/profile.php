@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card card-primary card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
-                  <a href="profileimageupload.php"><i class="fas fa-user-circle fa-3x" style="color: #0d6efd;"></i>
+                  <a href="#"><i class="fas fa-user-circle fa-3x" style="color: #0d6efd;"></i>
 </a>
                 </div>
                 <?php foreach ($clients as $client): ?>

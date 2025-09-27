@@ -231,7 +231,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
                 <div class="form-group mb-2">
                     <label for="feedback" class="mb-1">Feedback</label>
-                    <textarea class="form-control form-control-sm" id="feedback" rows="2" readonly><?php echo htmlspecialchars($data['feedback']); ?></textarea>
+                    <textarea class="form-control form-control-sm" id="feedback" rows="2" readonly><?php echo htmlspecialchars($data['feedback'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</textarea>
                 </div>
 
                 <div class="form-row">
@@ -246,11 +247,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <label for="reviewed_at" class="mb-1">reviewed_at</label>
-                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewed_at']); ?>" class="form-control form-control-sm" id="reviewed_at" readonly>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewed_at'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+" class="form-control form-control-sm" id="reviewed_at" readonly>
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <label for="reviewer_id" class="mb-1">reviewer_id</label>
-                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewer_id']); ?>" class="form-control form-control-sm" id="reviewer_id" readonly>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewer_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+" class="form-control form-control-sm" id="reviewer_id" readonly>
                     </div>
 
 

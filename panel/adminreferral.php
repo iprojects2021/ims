@@ -280,8 +280,10 @@ $enrollmentcount = $stmt->fetchColumn();
             <tr class="clickable-row" data-id="<?= $referaldatainfo['id'] ?>">
             <td><?= htmlspecialchars($referaldatainfo['id']) ?></td>
               <td><?= htmlspecialchars($referaldatainfo['userid']) ?></td>
-              <td><?= htmlspecialchars($referaldatainfo['referred_email']) ?></td>
-              <td><?= htmlspecialchars($referaldatainfo['referred_phone']) ?></td>
+              <td><?= htmlspecialchars(($referaldatainfo['referred_email'] ?? '') && strtolower($referaldatainfo['referred_email']) !== 'null' ? $referaldatainfo['referred_email'] : '--') ?>
+</td>
+              <td><?= htmlspecialchars(($referaldatainfo['referred_phone'] ?? '') && strtolower($referaldatainfo['referred_phone']) !== 'null' ? $referaldatainfo['referred_phone'] : '--') ?>
+</td>
               <td><?= htmlspecialchars($referaldatainfo['status']) ?></td>
               <td><?= date("Y-m-d H:i", strtotime($referaldatainfo['created_at'])) ?></td>
               

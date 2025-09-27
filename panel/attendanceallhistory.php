@@ -120,7 +120,8 @@ $daytrackerhistory = $stmt->fetchAll();
       <div class="inner">
         <h4 class="mb-2">🚪 Logout</h4>
         <p><strong>DateTime:</strong> </p>
-        <p><strong></strong> <?php echo htmlspecialchars($row['logouttime']); ?></p>
+        <p><strong></strong> <?php echo htmlspecialchars($row['logouttime'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</p>
       </div>
       <div class="icon">
         <i class="fas fa-sign-out-alt"></i>
@@ -160,7 +161,7 @@ $daytrackerhistory = $stmt->fetchAll();
       <tbody>
         <?php if ($allhistory): ?>
           <?php foreach ($allhistory as $documentdata): ?>
-            <tr class="clickable-row" data-id="<?= $documentdata['id'] ?>">
+            <tr>
               <td><?= htmlspecialchars($documentdata['id']) ?></td>
               <td><?= htmlspecialchars($documentdata['userid']) ?></td>
               <td><?= htmlspecialchars($documentdata['start_time']) ?></td>
