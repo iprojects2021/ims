@@ -34,9 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
   $attachmentPath = null;
 
-  // Define base upload folder and ideas subfolder (use DIRECTORY_SEPARATOR for portability)
-  $ideasSubfolder = $uploadFolder . DIRECTORY_SEPARATOR . 'ideas' . DIRECTORY_SEPARATOR;
-
+  
   // Ensure base uploads folder exists
   if (!is_dir($uploadFolder)) {
       if (!mkdir($uploadFolder, 0755, true)) {
@@ -44,13 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
       }
   }
 
-  // Ensure ideas subfolder exists
-  if (!is_dir($ideasSubfolder)) {
-      if (!mkdir($ideasSubfolder, 0755, true)) {
-          die("Failed to create folder: uploads/ideas");
-      }
-  }
-
+  
   // Handle file upload if provided
   if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
       $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
@@ -63,12 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
       $originalName = basename($_FILES['attachment']['name']);
       $safeName = preg_replace("/[^a-zA-Z0-9.\-_]/", "_", $originalName);
       $uniqueName = time() . "_" . $safeName;
-      $fullPath = $ideasSubfolder . $uniqueName;
+     // $fullPath = $ideasSubfolder . $uniqueName;
+     $fullPath = $uploadFolder . DIRECTORY_SEPARATOR . $uniqueName;
 
       // Move uploaded file
       if (move_uploaded_file($_FILES['attachment']['tmp_name'], $fullPath)) {
           // Save relative path for DB/web access
-          $attachmentPath = 'uploads/ideas/' . $uniqueName;
+          $attachmentPath = 'uploads/' . $uniqueName;
       } else {
           die("Error uploading the file.");
       }

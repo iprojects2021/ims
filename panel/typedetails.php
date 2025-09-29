@@ -5,11 +5,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
   $id = $_POST['id'];
   try{
  // $sql="SELECT * FROM application WHERE id = ?";
- $sql = "SELECT *
-        FROM paymentverification pv
-        JOIN application a ON pv.program_id = a.program_id
-        JOIN programs p ON pv.program_id = p.program_id
-        WHERE a.id = ?";
+ $sql = "SELECT 
+ a.*, 
+ p.*, 
+ pv.*,
+ a.status AS application_status
+FROM application a
+LEFT JOIN programs p 
+ ON a.program_id = p.program_id
+LEFT JOIN paymentverification pv 
+ ON a.paymentverificationid = pv.PaymentVerificationID
+WHERE a.id = ?
+";
 
   
   $stmt = $db->prepare($sql);
@@ -116,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             <li class="list-group-item">Outcome: <b><?php echo htmlspecialchars($app['outcome']); ?></b></li>
             <li class="list-group-item">Start Date: <b><?php echo htmlspecialchars($app['expected_start_date']); ?></b></li>
             <li class="list-group-item">Program Type: <b><?php echo htmlspecialchars($app['type']); ?></b></li>
-            <li class="list-group-item">Status: <b><?php echo getStatusBadge($app['status']); ?></b></li>
+            <li class="list-group-item">Status: <b><?php echo getStatusBadge($app['application_status']); ?></b></li>
             <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate']); ?></b></li>
           </ul>
         </div>
@@ -129,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             <li class="list-group-item">Title: <b><?php echo htmlspecialchars($app['title']); ?></b></li>
             <li class="list-group-item">Slug: <b><?php echo htmlspecialchars($app['slug']); ?></b></li>
             <li class="list-group-item">Short Description: <b><?php echo htmlspecialchars($app['short_description']); ?></b></li>
-            <li class="list-group-item">Duration: <b><?php echo htmlspecialchars($app['duration']); ?> days</b></li>
+            <li class="list-group-item">Duration: <b><?php echo htmlspecialchars($app['duration']); ?> </b></li>
             <li class="list-group-item">Start Date: <b><?php echo htmlspecialchars($app['start_date']); ?></b></li>
             <li class="list-group-item">Remote: <b><?php echo htmlspecialchars($app['is_remote']); ?></b></li>
             <li class="list-group-item">Stipend: <b><?php echo getStatusBadge($app['stipend_amount']); ?></b></li>
@@ -149,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) {
             <li class="list-group-item">Invoice ID: <b><?php echo htmlspecialchars($app['InvoiceID']); ?></b></li>
             <li class="list-group-item">Email: <b><?php echo htmlspecialchars($app['Email']); ?></b></li>
             <li class="list-group-item">Phone: <b><?php echo htmlspecialchars($app['Phone']); ?></b></li>
-            <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate']); ?></b></li>
+            <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['CreateDate']); ?></b></li>
           </ul>
         </div>
       </div>

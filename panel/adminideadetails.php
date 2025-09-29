@@ -230,10 +230,10 @@ $stmt->execute([$status, $feedback, $createdBy, $date, $id]);
                 <p class="text-sm">Attachments<br>
                 <?php
 // Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/ideas/', '', $applications['attachments']);
+$fileName = str_replace('uploads/', '', $applications['attachments']);
 ?>
 
-<a href="/ims/panel/downloadidea.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
                 </p>
                 <p class="text-sm">Links
                   <b. class="d-block"><?php echo htmlspecialchars($applications['links']); ?></b>
