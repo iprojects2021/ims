@@ -15,7 +15,7 @@ foreach ($clients as $client) {
 
 <?php
 
-$stmt = $db->prepare("SELECT * FROM programs WHERE title='college project' AND status='new'");
+$stmt = $db->prepare("SELECT * FROM programs WHERE title='college project' AND status='upcoming'");
 $stmt->execute();
 $data = $stmt->fetch();
 ?>

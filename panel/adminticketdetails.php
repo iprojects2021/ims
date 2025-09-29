@@ -492,7 +492,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
   <button type="submit" class="btn btn-primary btn-sm" name="add">Submit</button>
 </form>
   <p class="text-sm">AssignedTo
-                  <b class="d-block"><?php echo htmlspecialchars($applications['assignedto']); ?></b>
+                  <b class="d-block"><?php echo htmlspecialchars($applications['assignedto'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</b>
                 </p>
                 <p class="text-sm">FileName
                   <b class="d-block"> <?php
