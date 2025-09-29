@@ -1,75 +1,85 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-$studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
-?>
-<?php
-$email = $_SESSION['user']['email'];
-$stmt = $db->prepare("SELECT *FROM users WHERE email = :email");
-$stmt->execute(['email' => $email]);
-$enuiry_data = $stmt->fetchAll();
-?>
-<?php
 include("../panel/util/statuscolour.php");
 
+// Get logged-in student's info
+$studentName = isset($_SESSION["user"]["name"]) ? $_SESSION["user"]["name"] : "Student";
+$email = $_SESSION['user']['email'] ?? '';
 
+// Fetch user data
+if ($email) {
+    $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+    $stmt->execute(['email' => $email]);
+    $enuiry_data = $stmt->fetchAll();
+}
 
+// Fetch all applications
 $stmt = $db->prepare("SELECT * FROM application");
 $stmt->execute();
 $applicationdata = $stmt->fetchAll();
 
-
-?>
-<?php
-
+// Handle form submission
+$showAlert = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $stmt = $db->prepare("INSERT INTO programs (
-    title, slug, short_description, detailed_description, duration,
-    start_date,end_date ,is_remote, location, timezone,
-    stipend_amount, stipend_currency, is_paid,
-    application_deadline, max_applicants, is_active, status, mentorid, SuperProgram
-) VALUES (
-    :title, :slug, :short_description, :detailed_description, :duration,
-    :start_date,:end_date, :is_remote, :location, :timezone,
-    :stipend_amount, :stipend_currency, :is_paid,
-    :application_deadline, :max_applicants, :is_active, :status, :mentorid, :SuperProgram
-)");
 
-// Bind parameters from POST
-$stmt->execute([
-    ':title' => $_POST['title'],
-    ':slug' => $_POST['slug'],
-    ':short_description' => $_POST['short_description'],
-    ':detailed_description' => $_POST['detailed_description'],
-    ':duration' => $_POST['duration'],
-    ':start_date' => $_POST['start_date'],
-    ':end_date' => $_POST['end_date'],
-    ':is_remote' => $_POST['is_remote'],
-    ':location' => $_POST['location'],
-    ':timezone' => $_POST['timezone'],
-    ':stipend_amount' => $_POST['stipend_amount'],
-    ':stipend_currency' => $_POST['stipend_currency'],
-    ':is_paid' => $_POST['is_paid'],
-    ':application_deadline' => $_POST['application_deadline'],
-    ':max_applicants' => $_POST['max_applicants'],
-    ':is_active' => $_POST['is_active'],
-    ':status' =>"new",
-    ':mentorid' =>"admin",
-    ':SuperProgram' =>$_POST['SuperProgram']
-    
-]);
+    // 1️⃣ Check if a program with the same title and status 'upcoming' already exists
+    $checkStmt = $db->prepare("SELECT COUNT(*) FROM programs WHERE title = :title AND status = 'upcoming'");
+    $checkStmt->execute([':title' => $_POST['title']]);
+    $exists = $checkStmt->fetchColumn();
 
+    if ($exists > 0) {
+        // Program exists, don't insert
+        $showAlert = 'duplicate';
+    } else {
+        // 2️⃣ Insert new program
+        $stmt = $db->prepare("INSERT INTO programs (
+            title, slug, short_description, detailed_description, duration,
+            start_date, end_date, is_remote, location, timezone,
+            stipend_amount, stipend_currency, is_paid,
+            application_deadline, max_applicants, is_active, status, mentorid, SuperProgram
+        ) VALUES (
+            :title, :slug, :short_description, :detailed_description, :duration,
+            :start_date, :end_date, :is_remote, :location, :timezone,
+            :stipend_amount, :stipend_currency, :is_paid,
+            :application_deadline, :max_applicants, :is_active, :status, :mentorid, :SuperProgram
+        )");
 
-    // Check if the query was successful
- if ($stmt->rowCount() > 0) {
-  $showAlert = 'success';
-} else {
-  $showAlert = 'error';
+        $stmt->execute([
+            ':title' => $_POST['title'],
+            ':slug' => $_POST['slug'],
+            ':short_description' => $_POST['short_description'],
+            ':detailed_description' => $_POST['detailed_description'],
+            ':duration' => $_POST['duration'],
+            ':start_date' => $_POST['start_date'],
+            ':end_date' => $_POST['end_date'],
+            ':is_remote' => $_POST['is_remote'],
+            ':location' => $_POST['location'],
+            ':timezone' => $_POST['timezone'],
+            ':stipend_amount' => $_POST['stipend_amount'],
+            ':stipend_currency' => $_POST['stipend_currency'],
+            ':is_paid' => $_POST['is_paid'],
+            ':application_deadline' => $_POST['application_deadline'],
+            ':max_applicants' => $_POST['max_applicants'],
+            ':is_active' => $_POST['is_active'],
+            ':status' => "upcoming",
+            ':mentorid' => "admin",
+            ':SuperProgram' => $_POST['SuperProgram']
+        ]);
+
+        $showAlert = ($stmt->rowCount() > 0) ? 'success' : 'error';
+    }
 }
 
-  //header('Location: collegeprojectsform.php');
-  //exit();
-}?>
+// Optional: show alert messages
+if ($showAlert == 'success') {
+//    echo "<div class='alert alert-success'>Program added successfully!</div>";
+} elseif ($showAlert == 'error') {
+    echo "<div class='alert alert-danger'>Failed to add program. Please try again.</div>";
+} elseif ($showAlert == 'duplicate') {
+    echo "<div class='alert alert-warning'>Program with this title is already upcoming. Cannot insert duplicate.</div>";
+}
+?>
 
 
 

@@ -545,7 +545,7 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-user-graduate"></i>
                     </div>
                     <h3 class="reward-title">Basic Enrollment</h3>
-                    <div class="reward-amount">$50</div>
+                    <div class="reward-amount">₹100</div>
                     <p class="reward-desc">When a friend enrolls in any basic internship program</p>
                 </div>
                 
@@ -554,7 +554,7 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-laptop-code"></i>
                     </div>
                     <h3 class="reward-title">Tech Program</h3>
-                    <div class="reward-amount">$75</div>
+                    <div class="reward-amount">₹500</div>
                     <p class="reward-desc">When a friend enrolls in a technical internship</p>
                 </div>
                 
@@ -564,7 +564,7 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-medal"></i>
                     </div>
                     <h3 class="reward-title">Premium Program</h3>
-                    <div class="reward-amount">$100</div>
+                    <div class="reward-amount">₹800</div>
                     <p class="reward-desc">When a friend enrolls in a premium internship</p>
                 </div>
             </div>

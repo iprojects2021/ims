@@ -1,85 +1,136 @@
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-include("../vendor/autoload.php");
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
+try {
+    if (!isset($_FILES['program_file'])) {
+        die("❌ No file received in \$_FILES.");
+    }
 
+    if ($_FILES['program_file']['error'] !== UPLOAD_ERR_OK) {
+        die("❌ Upload error code: " . $_FILES['program_file']['error']);
+    }
 
-// Handle file upload
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['program_file']) ) {
-    $file = $_FILES['program_file']['tmp_name'];
+    $fileTmpPath = $_FILES['program_file']['tmp_name'];
+    $fileName    = $_FILES['program_file']['name'];
 
-    try {
-        $spreadsheet = IOFactory::load($file);
-        $sheet = $spreadsheet->getActiveSheet();
-        $rows = $sheet->toArray();
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    if ($fileExtension !== 'csv') {
+        die("❌ Only CSV files are allowed.");
+    }
 
-        // Skip the header row
-        $header = array_shift($rows);
+    if (($handle = fopen($fileTmpPath, "r")) !== false) {
+        // Skip header row
+        fgetcsv($handle);
 
-        $sql = "INSERT INTO programs (
-            title, slug, short_description, detailed_description, duration,
-            start_date, end_date, is_remote, location, timezone,
-            stipend_amount, stipend_currency, is_paid, application_deadline,
-            max_applicants, is_active, SuperProgram, status, programtype, amount, mentorid
-        ) VALUES (
-            :title, :slug, :short_description, :detailed_description, :duration,
-            :start_date, :end_date, :is_remote, :location, :timezone,
-            :stipend_amount, :stipend_currency, :is_paid, :application_deadline,
-            :max_applicants, :is_active, :SuperProgram, :status, :programtype, :amount, :mentorid
-        )";
+        $stmtInsert = $db->prepare("
+            INSERT INTO programs (
+                title, slug, short_description, detailed_description, duration,
+                start_date, end_date, is_remote, location, timezone, stipend_amount,
+                stipend_currency, is_paid, application_deadline, max_applicants,
+                is_active, SuperProgram, status, programtype, amount, mentorid
+            ) VALUES (
+                :title, :slug, :short_description, :detailed_description, :duration,
+                :start_date, :end_date, :is_remote, :location, :timezone, :stipend_amount,
+                :stipend_currency, :is_paid, :application_deadline, :max_applicants,
+                :is_active, :SuperProgram, :status, :programtype, :amount, :mentorid
+            )
+        ");
 
-        $stmt = $db->prepare($sql);
+        $stmtCheck = $db->prepare("
+            SELECT COUNT(*) FROM programs WHERE title = :title AND status = 'upcoming'
+        ");
 
-        foreach ($rows as $row) {
-            $stmt->execute([
-                ':title' => $row[0],
-                ':slug' => $row[1],
-                ':short_description' => $row[2],
-                ':detailed_description' => $row[3],
-                ':duration' => $row[4],
-                ':start_date' => $row[5],
-                ':end_date' => $row[6] ?: null,
-                ':is_remote' => $row[7] ?: 0,
-                ':location' => $row[8],
-                ':timezone' => $row[9],
-                ':stipend_amount' => $row[10] ?: null,
-                ':stipend_currency' => $row[11] ?: 'USD',
-                ':is_paid' => $row[12] ?: 0,
-                ':application_deadline' => $row[13] ?: null,
-                ':max_applicants' => $row[14] ?: null,
-                ':is_active' => $row[15] ?: 1,
-                ':SuperProgram' => $row[16],
-                ':status' => $row[17],
-                ':programtype' => $row[18],
-                ':amount' => $row[19],
-                ':mentorid' => $row[20]
+        $insertedCount = 0;
+        $skippedCount = 0;
+        $skippedTitles = [];
 
-            ]);  
+        while (($row = fgetcsv($handle, 1000, ",")) !== false) {
+
+            $title = trim($row[0] ?? '');
+            $status = strtolower(trim($row[17] ?? 'upcoming'));
+
+            if ($title === '') continue; // skip empty titles
+
+            // Check for duplicates
+            $stmtCheck->execute([':title' => $title]);
+            if ($stmtCheck->fetchColumn() > 0 && $status === 'upcoming') {
+                $skippedCount++;
+                $skippedTitles[] = $title;
+                continue; // skip this row
+            }
+
+            $data = [
+                ':title'                => $title,
+                ':slug'                 => $row[1] ?? null,
+                ':short_description'    => $row[2] ?? null,
+                ':detailed_description' => $row[3] ?? null,
+                ':duration'             => $row[4] ?? null,
+                ':start_date'           => $row[5] ?? null,
+                ':end_date'             => $row[6] ?? null,
+                ':is_remote'            => $row[7] ?? 1,
+                ':location'             => $row[8] ?? null,
+                ':timezone'             => $row[9] ?? null,
+                ':stipend_amount'       => $row[10] ?? null,
+                ':stipend_currency'     => $row[11] ?? "USD",
+                ':is_paid'              => $row[12] ?? 0,
+                ':application_deadline' => $row[13] ?? null,
+                ':max_applicants'       => $row[14] ?? null,
+                ':is_active'            => $row[15] ?? 1,
+                ':SuperProgram'         => $row[16] ?? null,
+                ':status'               => $status,
+                ':programtype'          => $row[18] ?? null,
+                ':amount'               => $row[19] ?? null,
+                ':mentorid'             => $row[20] ?? null,
+            ];
+
+            $stmtInsert->execute($data);
+            $insertedCount++;
         }
 
-        //echo "Programs imported successfully!";
-        echo '
-    <div class="container mt-3">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <h5><i class="icon fas fa-check"></i> Success!</h5>
-            Programs imported successfully
+        fclose($handle);
+
+        // Show result message
+        $message = "$insertedCount program(s) imported successfully.";
+        if ($skippedCount > 0) {
+            $message .= " $skippedCount duplicate program(s) were skipped: " . implode(", ", $skippedTitles);
+            $alertClass = "alert-warning";
+        } else {
+            $alertClass = "alert-success";
+        }
+
+        echo "
+        <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                    z-index: 1050; width: 400px; max-width: 90%;'>
+            <div class='alert $alertClass alert-dismissible fade show' role='alert' id='statusAlert' style='box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>
+                $message
+            </div>
+        </div>
+        <script>
+            setTimeout(function() {
+                window.location.href = 'admin_addprogrms.php';
+            }, 5000);
+        </script>
+        ";
+
+    } else {
+        die("❌ Error reading the uploaded CSV file.");
+    }
+
+} catch (PDOException $e) {
+    echo "
+    <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+        z-index: 1050; width: 400px; max-width: 90%;'>
+        <div class='alert alert-danger alert-dismissible fade show' role='alert' id='statusAlert' style='box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>
+            Database error: " . htmlspecialchars($e->getMessage()) . "
         </div>
     </div>
-
     <script>
         setTimeout(function() {
-            window.location.href = "admin_addprogrms.php";
-        }, 3000);
+            window.location.href = 'admin_addprogrms.php';
+        }, 5000);
     </script>
-';
-
-    } catch (Exception $e) {
-        echo "Error processing file: " . $e->getMessage();
-    }
-} else {
-    echo "No file uploaded.";
+    ";
 }
 ?>
 

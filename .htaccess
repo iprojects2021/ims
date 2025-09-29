@@ -1,28 +1,29 @@
+RewriteEngine On
+
 # Prevent directory listing
 Options -Indexes
 
-# Block direct access to files (e.g., .pdf, .txt, .mp4) — images are removed
+# Block direct access to files (except images & CSV)
 <FilesMatch "\.(pdf|txt|mp4)$">
     Order Deny,Allow
     Deny from all
 </FilesMatch>
 
-# Redirect file requests (excluding images) to download.php
-RewriteEngine On
+<FilesMatch "\.csv$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Redirect blocked files to download.php
 RewriteCond %{REQUEST_URI} \.(pdf|txt|mp4)$ [NC]
 RewriteRule ^(.*)$ /download.php?file=$1 [L]
 
-# =========================
-# Hide .php extension
-# =========================
-
-# 1. Redirect direct .php access to clean URL (avoid duplicate content)
+# Hide .php extension (exclude POST requests)
 RewriteCond %{THE_REQUEST} \s/([^\s]+)\.php[?\s] [NC]
+RewriteCond %{REQUEST_METHOD} =GET
 RewriteRule ^ /%1 [R=301,L]
 
-# 2. Internally rewrite clean URLs to .php files if they exist
+# Internally rewrite clean URLs to .php files
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L]
-
-
