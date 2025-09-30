@@ -261,7 +261,7 @@ $data = $stmt->fetch();
                         </div>
                                                <input type="hidden" name="program_id" value="<?php echo $data['program_id']?>">
                         
-                        
+                        <input type="hidden" name="type" value="Career & Interview Preparation">
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary btn-submit">Submit Enquiry</button>
                     </form>

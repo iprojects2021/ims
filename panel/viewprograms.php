@@ -105,6 +105,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <th>title	</th>
                   <th>slug</th>
                   <th>short_description</th>
+                  <th>Status</th>
                   <th>detailed_description</th>
                   <th>duration</th>
                   <th>start_date</th>
@@ -129,6 +130,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <td><?= htmlspecialchars($row['title']) ?></td>
     <td><?= htmlspecialchars($row['slug']) ?></td>
     <td><?= htmlspecialchars($row['short_description']) ?></td>
+    <td><?= htmlspecialchars($row['status']) ?></td>
     <td><?= htmlspecialchars($row['detailed_description']) ?></td>
     <td><?= htmlspecialchars($row['duration']) ?></td>
     <td><?= htmlspecialchars($row['start_date']) ?></td>
@@ -153,6 +155,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <th>title	</th>
                   <th>slug</th>
                   <th>short_description</th>
+                  <th>Status</th>
                   <th>detailed_description</th>
                   <th>duration</th>
                   <th>start_date</th>
