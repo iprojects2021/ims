@@ -2,6 +2,10 @@
 include("../includes/db.php");
 $sql = "SELECT * FROM programs WHERE title='Java Developer Intern' AND status='upcoming'";
 $stmt = $db->query($sql); // $db is your PDO connection
+$programidelite8000 = $programidelite8000 ?? null; 
+$programidbasic1000 = $programidbasic1000 ?? null;
+$programidadvance2000 = $programidadvance2000 ?? null;
+$programidprofessional5000 = $programidprofessional5000 ?? null;
 
 if ($stmt) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all rows into an array
@@ -484,7 +488,8 @@ if ($stmt) {
                 <div class="modal-body">
                     <!-- Plan details section -->
                     <form id="applicationForm" action="../programpayment.php" method="post">
-                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($details[0]['program_id']); ?>" id="program_basic">
+                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($rows[0]['program_id']); ?>">
+                    <?php ?>
 
 
     <div class="plan-details">
@@ -635,7 +640,10 @@ if ($stmt) {
     document.getElementById('hidden-plan-type').value = planType;
     document.getElementById('hidden-amount').value = amount;
     document.getElementById('hidden-duration').value = duration;
+    document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("hidden-program_id").value = programid;
+});
+
 
 
     // Show the modal

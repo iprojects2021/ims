@@ -391,8 +391,8 @@ $programsdata = $stmt->fetch();
                 <?php foreach ($applicationData as $row): ?>
                   <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
                     <td><?= htmlspecialchars($row['program_id']) ?></td>
-                    <td><?= htmlspecialchars($row['fullname']) ?></td>
-                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['fullname'] ?? '') ?></td>
+ <td><?= htmlspecialchars($row['email']) ?></td>
                     <td><?= htmlspecialchars($row['project']) ?></td>
                     <td><?= htmlspecialchars($row['type']) ?></td>
                     <td><?= htmlspecialchars($row['expected_start_date']) ?></td>
