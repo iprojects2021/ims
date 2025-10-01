@@ -169,14 +169,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
                   <div class="info-box bg-light">
                     <div class="info-box-content">
                       <span class="info-box-text text-center text-muted">Status</span>
-                      <span class="info-box-number text-center text-muted mb-0"><?php echo htmlspecialchars($applications['status']); ?></span>
+                      <span class="info-box-number text-center text-muted mb-0"><?php echo htmlspecialchars($applications['status'] ?? ''); ?>
+</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-12 col-sm-4">
   <div class="info-box bg-light">
     <div class="info-box-content">
-      <span class="info-box-text text-center text-muted">Test</span>
+      <span class="info-box-text text-center text-muted">--</span>
       <!-- <?php if (empty($applications['assignedto'])): ?>
         <div class="text-center">
         <form method="post">
@@ -238,38 +239,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
               <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Document details</h3>
               <div class="text-muted">
               <p class="text-sm">Id
-                  <b class="d-block"><?php echo htmlspecialchars($applications['id']); ?></b>
+                  <b class="d-block"><?php echo htmlspecialchars($applications['id'] ?? ''); ?>
+</b>
                 </p>
                 
                 <p class="text-sm">Education Level
-                  <b class="d-block"><?php echo htmlspecialchars($applications['education_level']); ?></b>
+                  <b class="d-block"><?php echo htmlspecialchars($applications['education_level'] ?? ''); ?>
+</b>
                 </p>
                 <p class="text-sm">File
                 <b class="d-block"> <?php
-// Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/', '', $applications['file_path']);
+// Remove the prefix 'uploads/' safely
+$fileName = str_replace('uploads/', '', $applications['file_path'] ?? '');
 ?>
 
-<a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>
+
+<a href="/ims/panel/download.php?file=<?= urlencode($fileName ?? '') ?>" target="_blank">View</a>
+
 </b>
                 </p>
                 <p class="text-sm">Remark
-                  <b class="d-block"><?php echo htmlspecialchars($applications['remark']); ?></b>
+                  <b class="d-block"><?php echo htmlspecialchars($applications['remark'] ?? ''); ?>
+</b>
                 </p>
                 <p class="text-sm mb-1">Status
-                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status']); ?></b>
+                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['status'] ?? ''); ?>
+</b>
                 </p>
                 <p class="text-sm mb-1">Student Id
-                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['studentid']); ?></b>
+                  <b class="d-block mb-2"><?php echo htmlspecialchars($applications['studentid'] ?? ''); ?>
+</b>
                 </p>
                 <form method="post" action="">
   <div class="form-group">
     <label for="statusSelect">Change Status</label>
     <select class="form-control" id="statusSelect" name="status" required>
       <option value="">-- Select Status --</option>
-      <option value="Verified" <?php if ($applications['status'] == 'Verified') echo 'selected'; ?>>Verified</option>
-      <option value="Pending Action" <?php if ($applications['status'] == 'Pending Action') echo 'selected'; ?>>Pending Action</option>
-    </select>
+      <option value="Verified" <?php if (($applications['status'] ?? '') === 'Verified') echo 'selected'; ?>>Verified</option>
+<option value="Pending Action" <?php if (($applications['status'] ?? '') === 'Pending Action') echo 'selected'; ?>>Pending Action</option>
+   </select>
   </div>
 
   <!-- Hidden inputs to preserve necessary data -->
