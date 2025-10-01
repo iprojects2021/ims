@@ -144,3 +144,13 @@ CREATE TABLE taskstatushistory (
     INDEX idx_taskid (taskid),
     INDEX idx_changed_by (changed_by)
 );
+
+CREATE TABLE applicationstatus (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    applicationid INT NOT NULL,
+    userid INT NOT NULL,
+    oldstatus VARCHAR(100),
+    newstatus VARCHAR(100),
+    remarks VARCHAR(1000),
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
