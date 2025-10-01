@@ -435,6 +435,13 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="adminevaluations.php" class="nav-link">
+        <i class="nav-icon fas fa-clipboard-check"></i>
+        <p>Evaluations</p>
+      </a>
+    </li>
+
   
     <li class="nav-item">
       <a href="adminlogout.php" class="nav-link">
