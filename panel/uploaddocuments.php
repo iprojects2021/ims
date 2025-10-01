@@ -190,7 +190,7 @@ try {
                 </div>
             </div>
             <?php 
-$allowedStatuses = ['Approved', 'Offer Sent', 'Confirmed', 'Ongoing', 'Completed'];
+$allowedStatuses = ['Selected', 'Document Upload Pending', 'Document Rejected / Re-upload Required'];
 
 foreach ($checkstatus as $checkstatusdata): 
     if (in_array($checkstatusdata['status'], $allowedStatuses)): ?>

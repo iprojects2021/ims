@@ -76,6 +76,24 @@ $applicationCount1 = $stmt->fetchColumn();
   }
 } 
 ?>
+<?php
+try {
+    $sql = "SELECT * FROM applicationstatus WHERE applicationid = ?";
+    // Debugging (optional)
+    // echo $sql; var_dump($id); die;
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$id]);   // ✅ Pass as array
+    $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    $logger->log(
+        'ERROR',
+        'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage()
+    );
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,16 +101,40 @@ $applicationCount1 = $stmt->fetchColumn();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin-Application | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
-  <!-- AdminLTE Styles -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
+  <!-- iCheck -->
+  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css" />
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css" />
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css" />
+  <!-- summernote -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css" />
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
+  <style>
+    .badge-orange {
+      background-color: #fd7e14;
+      color: #fff;
+    }
+    /* Add cursor pointer for clickable rows */
+    .clickable-row {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -337,6 +379,56 @@ $applicationCount1 = $stmt->fetchColumn();
 <li class="list-group-item">Program Type: <b><?php echo htmlspecialchars($app['type'] ?? ''); ?></b></li>
 <li class="list-group-item">Status: <b><?php echo getStatusBadge($app['application_status'] ?? ''); ?></b></li>
 <li class="list-group-item">Created Date: <b><?php echo htmlspecialchars($app['createddate'] ?? ''); ?></b></li>
+<li class="list-group-item">
+<form id="statusForm">
+    <input type="hidden" name="applicationid" value="<?php echo htmlspecialchars($app['id'] ?? ''); ?>">
+    <input type="hidden" name="oldstatus" value="<?php echo htmlspecialchars($app['application_status'] ?? ''); ?>">
+    <input type="hidden" name="userid" value="<?php echo htmlspecialchars($_SESSION['user']['id'] ?? ''); ?>">
+
+    <label for="application_status">Update Status:</label>
+<select id="application_status" name="newstatus" class="form-select mt-1">
+    <option value="">Select Status</option>
+
+    <!-- Application Submission & Review Phase -->
+    <optgroup label="Application Submission & Review">
+        <option value="Submitted" <?php echo ($app['application_status'] ?? '') == 'Submitted' ? 'selected' : ''; ?>>Submitted</option>
+        <option value="Under Review" <?php echo ($app['application_status'] ?? '') == 'Under Review' ? 'selected' : ''; ?>>Under Review</option>
+        <option value="Shortlisted" <?php echo ($app['application_status'] ?? '') == 'Shortlisted' ? 'selected' : ''; ?>>Shortlisted</option>
+        <option value="Interview Scheduled" <?php echo ($app['application_status'] ?? '') == 'Interview Scheduled' ? 'selected' : ''; ?>>Interview Scheduled</option>
+        <option value="Interview Completed" <?php echo ($app['application_status'] ?? '') == 'Interview Completed' ? 'selected' : ''; ?>>Interview Completed</option>
+        <option value="Selected" <?php echo ($app['application_status'] ?? '') == 'Selected' ? 'selected' : ''; ?>>Selected</option>
+        <option value="Rejected" <?php echo ($app['application_status'] ?? '') == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
+    </optgroup>
+
+    <!-- Document & Verification Phase -->
+    <optgroup label="Document & Verification">
+        <option value="Document Upload Pending" <?php echo ($app['application_status'] ?? '') == 'Document Upload Pending' ? 'selected' : ''; ?>>Document Upload Pending</option>
+        <option value="Document Submitted" <?php echo ($app['application_status'] ?? '') == 'Document Submitted' ? 'selected' : ''; ?>>Document Submitted</option>
+        <option value="Document Verification Pending" <?php echo ($app['application_status'] ?? '') == 'Document Verification Pending' ? 'selected' : ''; ?>>Document Verification Pending</option>
+        <option value="Document Approved" <?php echo ($app['application_status'] ?? '') == 'Document Approved' ? 'selected' : ''; ?>>Document Approved</option>
+        <option value="Document Rejected / Re-upload Required" <?php echo ($app['application_status'] ?? '') == 'Document Rejected / Re-upload Required' ? 'selected' : ''; ?>>Document Rejected / Re-upload Required</option>
+    </optgroup>
+
+    <!-- Offer & Onboarding Phase -->
+    <optgroup label="Offer & Onboarding">
+        <option value="Offer Letter Sent" <?php echo ($app['application_status'] ?? '') == 'Offer Letter Sent' ? 'selected' : ''; ?>>Offer Letter Sent</option>
+        <option value="Offer Letter Accepted" <?php echo ($app['application_status'] ?? '') == 'Offer Letter Accepted' ? 'selected' : ''; ?>>Offer Letter Accepted</option>
+        <option value="Offer Letter Declined" <?php echo ($app['application_status'] ?? '') == 'Offer Letter Declined' ? 'selected' : ''; ?>>Offer Letter Declined</option>
+        <option value="Joining Letter Sent" <?php echo ($app['application_status'] ?? '') == 'Joining Letter Sent' ? 'selected' : ''; ?>>Joining Letter Sent</option>
+        <option value="Joining Confirmed" <?php echo ($app['application_status'] ?? '') == 'Joining Confirmed' ? 'selected' : ''; ?>>Joining Confirmed</option>
+        <option value="Not Joined" <?php echo ($app['application_status'] ?? '') == 'Not Joined' ? 'selected' : ''; ?>>Not Joined</option>
+    </optgroup>
+</select>
+
+
+    <label for="comment">Remarks:</label>
+    <textarea id="comment" name="remarks" class="form-control mt-1" rows="3"><?php echo htmlspecialchars($app['comment'] ?? ''); ?></textarea>
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+</form>
+
+<div id="statusMessage" class="mt-2"></div>
+
     </ul>
         </div>
 
@@ -375,9 +467,55 @@ $applicationCount1 = $stmt->fetchColumn();
         </div>
       </div>
     </div>
+    <!-- Applications table -->
+  <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Application Status History</h3>
+          </div>
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Application ID</th>
+                  <th>User ID</th>
+                  <th>Old Status</th>
+                  <th>New Status</th>
+                  <th>Remarks</th>
+                  <th>Create Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($applicationData as $row): ?>
+                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
+                    <td><?= htmlspecialchars($row['id']) ?></td>
+                    <td><?= htmlspecialchars($row['applicationid']) ?></td>
+                    <td><?= htmlspecialchars($row['userid']) ?></td>
+                    <td><?= getStatusBadge($row['oldstatus']) ?></td>
+                    <td><?= htmlspecialchars($row['newstatus']) ?></td>
+                    <td><?= htmlspecialchars($row['remarks']) ?></td>
+                    <td><?= htmlspecialchars($row['createdat']) ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID</th>
+                  <th>Application ID</th>
+                  <th>User ID</th>
+                  <th>Old Status</th>
+                  <th>New Status</th>
+                  <th>Remarks</th>
+                  <th>Create Date</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
   </div>
   
   <?php endforeach; ?>
+  
     </section>
   </div>
 
@@ -412,12 +550,93 @@ function redirectToForm(id) {
     document.getElementById('postRedirectForm').submit();
 }
 </script>
+<script>
+document.getElementById('statusForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent page reload
 
-<!-- Scripts -->
+    const formData = new FormData(this);
+
+    fetch('update_status.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        const msgDiv = document.getElementById('statusMessage');
+        if (data.success) {
+            msgDiv.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+        } else {
+            msgDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+        }
+
+        // 🔹 Automatically clear message after 3 seconds
+        setTimeout(() => {
+            msgDiv.innerHTML = '';
+        }, 3000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+
+<!-- JS Includes -->
 <script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<script src="dist/js/adminlte.js"></script>
-<script src="dist/js/demo.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="plugins/jszip/jszip.min.js"></script>
+<script src="plugins/pdfmake/pdfmake.min.js"></script>
+<script src="plugins/pdfmake/vfs_fonts.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      responsive: true,
+      lengthChange: false,
+      autoWidth: false,
+      buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    // Clickable rows redirect
+    $('.clickable-row').on('click', function () {
+      const id = $(this).data('id');
+      $('<form>', {
+        'method': 'POST',
+        'action': 'admintypedetails.php'
+      }).append($('<input>', {
+        'type': 'hidden',
+        'name': 'id',
+        'value': id
+      })).appendTo('body').submit();
+    });
+  });
+</script>
+<style>
+  /* Hide the + icon cell if it somehow still appears */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child::before,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child::before {
+    display: none !important;
+  }
+
+  /* Prevent the extra column for the + icon */
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child,
+  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child {
+    padding-left: 8px !important;
+  }
+</style>
+
 </body>
 </html>
