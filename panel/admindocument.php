@@ -282,7 +282,7 @@ document.getElementById('education').addEventListener('change', function () {
   });
 </script>
        <!-- Hidden form to send POST -->
-       <form id="postForm" method="POST" action="documenttype.PHP" style="display:none;">
+       <form id="postForm" method="POST" action="documenttype.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>
