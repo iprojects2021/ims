@@ -7,6 +7,11 @@ $stmt = $db->prepare("SELECT * FROM questions");
 $stmt->execute();
 $allquestionslist = $stmt->fetchAll();
 
+//fetch all feedback
+$stmt = $db->prepare("SELECT * FROM evaluationfeedbackanswer");
+$stmt->execute();
+$allanswerslist = $stmt->fetchAll();
+
 // Handle form submission
 $showAlert = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -69,6 +74,18 @@ if ($showAlert == 'success') {
 }
 ?>
 
+<?php
+
+try {
+    $sql = "UPDATE notification 
+            SET isread = 1 
+            WHERE userid ='admin' 
+              AND menu_item = 'feedback'";
+    $db->query($sql);
+} catch (Exception $e) {
+    // Optional: Log the error
+}
+?>
 
 
 
@@ -132,7 +149,10 @@ if ($showAlert == 'success') {
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal">
     Add Question
   </button>
- 
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#previewModal" id="previewBtn">
+  Preview
+</button>
+
 </div>
 
           </div><!-- /.col -->
@@ -183,13 +203,16 @@ if ($showAlert == 'success') {
             <select name="questiontype" id="questiontype" class="form-control" required>
               <option value="MCQ">MCQ</option>
               <option value="Text">Text</option>
+              <option value="Date">Date</option>
             </select>
           </div>
 
           <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <input type="text" name="category" id="category" class="form-control">
-          </div>
+  <label for="category" class="form-label">Category</label>
+  <input type="text" name="category" id="category" class="form-control" list="categoryList" placeholder="Select or add category">
+  <datalist id="categoryList"></datalist>
+</div>
+
 
           <div id="mcqOptions">
             <div class="mb-3"><input type="text" name="ans1" class="form-control" placeholder="Option 1"></div>
@@ -198,10 +221,10 @@ if ($showAlert == 'success') {
             <div class="mb-3"><input type="text" name="ans4" class="form-control" placeholder="Option 4"></div>
           </div>
 
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="textans" class="form-label">Text Answer (if any)</label>
             <input type="text" name="textans" id="textans" class="form-control">
-          </div>
+          </div> -->
 
         </div>
         <div class="modal-footer">
@@ -212,6 +235,40 @@ if ($showAlert == 'success') {
     </div>
   </div>
 </div>
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Preview & Submit Evaluation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form method="POST" action="submit_answers.php" id="evaluationForm">
+        <div class="modal-body">
+          
+          <!-- Questions Section -->
+          <h6><i class="fas fa-question-circle"></i> Questions</h6>
+          <div id="questionsContainer"></div>
+          <hr>
+
+          
+          
+        </div>
+        
+        <div class="modal-footer">
+          <!-- <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Submit Evaluation</button> -->
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
 
 <div class="card">
           <div class="card-header">
@@ -230,14 +287,13 @@ if ($showAlert == 'success') {
                   <th>Ans2</th>
                   <th>Ans3</th>
                   <th>Ans4</th>
-                  <th>Text Answer</th>
                   <th>Status</th>
                   <th>Create Date</th>
                 </tr>
               </thead>
               <tbody>
               <?php foreach ($allquestionslist as $data): ?>
-                <tr class="clickable-row" data-id="<?= $data['id'] ?>">
+                <tr>
                   <td><?= htmlspecialchars($data['id']) ?></td>
                   <td><?= nl2br(htmlspecialchars($data['userid'])) ?></td>
                   <td><?= htmlspecialchars($data['question']) ?></td>
@@ -247,9 +303,59 @@ if ($showAlert == 'success') {
                   <td><?= htmlspecialchars($data['ans2']) ?></td>
                   <td><?= htmlspecialchars($data['ans3']) ?></td>
                   <td><?= htmlspecialchars($data['ans4']) ?></td>
-                  <td><?= htmlspecialchars($data['textans']) ?></td>
                   <td><?= htmlspecialchars($data['status']) ?></td>
                   <td><?= htmlspecialchars($data['createdate']) ?></td>
+                  </tr>
+              <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+</div>
+<div class="card">
+          <div class="card-header">
+            <h3 class="card-title">All Answers List</h3>
+          </div>
+          <div class="card-body">
+            <table id="new" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>User Id</th>
+                  <th>Status</th>
+                  <th>Type</th>
+                  <th>Question Id</th>
+                  <th>Answer</th>
+                  <th>Attendance Score</th>
+                  <th>Quality Score</th>
+                  <th>Technical Score</th>
+                  <th>Communication Score</th>
+                  <th>Initiative Score</th>
+                  <th>Overall Score</th>
+                  <th>Improvements Questions</th>
+                  <th>Comments</th>
+                  <th>Create Date</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+              <?php foreach ($allanswerslist as $data): ?>
+                <tr>
+                  <td><?= htmlspecialchars($data['id']) ?></td>
+                  <td><?= nl2br(htmlspecialchars($data['userid'])) ?></td>
+                  <td><?= htmlspecialchars($data['status']) ?></td>
+                  <td><?= htmlspecialchars($data['type']) ?></td>
+                  <td><?= htmlspecialchars($data['questionid']) ?></td>
+                  <td><?= htmlspecialchars($data['answer']) ?></td>
+                  <td><?= htmlspecialchars($data['attendance_score']) ?></td>
+                  <td><?= htmlspecialchars($data['technical_score']) ?></td>
+                  <td><?= htmlspecialchars($data['communication_score']) ?></td>
+                  <td><?= htmlspecialchars($data['initiative_score']) ?></td>
+                  <td><?= htmlspecialchars($data['teamwork_score']) ?></td>
+                  <td><?= htmlspecialchars($data['overall_score']) ?></td>
+                  <td><?= htmlspecialchars($data['improvement_suggestions']) ?></td>
+                  <td><?= htmlspecialchars($data['comments']) ?></td>
+                  <td><?= htmlspecialchars($data['createdat']) ?></td>
                   </tr>
               <?php endforeach; ?>
               </tbody>
@@ -330,7 +436,7 @@ if ($showAlert == 'success') {
 <script src="dist/js/adminlte.min.js"></script>
 <!-- Hidden form to send POST -->
 <!-- Hidden Form for Submitting Program ID -->
-<form id="postForm" method="POST" action="editprograms.php" style="display:none;">
+<form id="postForm" method="POST" action="#" style="display:none;">
     <input type="hidden" name="program_id" id="hiddenId">
 </form>
 
@@ -360,6 +466,21 @@ if ($showAlert == 'success') {
     });
   });
 </script>
+<script>
+$(document).ready(function() {
+    var table = $('#new').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "pageLength": 10,
+        "lengthChange": false, // hide dropdown if not needed
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    });
+
+    table.buttons().container()
+        .appendTo('#new_wrapper .col-md-6:eq(0)');
+});
+</script>
+
 <!-- Add this CSS to hide any remaining + icon rows -->
 <style>
   /* Hide the + icon cell if it somehow still appears */
@@ -388,6 +509,80 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('mcqOptions').style.display = 'block';
 });
 </script>
+
+<script>
+$('#previewModal').on('show.bs.modal', function () {
+  fetch("fetch_questions.php")
+    .then(response => response.json())
+    .then(data => {
+      let container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
+      data.forEach(q => {
+        let card = document.createElement("div");
+        card.className = "card mb-2";
+        card.innerHTML = `
+          <div class="card-header">
+            <strong>Q${q.id}:</strong> ${q.question}
+            <span class="badge badge-info float-right">${q.questiontype}</span>
+          </div>
+          <div class="card-body">
+            ${renderInput(q)}
+          </div>`;
+        container.appendChild(card);
+      });
+    });
+
+  function renderInput(q) {
+    if (q.questiontype === "MCQ") {
+      return renderOptions(q);
+    } else if (q.questiontype === "Date") {
+      return renderDate(q);
+    } else {
+      return renderText(q);
+    }
+  }
+
+  function renderOptions(q) {
+    let options = "";
+    for (let i = 1; i <= 4; i++) {
+      if (q["ans"+i]) {
+        options += `
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answers[${q.id}]" value="${q["ans"+i]}" required>
+          <label class="form-check-label">${q["ans"+i]}</label>
+        </div>`;
+      }
+    }
+    return options;
+  }
+
+  function renderText(q) {
+    return `<input type="text" name="answers[${q.id}]" class="form-control" placeholder="Your answer..." required>`;
+  }
+
+  function renderDate(q) {
+    return `<input type="date" name="answers[${q.id}]" class="form-control" required>`;
+  }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  fetch("fetch_categories.php")
+    .then(response => response.json())
+    .then(data => {
+      let datalist = document.getElementById("categoryList");
+      datalist.innerHTML = "";
+      data.forEach(cat => {
+        let option = document.createElement("option");
+        option.value = cat;
+        datalist.appendChild(option);
+      });
+    });
+});
+</script>
+
+
+
 
 
 <?php include("../panel/util/alert.php");?>

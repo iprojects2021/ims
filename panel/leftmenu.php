@@ -67,8 +67,9 @@ $notificationCounts = [
     'task'    => getNotificationCount($db, $userid, 'task', $role),
     'document'    => getNotificationCount($db, $userid, 'document', $role),
     'innovationideas'    => getNotificationCount($db, $userid, 'innovationideas', $role),
+    'feedback'    => getNotificationCount($db, $userid, 'feedback', $role),
 ];
-$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document']+$notificationCounts['innovationideas'];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document']+$notificationCounts['innovationideas']+$notificationCounts['feedback'];
 
 // Notification messages
 $ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
@@ -77,6 +78,7 @@ $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
 $documentMessages   = getUnreadNotifications($db, $userid, 'document', $role);
 $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
 $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationideas', $role);
+$feedbackMessages   = getUnreadNotifications($db, $userid, 'feedback', $role);
 
 ?>
 
@@ -219,6 +221,15 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($innovation['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($innovation['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
+<!--feedback messages-->
+        <?php foreach ($feedbackMessages as $feedback): ?>
+            <a href="#" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($feedback['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($feedback['createdAt'])) ?></span>
             </a>
         <?php endforeach; ?>
 
@@ -437,10 +448,16 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
     </li>
     <li class="nav-item">
       <a href="adminevaluations.php" class="nav-link">
-        <i class="nav-icon fas fa-clipboard-check"></i>
-        <p>Evaluations</p>
+      <i class="nav-icon fas fa-lightbulb"></i>
+        <p>Evaluations <?php if ($notificationCounts['feedback'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['feedback']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
       </a>
     </li>
+  
 
   
     <li class="nav-item">
@@ -574,6 +591,18 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <p>Evaluations</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="evaluations.php" class="nav-link">
+      <i class="nav-icon fas fa-lightbulb"></i>
+        <p>Evaluations <?php if ($notificationCounts['feedback'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['feedback']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
+      </a>
+    </li>
+  
 
     <li class="nav-item">
       <a href="notifications.php" class="nav-link">
