@@ -169,3 +169,6 @@ CREATE TABLE questions (
     status VARCHAR(50) DEFAULT 'active',
     createdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE questions ADD COLUMN ratemax INT DEFAULT 10;
+

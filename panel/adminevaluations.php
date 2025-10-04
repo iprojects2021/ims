@@ -199,13 +199,18 @@ try {
           </div>
 
           <div class="mb-3">
-            <label for="questiontype" class="form-label">Question Type</label>
-            <select name="questiontype" id="questiontype" class="form-control" required>
-              <option value="MCQ">MCQ</option>
-              <option value="Text">Text</option>
-              <option value="Date">Date</option>
-            </select>
-          </div>
+  <label for="questiontype" class="form-label">Question Type</label>
+  <select name="questiontype" id="questiontype" class="form-control" required>
+    <option value="MCQ">MCQ</option>
+    <option value="Text">Text</option>
+    <option value="Date">Date</option>
+    <option value="Rate">Rate</option> <!-- ✅ Added -->
+  </select>
+</div>
+<div class="mb-3" id="rateMaxDiv" style="display:none;">
+  <label for="ratemax" class="form-label">Maximum Rating</label>
+  <input type="number" name="ratemax" id="ratemax" class="form-control" min="1" max="20" value="10">
+</div>
 
           <div class="mb-3">
   <label for="category" class="form-label">Category</label>
@@ -235,38 +240,107 @@ try {
     </div>
   </div>
 </div>
+<!-- Preview Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      
-      <div class="modal-header">
-        <h5 class="modal-title" id="previewModalLabel">Preview & Submit Evaluation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content shadow-lg border-0 rounded">
+
+      <!-- Modal Header -->
+      <div class="modal-header" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); color: white; border:0;">
+        <h5 class="modal-title" id="previewModalLabel">
+          <i class="fas fa-eye"></i> Preview Evaluation
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
+      <!-- Form -->
       <form method="POST" action="submit_answers.php" id="evaluationForm">
         <div class="modal-body">
-          
-          <!-- Questions Section -->
-          <h6><i class="fas fa-question-circle"></i> Questions</h6>
-          <div id="questionsContainer"></div>
-          <hr>
 
-          
-          
+          <!-- Questions Container -->
+          <div id="questionsContainer">
+            <!-- Example Questions -->
+            <div class="card mb-3 shadow-sm p-3" style="border-left: 5px solid #2575fc; transition: transform 0.2s;">
+              <p class="mb-0"><strong>Q1:</strong> What is your favorite programming language?</p>
+            </div>
+            <div class="card mb-3 shadow-sm p-3" style="border-left: 5px solid #6a11cb; transition: transform 0.2s;">
+              <p class="mb-0"><strong>Q2:</strong> How many years of experience do you have?</p>
+            </div>
+            <!-- More questions dynamically can be added here -->
+          </div>
+
+          <!-- Pagination & Progress -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button type="button" class="btn btn-gradient-secondary" id="prevBtn" disabled>
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+
+            <!-- Progress Indicator -->
+            <div class="progress flex-grow-1 mx-3" style="height: 8px; border-radius: 10px; overflow:hidden;">
+              <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%; background: linear-gradient(to right, #6a11cb, #2575fc);"></div>
+            </div>
+
+            <button type="button" class="btn btn-gradient-primary" id="nextBtn">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
         </div>
-        
-        <div class="modal-footer">
-          <!-- <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Submit Evaluation</button> -->
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn btn-success btn-gradient-success">
+            <i class="fas fa-check"></i> Submit Evaluation
+          </button>
+          <button type="button" class="btn btn-secondary btn-gradient-secondary" data-dismiss="modal">
+            <i class="fas fa-times"></i> Close
+          </button>
         </div>
       </form>
 
     </div>
   </div>
 </div>
+
+<!-- Custom CSS for gradients and hover effects -->
+<style>
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .btn-gradient-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+  }
+  .btn-gradient-primary:hover {
+    background: linear-gradient(45deg, #2575fc, #6a11cb);
+    color: white;
+  }
+
+  .btn-gradient-secondary {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+  }
+  .btn-gradient-secondary:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    color: white;
+  }
+
+  .btn-gradient-success {
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+    color: white;
+    border: none;
+  }
+  .btn-gradient-success:hover {
+    background: linear-gradient(45deg, #38ef7d, #11998e);
+    color: white;
+  }
+</style>
 
 
 
@@ -511,60 +585,109 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script>
+let questionsData = [];
+let currentPage = 0;
+const pageSize = 5; // 5 questions per page
+
 $('#previewModal').on('show.bs.modal', function () {
   fetch("fetch_questions.php")
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-      let container = document.getElementById("questionsContainer");
-      container.innerHTML = "";
-      data.forEach(q => {
-        let card = document.createElement("div");
-        card.className = "card mb-2";
-        card.innerHTML = `
-          <div class="card-header">
-            <strong>Q${q.id}:</strong> ${q.question}
-            <span class="badge badge-info float-right">${q.questiontype}</span>
-          </div>
-          <div class="card-body">
-            ${renderInput(q)}
-          </div>`;
-        container.appendChild(card);
-      });
+      questionsData = data;
+      currentPage = 0;
+      renderPage();
     });
+});
 
-  function renderInput(q) {
-    if (q.questiontype === "MCQ") {
-      return renderOptions(q);
-    } else if (q.questiontype === "Date") {
-      return renderDate(q);
-    } else {
-      return renderText(q);
-    }
+function renderPage() {
+  const container = document.getElementById("questionsContainer");
+  container.innerHTML = "";
+
+  const start = currentPage * pageSize;
+  const end = Math.min(start + pageSize, questionsData.length);
+
+  for (let i = start; i < end; i++) {
+    const q = questionsData[i];
+    const card = document.createElement("div");
+    card.className = "card mb-2 p-2";
+    card.innerHTML = `
+      <div class="card-header font-weight-bold">${q.question}</div>
+      <div class="card-body">${renderInput(q)}</div>
+    `;
+    container.appendChild(card);
   }
 
-  function renderOptions(q) {
-    let options = "";
-    for (let i = 1; i <= 4; i++) {
-      if (q["ans"+i]) {
-        options += `
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="answers[${q.id}]" value="${q["ans"+i]}" required>
-          <label class="form-check-label">${q["ans"+i]}</label>
-        </div>`;
-      }
-    }
-    return options;
+  // Pagination button states
+  document.getElementById("prevBtn").disabled = currentPage === 0;
+  if ((currentPage + 1) * pageSize >= questionsData.length) {
+    document.getElementById("nextBtn").classList.add("d-none");
+    document.getElementById("submitBtn").classList.remove("d-none");
+  } else {
+    document.getElementById("nextBtn").classList.remove("d-none");
+    document.getElementById("submitBtn").classList.add("d-none");
   }
+}
 
-  function renderText(q) {
-    return `<input type="text" name="answers[${q.id}]" class="form-control" placeholder="Your answer..." required>`;
-  }
-
-  function renderDate(q) {
-    return `<input type="date" name="answers[${q.id}]" class="form-control" required>`;
+document.getElementById("prevBtn").addEventListener("click", () => {
+  if (currentPage > 0) {
+    currentPage--;
+    renderPage();
   }
 });
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  if ((currentPage + 1) * pageSize < questionsData.length) {
+    currentPage++;
+    renderPage();
+  }
+});
+
+// Render input based on type
+function renderInput(q) {
+  if (q.questiontype === "MCQ") return renderOptions(q);
+  if (q.questiontype === "Text") return renderText(q);
+  if (q.questiontype === "Date") return renderDate(q);
+  if (q.questiontype === "Rate") return renderRate(q);
+  return '';
+}
+
+function renderOptions(q) {
+  let html = '';
+  for (let i=1;i<=4;i++) {
+    if (q["ans"+i]) html += `
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="answers[${q.id}]" value="${q["ans"+i]}" required>
+        <label class="form-check-label">${q["ans"+i]}</label>
+      </div>`;
+  }
+  return html;
+}
+
+function renderText(q) {
+  return `<input type="text" class="form-control" name="answers[${q.id}]" required>`;
+}
+
+function renderDate(q) {
+  return `<input type="date" class="form-control" name="answers[${q.id}]" required>`;
+}
+
+// Rate (0 → ratemax, default 10)
+function renderRate(q) {
+  const max = q.ratemax ? parseInt(q.ratemax) : 10;
+  let html = '<div class="d-flex flex-wrap">';
+  for (let i=0;i<=max;i++) {
+    html += `
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="answers[${q.id}]" value="${i}" required>
+        <label class="form-check-label">${i}</label>
+      </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   fetch("fetch_categories.php")
@@ -580,7 +703,31 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+<script>
+  
+function renderInput(q) {
+  if (q.questiontype === "MCQ") {
+    return renderOptions(q);
+  } else if (q.questiontype === "Date") {
+    return renderDate(q);
+  } else if (q.questiontype === "Rate") {   // ✅ Added
+    return renderRate(q);
+  } else {
+    return renderText(q);
+  }
+}
 
+  </script>
+<script>
+document.getElementById('questiontype').addEventListener('change', function() {
+    var rateDiv = document.getElementById('rateMaxDiv');
+    if (this.value === 'Rate') {
+        rateDiv.style.display = 'block';
+    } else {
+        rateDiv.style.display = 'none';
+    }
+});
+</script>
 
 
 

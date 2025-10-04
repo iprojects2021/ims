@@ -585,15 +585,10 @@ $feedbackMessages   = getUnreadNotifications($db, $userid, 'feedback', $role);
     </li> -->
 
 
+   
     <li class="nav-item">
       <a href="evaluations.php" class="nav-link">
-        <i class="nav-icon fas fa-clipboard-check"></i>
-        <p>Evaluations</p>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a href="evaluations.php" class="nav-link">
-      <i class="nav-icon fas fa-lightbulb"></i>
+      <i class="nav-icon fas fa-clipboard-check"></i>
         <p>Evaluations <?php if ($notificationCounts['feedback'] > 0): ?>
         <span class="right badge badge-danger">
           New <?php echo $notificationCounts['feedback']; ?>

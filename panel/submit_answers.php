@@ -4,80 +4,88 @@ include("../panel/util/session.php");
 
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $userid = $_SESSION['user']['id']; // from session
-        $status = "Submitted";
-        $type   = "feedback"; // feedback form type
-        $createdBy = $userid;   // who created the notification
 
-        $insertSuccess = false;
-
-        // loop through answers
-        foreach ($_POST['answers'] as $questionid => $answer) {
-            $stmt = $db->prepare("INSERT INTO evaluationfeedbackanswer
-                (userid, status, type, questionid, answer, attendance_score, quality_score, technical_score, communication_score, initiative_score, teamwork_score, overall_score, comments, improvement_suggestions)
-                VALUES (:userid, :status, :type, :questionid, :answer, :attendance_score, :quality_score, :technical_score, :communication_score, :initiative_score, :teamwork_score, :overall_score, :comments, :improvement_suggestions)");
-
-            $insertSuccess = $stmt->execute([
-                ':userid' => $userid,
-                ':status' => $status,
-                ':type'   => $type,
-                ':questionid' => $questionid,
-                ':answer' => is_array($answer) ? json_encode($answer) : $answer, 
-                ':attendance_score' => $_POST['attendance_score'] ?? null,
-                ':quality_score' => $_POST['quality_score'] ?? null,
-                ':technical_score' => $_POST['technical_score'] ?? null,
-                ':communication_score' => $_POST['communication_score'] ?? null,
-                ':initiative_score' => $_POST['initiative_score'] ?? null,
-                ':teamwork_score' => $_POST['teamwork_score'] ?? null,
-                ':overall_score' => $_POST['overall_score'] ?? null,
-                ':comments' => $_POST['comments'] ?? null,
-                ':improvement_suggestions' => $_POST['improvement_suggestions'] ?? null,
-            ]);
+        if (!isset($_POST['answers']) || !is_array($_POST['answers'])) {
+            throw new Exception("No answers submitted.");
         }
 
-        // If feedback insertion was successful, add notification
-        if ($insertSuccess) {
-            $menuItem = 'feedback';
-            $notificationMessage = "New Feedback submitted by Student ID: " . $userid;
+        $userid = $_SESSION['user']['id']; // Current user
+        $status = "Submitted";
+        $type   = "feedback";  // Feedback form type
+        $createdBy = $userid;  // Who created notification
 
-            try {
-                $notifSql = "INSERT INTO notification (userid, menu_item, isread, message, createdBy) 
-                             VALUES ('admin', :menu_item, 0, :message, :createdBy)";
-                $notifStmt = $db->prepare($notifSql);
-                $notifStmt->execute([
-                    ':menu_item' => $menuItem,
-                    ':message' => $notificationMessage,
-                    ':createdBy' => $createdBy
-                ]);
-            } catch (Exception $e) {
-                // Log error if you have logger
-                // $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
+        // Begin transaction to ensure atomic inserts
+        $db->beginTransaction();
+        $allInserted = true;
+
+        foreach ($_POST['answers'] as $questionid => $answer) {
+            $stmt = $db->prepare("
+                INSERT INTO evaluationfeedbackanswer
+                (userid, status, type, questionid, answer)
+                VALUES (:userid, :status, :type, :questionid, :answer)
+            ");
+
+            $success = $stmt->execute([
+                ':userid' => $userid,
+                ':status' => $status,
+                ':type' => $type,
+                ':questionid' => $questionid,
+                ':answer' => is_array($answer) ? json_encode($answer) : $answer
+            ]);
+
+            if (!$success) {
+                $allInserted = false;
+                break;
             }
         }
 
-        // Success message
-        echo "
-        <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
-                    z-index: 1050; width: 400px; max-width: 90%;'>
-            <div class='alert alert-success alert-dismissible fade show' role='alert' id='statusAlert' 
-                style='box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-                       background: linear-gradient(90deg, #4CAF50, #81C784); 
-                       color: white; 
-                       font-weight: bold;'>
-                Feedback Submitted Successfully
+        if ($allInserted) {
+            // Insert notification for admin
+            $notifSql = "
+                INSERT INTO notification (userid, menu_item, isread, message, createdBy)
+                VALUES ('admin', :menu_item, 0, :message, :createdBy)
+            ";
+            $notifStmt = $db->prepare($notifSql);
+            $notifStmt->execute([
+                ':menu_item' => 'feedback',
+                ':message' => "New Feedback submitted by Student ID: " . $userid,
+                ':createdBy' => $createdBy
+            ]);
+
+            $db->commit();
+
+            echo "
+            <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                        z-index: 1050; width: 400px; max-width: 90%;'>
+                <div class='alert alert-success alert-dismissible fade show' role='alert' 
+                    style='box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+                           background: linear-gradient(90deg, #4CAF50, #81C784); 
+                           color: white; 
+                           font-weight: bold;'>
+                    Feedback Submitted Successfully
+                </div>
             </div>
-        </div>
-        <script>
-            setTimeout(function() {
-                window.location.href = 'evaluations.php';
-            }, 1000);
-        </script>
-        ";
+            <script>
+                setTimeout(function() {
+                    window.location.href = 'evaluations.php';
+                }, 1000);
+            </script>
+            ";
+        } else {
+            $db->rollBack();
+            throw new Exception("Error submitting some feedback answers.");
+        }
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    // Error response
+    echo "
+    <div class='alert alert-danger' role='alert'>
+        Error: " . htmlspecialchars($e->getMessage()) . "
+    </div>
+    ";
 }
 ?>
+
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->

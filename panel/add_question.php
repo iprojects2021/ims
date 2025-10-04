@@ -16,22 +16,25 @@ try {
         $ans4 = $_POST['ans4'] ?? null;
         $textans = $_POST['textans'] ?? null;
         $status = 'active';
+        $ratemax = $_POST['ratemax'] ?? null;
 
-        $stmt = $db->prepare("INSERT INTO questions (userid, question, questiontype, category, ans1, ans2, ans3, ans4, textans, status) 
-                               VALUES (:userid, :question, :questiontype, :category, :ans1, :ans2, :ans3, :ans4, :textans, :status)");
 
-        $stmt->execute([
-            ':userid' => $userid,
-            ':question' => $question,
-            ':questiontype' => $questiontype,
-            ':category' => $category,
-            ':ans1' => $ans1,
-            ':ans2' => $ans2,
-            ':ans3' => $ans3,
-            ':ans4' => $ans4,
-            ':textans' => $textans,
-            ':status' => $status
-        ]);
+        $stmt = $db->prepare("INSERT INTO questions (userid, question, questiontype, category, ans1, ans2, ans3, ans4, textans, ratemax, status) 
+        VALUES (:userid, :question, :questiontype, :category, :ans1, :ans2, :ans3, :ans4, :textans, :ratemax, :status)");
+
+$stmt->execute([
+':userid' => $userid,
+':question' => $question,
+':questiontype' => $questiontype,
+':category' => $category,
+':ans1' => $ans1,
+':ans2' => $ans2,
+':ans3' => $ans3,
+':ans4' => $ans4,
+':textans' => $textans,
+':ratemax' => $ratemax,
+':status' => $status
+]);
 
         echo "
         <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
