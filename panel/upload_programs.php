@@ -24,19 +24,21 @@ try {
         fgetcsv($handle);
 
         $stmtInsert = $db->prepare("
-            INSERT INTO programs (
-                title, slug, short_description, detailed_description, duration,
-                start_date, end_date, is_remote, location, timezone, stipend_amount,
-                stipend_currency, is_paid, application_deadline, max_applicants,
-                is_active, SuperProgram, status, programtype, amount, mentorid
-            ) VALUES (
-                :title, :slug, :short_description, :detailed_description, :duration,
-                :start_date, :end_date, :is_remote, :location, :timezone, :stipend_amount,
-                :stipend_currency, :is_paid, :application_deadline, :max_applicants,
-                :is_active, :SuperProgram, :status, :programtype, :amount, :mentorid
-            )
-        ");
-
+        INSERT INTO programs (
+            SuperProgram, title, programtype, duration, amount,
+            short_description, detailed_description, start_date, end_date,
+            is_remote, timezone, is_paid, stipend_currency, stipend_amount,
+            application_deadline, max_applicants, status, slug,
+            location, is_active, mentorid
+        ) VALUES (
+            :SuperProgram, :title, :programtype, :duration, :amount,
+            :short_description, :detailed_description, :start_date, :end_date,
+            :is_remote, :timezone, :is_paid, :stipend_currency, :stipend_amount,
+            :application_deadline, :max_applicants, :status, :slug,
+            :location, :is_active, :mentorid
+        )
+    ");
+    
         $stmtCheck = $db->prepare("
             SELECT COUNT(*) FROM programs WHERE title = :title AND status = 'upcoming'
         ");
@@ -61,29 +63,29 @@ try {
             }
 
             $data = [
-                ':title'                => $title,
-                ':slug'                 => $row[1] ?? null,
-                ':short_description'    => $row[2] ?? null,
-                ':detailed_description' => $row[3] ?? null,
-                ':duration'             => $row[4] ?? null,
-                ':start_date'           => $row[5] ?? null,
-                ':end_date'             => $row[6] ?? null,
-                ':is_remote'            => $row[7] ?? 1,
-                ':location'             => $row[8] ?? null,
-                ':timezone'             => $row[9] ?? null,
-                ':stipend_amount'       => $row[10] ?? null,
-                ':stipend_currency'     => $row[11] ?? "USD",
-                ':is_paid'              => $row[12] ?? 0,
-                ':application_deadline' => $row[13] ?? null,
-                ':max_applicants'       => $row[14] ?? null,
-                ':is_active'            => $row[15] ?? 1,
-                ':SuperProgram'         => $row[16] ?? null,
-                ':status'               => $status,
-                ':programtype'          => $row[18] ?? null,
-                ':amount'               => $row[19] ?? null,
+                ':SuperProgram'         => $row[0] ?? null,
+                ':title'                => $row[1] ?? null,
+                ':programtype'          => $row[2] ?? null,
+                ':duration'             => $row[3] ?? null,
+                ':amount'               => $row[4] ?? null,
+                ':short_description'    => $row[5] ?? null,
+                ':detailed_description' => $row[6] ?? null,
+                ':start_date'           => $row[7] ?? null,
+                ':end_date'             => $row[8] ?? null,
+                ':is_remote'            => $row[9] ?? 1,
+                ':timezone'             => $row[10] ?? null,
+                ':is_paid'              => $row[11] ?? 0,
+                ':stipend_currency'     => $row[12] ?? "USD",
+                ':stipend_amount'       => $row[13] ?? null,
+                ':application_deadline' => $row[14] ?? null,
+                ':max_applicants'       => $row[15] ?? null,
+                ':status'               => $row[16] ?? null,
+                ':slug'                 => $row[17] ?? null,
+                ':location'             => $row[18] ?? null,
+                ':is_active'            => $row[19] ?? 1,
                 ':mentorid'             => $row[20] ?? null,
             ];
-
+            
             $stmtInsert->execute($data);
             $insertedCount++;
         }

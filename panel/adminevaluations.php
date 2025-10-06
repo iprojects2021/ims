@@ -146,14 +146,25 @@ try {
           <div class="col-sm-6">
                <div class="d-flex justify-content-between align-items-center mb-3">
   <h1 class="m-0">Dashboard</h1>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal">
+  
+<div class="form-group">
+<label for="feedback form" class="form-label">FeedBack Form</label>
+    <div class="custom-control custom-switch">
+        
+        <input type="checkbox" class="custom-control-input" id="toggle_feedback">
+        <label class="custom-control-label" for="toggle_feedback" id="status_text">OFF</label>
+    </div>
+</div>
+
+
+</div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal">
     Add Question
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#previewModal" id="previewBtn">
   Preview
 </button>
 
-</div>
 
           </div><!-- /.col -->
           <div class="col-sm-6">
@@ -217,6 +228,14 @@ try {
   <input type="text" name="category" id="category" class="form-control" list="categoryList" placeholder="Select or add category">
   <datalist id="categoryList"></datalist>
 </div>
+<div class="mb-3">
+  <label for="status" class="form-label">Status</label>
+  <select name="status" id="status" class="form-control" required>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+</div>
+
 
 
           <div id="mcqOptions">
@@ -240,6 +259,87 @@ try {
     </div>
   </div>
 </div>
+
+<!-- Edit Question Modal -->
+<!-- Edit Question Modal -->
+<div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="editQuestionModalLabel">Edit Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Edit Question Form -->
+      <form id="editQuestionForm" method="POST" action="update_questions.php">
+        <div class="modal-body">
+
+          <!-- Hidden ID -->
+          <input type="hidden" name="id" id="edit_id">
+
+          <!-- Question -->
+          <div class="mb-3">
+            <label for="edit_question" class="form-label">Question</label>
+            <textarea name="question" id="edit_question" class="form-control" required></textarea>
+          </div>
+
+          <!-- Question Type -->
+          <div class="mb-3">
+            <label for="edit_questiontype" class="form-label">Question Type</label>
+            <select name="questiontype" id="edit_questiontype" class="form-control" required>
+              <option value="MCQ">MCQ</option>
+              <option value="Text">Text</option>
+              <option value="Date">Date</option>
+              <option value="Rate">Rate</option>
+            </select>
+          </div>
+
+          <!-- Maximum Rating (Visible only for Rate type) -->
+          <div class="mb-3" id="editRateDiv" style="display:none;">
+            <label for="edit_ratemax" class="form-label">Maximum Rating</label>
+            <input type="number" name="ratemax" id="edit_ratemax" class="form-control" min="1" max="20" value="10">
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label for="edit_category" class="form-label">Category</label>
+            <input type="text" name="category" id="edit_category" class="form-control" list="categoryList" placeholder="Select or add category">
+          </div>
+
+          <!-- Status -->
+          <div class="mb-3">
+            <label for="edit_status" class="form-label">Status</label>
+            <select name="status" id="edit_status" class="form-control" required>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+
+          <!-- MCQ Options -->
+          <div id="edit_mcq_options">
+            <div class="mb-3"><input type="text" name="ans1" id="edit_ans1" class="form-control" placeholder="Option 1"></div>
+            <div class="mb-3"><input type="text" name="ans2" id="edit_ans2" class="form-control" placeholder="Option 2"></div>
+            <div class="mb-3"><input type="text" name="ans3" id="edit_ans3" class="form-control" placeholder="Option 3"></div>
+            <div class="mb-3"><input type="text" name="ans4" id="edit_ans4" class="form-control" placeholder="Option 4"></div>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update Question</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
 <!-- Preview Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -367,7 +467,7 @@ try {
               </thead>
               <tbody>
               <?php foreach ($allquestionslist as $data): ?>
-                <tr>
+                <tr class="clickable-row" data-id="<?= $data['id'] ?>">
                   <td><?= htmlspecialchars($data['id']) ?></td>
                   <td><?= nl2br(htmlspecialchars($data['userid'])) ?></td>
                   <td><?= htmlspecialchars($data['question']) ?></td>
@@ -510,7 +610,7 @@ try {
 <script src="dist/js/adminlte.min.js"></script>
 <!-- Hidden form to send POST -->
 <!-- Hidden Form for Submitting Program ID -->
-<form id="postForm" method="POST" action="#" style="display:none;">
+<!-- <form id="postForm" method="POST" action="#" style="display:none;">
     <input type="hidden" name="program_id" id="hiddenId">
 </form>
 
@@ -522,7 +622,7 @@ try {
       document.getElementById('postForm').submit();
     });
   });
-</script>
+</script> -->
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -728,7 +828,110 @@ document.getElementById('questiontype').addEventListener('change', function() {
     }
 });
 </script>
+<script>
+  $(document).ready(function() {
 
+// Load current status on page load
+$.get('toggle_feedback.php', {action: 'get_status'}, function(data){
+    if(data.status){
+        let isEnabled = (data.status === 'enabled feedback form');
+        $('#toggle_feedback').prop('checked', isEnabled);
+        $('#status_text').text(isEnabled ? 'ON' : 'OFF');
+    }
+}, 'json');
+
+// Update all rows when toggle is clicked
+$('#toggle_feedback').change(function(){
+    $.post('toggle_feedback.php', {action: 'toggle_all'}, function(data){
+        if(data.status){
+            let isEnabled = (data.status === 'enabled feedback form');
+            $('#toggle_feedback').prop('checked', isEnabled);
+            $('#status_text').text(isEnabled ? 'ON' : 'OFF');
+        }
+    }, 'json');
+});
+
+});
+
+</script>
+
+<script>
+$(document).ready(function() {
+  // 🔹 When a row is clicked
+  $('.clickable-row').on('click', function() {
+    const questionId = $(this).data('id');
+
+    // Fetch that question’s data using AJAX
+    $.ajax({
+      url: 'fetch_question_for_edit.php',
+      type: 'GET',
+      data: { id: questionId },
+      dataType: 'json',
+      success: function(q) {
+        // Fill form fields in modal
+        $('#edit_id').val(q.id);
+        $('#edit_question').val(q.question);
+        $('#edit_questiontype').val(q.questiontype);
+        $('#edit_category').val(q.category);
+        $('#edit_status').val(q.status);
+        $('#edit_ratemax').val(q.ratemax || 10);
+
+        // Show/hide Rate field based on type
+        if (q.questiontype === 'Rate') {
+          $('#editRateDiv').show();
+        } else {
+          $('#editRateDiv').hide();
+        }
+
+        // Show MCQ options only if type is MCQ
+        if (q.questiontype === 'MCQ') {
+          $('#edit_mcq_options').show();
+          $('#edit_ans1').val(q.ans1);
+          $('#edit_ans2').val(q.ans2);
+          $('#edit_ans3').val(q.ans3);
+          $('#edit_ans4').val(q.ans4);
+        } else {
+          $('#edit_mcq_options').hide();
+        }
+
+        // Finally show the modal
+        $('#editQuestionModal').modal('show');
+      },
+      error: function() {
+        alert('❌ Failed to load question details.');
+      }
+    });
+  });
+
+  // 🔹 Toggle Rate input inside modal
+  $('#edit_questiontype').on('change', function() {
+    if ($(this).val() === 'Rate') {
+      $('#editRateDiv').show();
+    } else {
+      $('#editRateDiv').hide();
+    }
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Show/Hide Rate field when type is changed
+  document.getElementById('edit_questiontype').addEventListener('change', function() {
+    if (this.value === 'Rate') {
+      document.getElementById('editRateDiv').style.display = 'block';
+    } else {
+      document.getElementById('editRateDiv').style.display = 'none';
+    }
+
+    if (this.value === 'MCQ') {
+      document.getElementById('edit_mcq_options').style.display = 'block';
+    } else {
+      document.getElementById('edit_mcq_options').style.display = 'none';
+    }
+  });
+});
+</script>
 
 
 

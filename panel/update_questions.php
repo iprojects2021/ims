@@ -4,9 +4,9 @@ include("../panel/util/session.php");
 include("../panel/util/statuscolour.php");
 
 try {
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $userid =$_SESSION['user']['id'];
+        $id = $_POST['id'];
+        $userid = $_SESSION['user']['id'];
         $question = $_POST['question'];
         $questiontype = $_POST['questiontype'];
         $category = $_POST['category'] ?? null;
@@ -18,33 +18,46 @@ try {
         $status = $_POST['status'];
         $ratemax = $_POST['ratemax'] ?? null;
 
+        $stmt = $db->prepare("
+            UPDATE questions 
+            SET 
+                question = :question,
+                questiontype = :questiontype,
+                category = :category,
+                ans1 = :ans1,
+                ans2 = :ans2,
+                ans3 = :ans3,
+                ans4 = :ans4,
+                textans = :textans,
+                ratemax = :ratemax,
+                status = :status
+            WHERE id = :id AND userid = :userid
+        ");
 
-        $stmt = $db->prepare("INSERT INTO questions (userid, question, questiontype, category, ans1, ans2, ans3, ans4, textans, ratemax, status) 
-        VALUES (:userid, :question, :questiontype, :category, :ans1, :ans2, :ans3, :ans4, :textans, :ratemax, :status)");
-
-$stmt->execute([
-':userid' => $userid,
-':question' => $question,
-':questiontype' => $questiontype,
-':category' => $category,
-':ans1' => $ans1,
-':ans2' => $ans2,
-':ans3' => $ans3,
-':ans4' => $ans4,
-':textans' => $textans,
-':ratemax' => $ratemax,
-':status' => $status
-]);
+        $stmt->execute([
+            ':id' => $id,
+            ':userid' => $userid,
+            ':question' => $question,
+            ':questiontype' => $questiontype,
+            ':category' => $category,
+            ':ans1' => $ans1,
+            ':ans2' => $ans2,
+            ':ans3' => $ans3,
+            ':ans4' => $ans4,
+            ':textans' => $textans,
+            ':ratemax' => $ratemax,
+            ':status' => $status
+        ]);
 
         echo "
         <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
                     z-index: 1050; width: 400px; max-width: 90%;'>
             <div class='alert alert-success alert-dismissible fade show' role='alert' id='statusAlert' 
                 style='box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-                       background: linear-gradient(90deg, #4CAF50, #81C784); 
+                       background: linear-gradient(90deg, #2196F3, #64B5F6); 
                        color: white; 
                        font-weight: bold;'>
-                Question Added Successfully
+                Question Updated Successfully
             </div>
         </div>
         <script>
@@ -53,13 +66,10 @@ $stmt->execute([
             }, 1000);
         </script>
         ";
-        
-
-        // echo "<script>alert('Question added successfully');window.location.href='your_page.php';</script>";
     }
 
 } catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    echo 'Error: ' . $e->getMessage();
 }
 ?>
 <!-- Google Font: Source Sans Pro -->
