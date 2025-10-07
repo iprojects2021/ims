@@ -227,7 +227,7 @@
             <!-- Basic Plan -->
              <div class="plan">
                 <h3><i class="fas fa-star"></i> Basic</h3>
-                <div class="price">₹1,000 <span>/ 15 Days</span></div>
+                <div class="price" data-inr="1000">₹1,000 <span>/ 15 Days</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Live Meetings</li>
                     <li><i class="fas fa-check"></i> Learning: Quick exposure Projects</li>
@@ -243,7 +243,7 @@
             </div>
             <div class="plan">
                 <h3><i class="fas fa-star"></i> Advanced</h3>
-                <div class="price">₹2,000 <span>/ 1 Month</span></div>
+                <div class="price" data-inr="2000">₹2,000 <span>/ 1 Month</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Learning: Intensive Learning</li>
@@ -259,7 +259,7 @@
             <!-- Premium Plan -->
             <div class="plan">
                 <h3><i class="fas fa-rocket"></i> Professional</h3>
-                <div class="price">₹5,000 <span>/ 3 months</span></div>
+                <div class="price" data-inr="5000">₹5,000 <span>/ 3 months</span></div>
                 <ul class="features">
                     
                     <li><i class="fas fa-check"></i> 10+ mentor-guided projects task</li>
@@ -274,7 +274,7 @@
             <!-- Pro Plan (Most Popular) -->
             <div class="plan pro">
                 <h3><i class="fas fa-crown"></i> Elite</h3>
-                <div class="price">₹8,000 <span>/ 6 months</span></div>
+                <div class="price" data-inr="8000">₹8,000 <span>/ 6 months</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> 1:1 mentorship</li>
                     <li><i class="fas fa-check"></i> Learning: Deep Learning</li>
@@ -299,5 +299,35 @@
             </div>
         </div>
     </div>
+    <script>
+// Currency Conversion
+document.addEventListener("DOMContentLoaded", () => {
+    const symbols = { INR: "₹", USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", JPY: "¥", SGD: "S$", AED: "د.إ" };
+
+    fetch("https://ipapi.co/json/")
+        .then(res => res.json())
+        .then(location => {
+            const currency = location.currency || "INR";
+
+            fetch("https://open.er-api.com/v6/latest/INR")
+                .then(res => res.json())
+                .then(data => {
+                    const rate = data.rates[currency] || 1;
+                    const symbol = symbols[currency] || currency + " ";
+
+                    document.querySelectorAll(".price").forEach(el => {
+                        const base = parseFloat(el.getAttribute("data-inr"));
+                        const durationHTML = el.querySelector("span")?.outerHTML || "";
+                        const converted = (base * rate).toFixed(2);
+                        el.innerHTML = `${symbol}${Number(converted).toLocaleString()} ${durationHTML}`;
+                    });
+                })
+                .catch(err => console.error("Exchange API Error:", err));
+        })
+        .catch(err => console.error("IP API Error:", err));
+});
+</script>
 </body>
+
+
 </html>
