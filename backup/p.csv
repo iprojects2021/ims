@@ -1,0 +1,4 @@
+SuperProgram,title,programtype,duration,amount,short_description,detailed_description,start_date,end_date,is_remote,timezone,is_paid,stipend_currency,stipend_amount,application_deadline,max_applicants,status,slug,location,is_active,mentorid
+TechSeries,AI Bootcamp,Technical,3 Months,50000,"Learn the fundamentals of AI","This intensive bootcamp covers Python, ML basics, and real projects.",2025-11-01,2026-01-31,1,Asia/Kolkata,1,INR,50000,2025-10-20,100,Active,ai-bootcamp-online,Online,1,12
+BizSeries,Startup Mastery,Business,2 Months,30000,"Master startup basics","Includes mentorship and startup pitch sessions.",2025-12-01,2026-01-31,0,Asia/Kolkata,1,INR,30000,2025-11-15,50,Active,startup-mastery,mumbai,1,8
+DesignSeries,UX Design Workshop,Design,1 Month,20000,"UI/UX fundamentals","Practical workshop to create real-world UX projects.",2025-10-20,2025-11-20,1,Asia/Kolkata,0,INR,0,2025-10-10,40,Inactive,ux-design-workshop,online,0,10

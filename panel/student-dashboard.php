@@ -89,6 +89,124 @@ foreach ($referralCounts as $row) {
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
   <style>
+  /* ================= REWARDS SECTION ================= */
+.rewards-section {
+    background: linear-gradient(135deg, #ffffff, #f9faff);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px 30px;
+    text-align: center;
+    margin-top: 40px;
+    transition: box-shadow 0.3s ease;
+}
+
+.rewards-section:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.rewards-section p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 25px;
+}
+
+/* Reward Grid */
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Individual Reward Card */
+.reward-card {
+    background: var(--white);
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.reward-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(74,107,255,0.08), transparent 70%);
+    transform: rotate(25deg);
+    z-index: 0;
+}
+
+.reward-card:hover {
+    transform: translateY(-7px) scale(1.02);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+/* Icon */
+.reward-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 18px;
+    z-index: 1;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.reward-card:hover .reward-icon {
+    transform: rotate(8deg) scale(1.1);
+}
+
+/* Title */
+.reward-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-color);
+    z-index: 1;
+    position: relative;
+}
+
+/* Reward Amount */
+.reward-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-bottom: 12px;
+    z-index: 1;
+    position: relative;
+}
+
+/* Description */
+.reward-desc {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    z-index: 1;
+    position: relative;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rewards-section {
+        padding: 25px 15px;
+    }
+    .reward-card {
+        padding: 20px;
+    }
+    .reward-icon {
+        font-size: 2.5rem;
+    }
+    .reward-amount {
+        font-size: 1.3rem;
+    }
+}
+</style>
+  <style>
      :root {
             --primary-color: #4361ee;
             --secondary-color: #3f37c9;
@@ -401,6 +519,40 @@ foreach ($referralCounts as $row) {
   </div>
 
         </div>
+        <section class="rewards-section">
+            
+            <p>Here's what you can earn when your referrals enroll in our programs</p>
+            
+            <div class="rewards-grid">
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="reward-title">Basic Enrollment</h3>
+                    <div class="reward-amount">₹100</div>
+                    <p class="reward-desc">When a friend enrolls in any basic internship program</p>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="reward-title">Tech Program</h3>
+                    <div class="reward-amount">₹500</div>
+                    <p class="reward-desc">When a friend enrolls in a technical internship</p>
+                </div>
+                
+                           
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3 class="reward-title">Premium Program</h3>
+                    <div class="reward-amount">₹800</div>
+                    <p class="reward-desc">When a friend enrolls in a premium internship</p>
+                </div>
+            </div>
+        </section>
     
       </div><!-- /.container-fluid -->
     </section>
