@@ -253,6 +253,9 @@ if (isset($_GET['internship'])) {
         case 'DatabaseBackendDeveloperIntern':
             include('DatabaseBackendDeveloperIntern.php');
             break;
+        case 'DigitalMarketingIntern':
+            include('DigitalMarketingIntern.php');
+            break;
 
     }
     include('../pageinclude/chooseplan.php'); 

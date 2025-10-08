@@ -692,6 +692,31 @@ $role = $_SESSION['user']['role'] ?? null;
                 </ul>
                 <a href="internshipprogram/internship.php?internship=DatabaseBackendDeveloperIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
             </div>
+            <!-- Digital Marketing Intern -->
+            <div class="track-card">
+                <div class="track-header">
+                    <div class="track-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="track-title">Digital Marketing Intern</h3>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-pill">Google Ads</span>
+                    <span class="tech-pill">Google Analytics</span>
+                    <span class="tech-pill">SEO</span>
+                    <span class="tech-pill">Social Media Marketing</span>
+                </div>
+                <p>Plan and analyze digital marketing campaigns to boost brand visibility, engagement, and lead generation.</p>
+                <ul class="benefits-list">
+                    <li class="benefit-item"><i class="fas fa-check"></i> Search Engine Optimization (SEO)</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Social Media Marketing (SMM)</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Content Marketing</li>
+                    <li class="benefit-item"><i class="fas fa-check"></i> Email & Influencer Marketing</li>
+                </ul>
+                <a href="internshipprogram/internship.php?internship=DigitalMarketingIntern" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">View Curriculum</a>
+            </div>
+            
+        </div>
             
         </div>
         
