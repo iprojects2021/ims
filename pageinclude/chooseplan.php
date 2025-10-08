@@ -299,34 +299,7 @@
             </div>
         </div>
     </div>
-    <script>
-// Currency Conversion
-document.addEventListener("DOMContentLoaded", () => {
-    const symbols = { INR: "₹", USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", JPY: "¥", SGD: "S$", AED: "د.إ" };
-
-    fetch("https://ipapi.co/json/")
-        .then(res => res.json())
-        .then(location => {
-            const currency = location.currency || "INR";
-
-            fetch("https://open.er-api.com/v6/latest/INR")
-                .then(res => res.json())
-                .then(data => {
-                    const rate = data.rates[currency] || 1;
-                    const symbol = symbols[currency] || currency + " ";
-
-                    document.querySelectorAll(".price").forEach(el => {
-                        const base = parseFloat(el.getAttribute("data-inr"));
-                        const durationHTML = el.querySelector("span")?.outerHTML || "";
-                        const converted = (base * rate).toFixed(2);
-                        el.innerHTML = `${symbol}${Number(converted).toLocaleString()} ${durationHTML}`;
-                    });
-                })
-                .catch(err => console.error("Exchange API Error:", err));
-        })
-        .catch(err => console.error("IP API Error:", err));
-});
-</script>
+    
 </body>
 
 
