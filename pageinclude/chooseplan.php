@@ -227,7 +227,6 @@
             <!-- Basic Plan -->
              <div class="plan">
                 <h3><i class="fas fa-star"></i> Basic</h3>
-                <div class="price" data-inr="1000">₹1,000 <span>/ 15 Days</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Live Meetings</li>
                     <li><i class="fas fa-check"></i> Learning: Quick exposure Projects</li>
@@ -243,7 +242,6 @@
             </div>
             <div class="plan">
                 <h3><i class="fas fa-star"></i> Advanced</h3>
-                <div class="price" data-inr="2000">₹2,000 <span>/ 1 Month</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Learning: Intensive Learning</li>
@@ -259,7 +257,6 @@
             <!-- Premium Plan -->
             <div class="plan">
                 <h3><i class="fas fa-rocket"></i> Professional</h3>
-                <div class="price" data-inr="5000">₹5,000 <span>/ 3 months</span></div>
                 <ul class="features">
                     
                     <li><i class="fas fa-check"></i> 10+ mentor-guided projects task</li>
@@ -274,7 +271,6 @@
             <!-- Pro Plan (Most Popular) -->
             <div class="plan pro">
                 <h3><i class="fas fa-crown"></i> Elite</h3>
-                <div class="price" data-inr="8000">₹8,000 <span>/ 6 months</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> 1:1 mentorship</li>
                     <li><i class="fas fa-check"></i> Learning: Deep Learning</li>
