@@ -1,3 +1,141 @@
+<?php
+include("../includes/db.php");
+include("../panel/util/session.php");
+
+try {
+    if (!isset($_FILES['program_file'])) {
+        die("❌ No file received in \$_FILES.");
+    }
+
+    if ($_FILES['program_file']['error'] !== UPLOAD_ERR_OK) {
+        die("❌ Upload error code: " . $_FILES['program_file']['error']);
+    }
+
+    $fileTmpPath = $_FILES['program_file']['tmp_name'];
+    $fileName    = $_FILES['program_file']['name'];
+
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    if ($fileExtension !== 'csv') {
+        die("❌ Only CSV files are allowed.");
+    }
+
+    if (($handle = fopen($fileTmpPath, "r")) !== false) {
+        // Skip header row
+        fgetcsv($handle);
+
+        $stmtInsert = $db->prepare("
+        INSERT INTO programs (
+            SuperProgram, title, programtype, duration, amount,
+            short_description, detailed_description, start_date, end_date,
+            is_remote, timezone, is_paid, stipend_currency, stipend_amount,
+            application_deadline, max_applicants, status, slug,
+            location, is_active, mentorid
+        ) VALUES (
+            :SuperProgram, :title, :programtype, :duration, :amount,
+            :short_description, :detailed_description, :start_date, :end_date,
+            :is_remote, :timezone, :is_paid, :stipend_currency, :stipend_amount,
+            :application_deadline, :max_applicants, :status, :slug,
+            :location, :is_active, :mentorid
+        )
+    ");
+    
+        $stmtCheck = $db->prepare("
+            SELECT COUNT(*) FROM programs WHERE title = :title AND status = 'upcoming'
+        ");
+
+        $insertedCount = 0;
+        $skippedCount = 0;
+        $skippedTitles = [];
+
+        while (($row = fgetcsv($handle, 1000, ",")) !== false) {
+
+            $title = trim($row[0] ?? '');
+            $status = strtolower(trim($row[17] ?? 'upcoming'));
+
+            if ($title === '') continue; // skip empty titles
+
+            // Check for duplicates
+            $stmtCheck->execute([':title' => $title]);
+            if ($stmtCheck->fetchColumn() > 0 && $status === 'upcoming') {
+                $skippedCount++;
+                $skippedTitles[] = $title;
+                continue; // skip this row
+            }
+
+            $data = [
+                ':SuperProgram'         => $row[0] ?? null,
+                ':title'                => $row[1] ?? null,
+                ':programtype'          => $row[2] ?? null,
+                ':duration'             => $row[3] ?? null,
+                ':amount'               => $row[4] ?? null,
+                ':short_description'    => $row[5] ?? null,
+                ':detailed_description' => $row[6] ?? null,
+                ':start_date'           => $row[7] ?? null,
+                ':end_date'             => $row[8] ?? null,
+                ':is_remote'            => $row[9] ?? 1,
+                ':timezone'             => $row[10] ?? null,
+                ':is_paid'              => $row[11] ?? 0,
+                ':stipend_currency'     => $row[12] ?? "USD",
+                ':stipend_amount'       => $row[13] ?? null,
+                ':application_deadline' => $row[14] ?? null,
+                ':max_applicants'       => $row[15] ?? null,
+                ':status'               => $row[16] ?? null,
+                ':slug'                 => $row[17] ?? null,
+                ':location'             => $row[18] ?? null,
+                ':is_active'            => $row[19] ?? 1,
+                ':mentorid'             => $row[20] ?? null,
+            ];
+            
+            $stmtInsert->execute($data);
+            $insertedCount++;
+        }
+
+        fclose($handle);
+
+        // Show result message
+        $message = "$insertedCount program(s) imported successfully.";
+        if ($skippedCount > 0) {
+            $message .= " $skippedCount duplicate program(s) were skipped: " . implode(", ", $skippedTitles);
+            $alertClass = "alert-warning";
+        } else {
+            $alertClass = "alert-success";
+        }
+
+        echo "
+        <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+                    z-index: 1050; width: 400px; max-width: 90%;'>
+            <div class='alert $alertClass alert-dismissible fade show' role='alert' id='statusAlert' style='box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>
+                $message
+            </div>
+        </div>
+        <script>
+            setTimeout(function() {
+                window.location.href = 'admin_addprogrms.php';
+            }, 5000);
+        </script>
+        ";
+
+    } else {
+        die("❌ Error reading the uploaded CSV file.");
+    }
+
+} catch (PDOException $e) {
+    echo "
+    <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
+        z-index: 1050; width: 400px; max-width: 90%;'>
+        <div class='alert alert-danger alert-dismissible fade show' role='alert' id='statusAlert' style='box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>
+            Database error: " . htmlspecialchars($e->getMessage()) . "
+        </div>
+    </div>
+    <script>
+        setTimeout(function() {
+            window.location.href = 'admin_addprogrms.php';
+        }, 5000);
+    </script>
+    ";
+}
+?>
+
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -53,89 +191,3 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
 
-<?php
-include("../includes/db.php");
-include("../panel/util/session.php");
-
-include("../vendor/autoload.php");
-
-use PhpOffice\PhpSpreadsheet\IOFactory;
-
-
-
-// Handle file upload
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['program_file']) ) {
-    $file = $_FILES['program_file']['tmp_name'];
-
-    try {
-        $spreadsheet = IOFactory::load($file);
-        $sheet = $spreadsheet->getActiveSheet();
-        $rows = $sheet->toArray();
-
-        // Skip the header row
-        $header = array_shift($rows);
-
-        $sql = "INSERT INTO programs (
-            title, slug, short_description, detailed_description, duration,
-            start_date, end_date, is_remote, location, timezone,
-            stipend_amount, stipend_currency, is_paid, application_deadline,
-            max_applicants, is_active, SuperProgram, status, programtype, amount, mentorid
-        ) VALUES (
-            :title, :slug, :short_description, :detailed_description, :duration,
-            :start_date, :end_date, :is_remote, :location, :timezone,
-            :stipend_amount, :stipend_currency, :is_paid, :application_deadline,
-            :max_applicants, :is_active, :SuperProgram, :status, :programtype, :amount, :mentorid
-        )";
-
-        $stmt = $db->prepare($sql);
-
-        foreach ($rows as $row) {
-            $stmt->execute([
-                ':title' => $row[0],
-                ':slug' => $row[1],
-                ':short_description' => $row[2],
-                ':detailed_description' => $row[3],
-                ':duration' => $row[4],
-                ':start_date' => $row[5],
-                ':end_date' => $row[6] ?: null,
-                ':is_remote' => $row[7] ?: 0,
-                ':location' => $row[8],
-                ':timezone' => $row[9],
-                ':stipend_amount' => $row[10] ?: null,
-                ':stipend_currency' => $row[11] ?: 'USD',
-                ':is_paid' => $row[12] ?: 0,
-                ':application_deadline' => $row[13] ?: null,
-                ':max_applicants' => $row[14] ?: null,
-                ':is_active' => $row[15] ?: 1,
-                ':SuperProgram' => $row[16],
-                ':status' => $row[17],
-                ':programtype' => $row[18],
-                ':amount' => $row[19],
-                ':mentorid' => $row[20]
-
-            ]);  
-        }
-
-        //echo "Programs imported successfully!";
-        echo '
-    <div class="container mt-3">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <h5><i class="icon fas fa-check"></i> Success!</h5>
-            Programs imported successfully
-        </div>
-    </div>
-
-    <script>
-        setTimeout(function() {
-            window.location.href = "admin_addprogrms.php";
-        }, 3000);
-    </script>
-';
-
-    } catch (Exception $e) {
-        echo "Error processing file: " . $e->getMessage();
-    }
-} else {
-    echo "No file uploaded.";
-}
-?>

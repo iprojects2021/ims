@@ -1,9 +1,13 @@
 <?php
+include 'includes/db.php';
+include('panel/util/PdoSessionHandler.php');
+// Use the custom session handler
+$handler = new PdoSessionHandler($db);
+session_set_save_handler($handler, true);
 session_start();
-
-// Example: Assume the role is stored in session
 $role = $_SESSION['user']['role'] ?? null;
 ?>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -148,16 +152,13 @@ $role = $_SESSION['user']['role'] ?? null;
             background: var(--secondary);
         }
     /* Hero */
-    .hero {
-      height: 440px;
-      background-image: url("assets/images/banner1.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #fff;
-      margin: 2rem auto;
-      max-width: 1500px;
-    }
+    .hero-section {
+            background: linear-gradient(135deg, #6c63ff 0%, #4a3fcf 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
 
     /* Internships */
     .internships {
@@ -367,8 +368,8 @@ $role = $_SESSION['user']['role'] ?? null;
   <!-- 🔍 Search Bar -->
   <div class="search-wrapper">
     <div class="custom-search">
-      <input type="text" placeholder="What are you looking for? e.g Design, Mumbai, Infosys">
-      <button><i class="fas fa-search"></i></button>
+      <input type="text" placeholder="Learn, Build, Work on Real Projects with Prfossional Experience">
+      
     </div>
   </div>
 <div class="services-grid">
@@ -406,8 +407,8 @@ $role = $_SESSION['user']['role'] ?? null;
                 <p class="service-desc">
                     Resume building, mock interviews, and coding bootcamps to make you job-ready.
                 </p>
-                <a href="developmentinternships.php" class="btn">Learn More</a>
-                <!-- <a href="interviewpreparation.php" class="btn">Learn More</a> -->
+                
+                <a href="interviewpreparation.php" class="btn">Learn More</a> 
             </div>
                    <!-- Service 1 -->
             <div class="service-card">
@@ -422,13 +423,18 @@ $role = $_SESSION['user']['role'] ?? null;
             </div>
            
         </div>
-  <!-- 📢 Hero Section -->
-  <div class="hero"></div>
-
+        <br><br>
+  <!-- Hero Section -->
+        <div class="hero-section text-center" id="contact">
+            <h1 style="text-align: center;  margin-bottom: 1rem;"><i class="fas fa-graduation-cap"></i> Start Today → Gain Career Opportunities Tomorrow!</h1>
+            <h3 style="text-align: center; color:  margin-bottom: 1rem;" class="my-3">Enroll Today, Start Tomorrow!</h3>
+            <p style="text-align: center; color:  margin-bottom: 1rem;" class="lead">Stop Waiting. Start Building Your Future Now. ⚡</p>
+        </div>
+<br><br>
   <!-- 📍 Popular Cities -->
   <section class="internships">
     <h2>Internships</h2>
-    <p>Apply to 10,000+ internships for free</p>
+    <p>Your Resume Needs Projects. Let’s Add Them Today.</p>
     <div class="cities">
       <div class="city-box"><img src="assets/images/1wfh.png"><p>Work from home</p></div>
       <div class="city-box"><img src="assets/images/2delhi.png"><p>Delhi/NCR</p></div>
@@ -443,12 +449,12 @@ $role = $_SESSION['user']['role'] ?? null;
   <section class="categories">
     <h2 class="img-title">Popular categories</h2>
     <div class="images">
-      <div class="box"><a href="#"><img src="assets/images/cat1.png"><p>Information Technology</p></a></div>
-      <div class="box"><a href="#"><img src="assets/images/cat2.png"><p>Business Management</p></a></div>
-      <div class="box"><a href="#"><img src="assets/images/cat3.png"><p>Humanities</p></a></div>
-      <div class="box"><a href="#"><img src="assets/images/cat4.png"><p>Science & Technology</p></a></div>
-      <div class="box"><a href="#"><img src="assets/images/cat5.png"><p>Law</p></a></div>
-      <div class="box"><a href="#"><img src="assets/images/cat6.png"><p>Architecture</p></a></div>
+      <div class="box"><a><img src="assets/images/cat1.png"><p>Information Technology</p></a></div>
+      <div class="box"><a ><img src="assets/images/cat2.png"><p>Business Management</p></a></div>
+      <div class="box"><a ><img src="assets/images/cat3.png"><p>HR Admin</p></a></div>
+      <div class="box"><a ><img src="assets/images/cat4.png"><p>AI Technologies</p></a></div>
+      <div class="box"><a ><img src="assets/images/cat5.png"><p>Solutions</p></a></div>
+      <div class="box"><a ><img src="assets/images/cat6.png"><p>Architecture</p></a></div>
     </div>
   </section>
 

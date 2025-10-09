@@ -637,6 +637,5 @@ if ($stmt) {
         // Load program data when page loads
         window.addEventListener('DOMContentLoaded', loadProgramData);
     </script>
-    
 </body>
 </html>

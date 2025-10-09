@@ -1,7 +1,6 @@
 <?php
 include("../includes/db.php");
-include("../panel/util/alerts.php");
-session_start();
+include("../panel/util/session.php");
 
 $useriddata=$_SESSION['user']['id'];
 
@@ -148,7 +147,7 @@ try {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Document</li>
             </ol>
           </div><!-- /.col -->
@@ -191,7 +190,7 @@ try {
                 </div>
             </div>
             <?php 
-$allowedStatuses = ['Approved', 'Offer Sent', 'Confirmed', 'Ongoing', 'Completed'];
+$allowedStatuses = ['Selected', 'Document Upload Pending', 'Document Rejected / Re-upload Required'];
 
 foreach ($checkstatus as $checkstatusdata): 
     if (in_array($checkstatusdata['status'], $allowedStatuses)): ?>

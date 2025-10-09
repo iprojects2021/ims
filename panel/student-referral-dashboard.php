@@ -63,7 +63,9 @@ foreach ($referralCounts as $row) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>INDSAC SOFTECH  |Student Dashboard</title>
+  <title>Student Portal | INDSAC SOFTECH</title>
+  <link rel="icon" type="image/png" href="../favico.png">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
    
   <!-- Google Font: Source Sans Pro -->
@@ -337,19 +339,42 @@ foreach ($referralCounts as $row) {
         }
         
         .rewards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .reward-card {
-            background-color: var(--secondary-color);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    flex-wrap: wrap;              /* ✅ allows wrapping on smaller screens */
+    margin-top: 20px;
+}
+
+
+/* ✅ 4 cards per row on large screens */
+.reward-card {
+    flex: 1 1 calc(25% - 20px);   /* evenly distributes 4 cards */
+    max-width: 280px;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+/* 💻 Tablets: 2 cards per row */
+@media (max-width: 992px) {
+    .reward-card {
+        flex: 1 1 calc(45% - 20px);
+        max-width: none;
+    }
+}
+
+/* 📱 Mobiles: 1 card per row */
+@media (max-width: 600px) {
+    .reward-card {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+}
+
+
         
         .reward-card:hover {
             transform: translateY(-5px);
@@ -450,8 +475,8 @@ foreach ($referralCounts as $row) {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
+              <li class="breadcrumb-item active">Referral</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -540,12 +565,12 @@ foreach ($referralCounts as $row) {
             <p>Here's what you can earn when your referrals enroll in our programs</p>
             
             <div class="rewards-grid">
-                <div class="reward-card">
+            <div class="reward-card">
                     <div class="reward-icon">
                         <i class="fas fa-user-graduate"></i>
                     </div>
                     <h3 class="reward-title">Basic Enrollment</h3>
-                    <div class="reward-amount">$50</div>
+                    <div class="reward-amount">₹100</div>
                     <p class="reward-desc">When a friend enrolls in any basic internship program</p>
                 </div>
                 
@@ -554,7 +579,7 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-laptop-code"></i>
                     </div>
                     <h3 class="reward-title">Tech Program</h3>
-                    <div class="reward-amount">$75</div>
+                    <div class="reward-amount">₹200</div>
                     <p class="reward-desc">When a friend enrolls in a technical internship</p>
                 </div>
                 
@@ -564,8 +589,16 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-medal"></i>
                     </div>
                     <h3 class="reward-title">Premium Program</h3>
-                    <div class="reward-amount">$100</div>
+                    <div class="reward-amount">₹500</div>
                     <p class="reward-desc">When a friend enrolls in a premium internship</p>
+                </div>
+                <div class="reward-card">
+                    <div class="reward-icon">
+                    <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="reward-title">Elite</h3>
+                    <div class="reward-amount">₹800</div>
+                    <p class="reward-desc">When a friend enrolls in a elite internship</p>
                 </div>
             </div>
         </section>

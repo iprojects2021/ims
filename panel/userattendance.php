@@ -198,7 +198,7 @@ $loggedcount = $stmt->fetchColumn();
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Attendance</li>
             </ol>
           </div>
@@ -689,7 +689,8 @@ if (!empty($row['logouttime'])) {
                     <td><?php echo htmlspecialchars($row['id']); ?></td>
                     <td><?php echo htmlspecialchars($row['createdat']); ?></td>                               
                     <td><?php echo htmlspecialchars($row['logintime']); ?></td>
-                    <td><?php echo htmlspecialchars($row['logouttime']); ?></td>
+                    <td><?php echo htmlspecialchars($row['logouttime'] ?? ''); ?>
+</td>
                     <td><?php
 // Set the timezone
 date_default_timezone_set('Asia/Kolkata');

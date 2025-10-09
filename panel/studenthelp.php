@@ -1,10 +1,6 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
-
-// Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
 
@@ -54,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         if ($result) {
+          $showAlert = 'success';
             // Insert notification
             $menuItem = 'tickets';
             $notificationMessage = "New ticket submitted by Student ID: " . $studentId;
@@ -71,16 +68,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $logger->log('ERROR', 'Notification Insert Failed: ' . $e->getMessage());
             }
 
-            echo '<div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-check"></i> Success!</h5>
-                Ticket submitted successfully.
-            </div>';
-            echo '<script type="text/javascript">
-                setTimeout(function() {
-                    window.location.href = "studenthelp.php"; 
-                }, 2000);
-            </script>';
+            // echo '<div class="alert alert-success alert-dismissible">
+            //     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            //     <h5><i class="icon fas fa-check"></i> Success!</h5>
+            //     Ticket submitted successfully.
+            // </div>';
+            // echo '<script type="text/javascript">
+            //     setTimeout(function() {
+            //         window.location.href = "studenthelp.php"; 
+            //     }, 2000);
+            // </script>';
         } else {
             echo '<div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -154,7 +151,7 @@ try {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">HelpDesk </li>
             </ol>
           </div><!-- /.col -->
@@ -276,6 +273,7 @@ try {
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<?php include("../panel/util/alert.php");?>
 </body>
 </html>
 <!-- Hidden form to send POST -->

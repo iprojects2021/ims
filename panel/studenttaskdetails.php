@@ -1,7 +1,8 @@
 <?php
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
-session_start();
+include("../panel/util/session.php");
+
 $taskId = $application['id'] ?? '';
 //print_r($_SESSION);die;
 $application = null;
@@ -21,10 +22,10 @@ if ($id) {
     }
 
     // Fetch comments if accessed via GET
-            $stmt = $db->prepare("SELECT * FROM taskcommit WHERE taskid =$id ORDER BY createdate ASC");
-            $stmt->execute([$id]);
-            $comments = $stmt->fetchAll();
-    
+    $stmt = $db->prepare("SELECT * FROM taskcommit WHERE taskid = ? ORDER BY createdate ASC");
+$stmt->execute([$id]);
+$comments = $stmt->fetchAll();
+
 }
 
 // Handle new comment submission
@@ -105,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['add'])) {
           <div class="col-sm-6"><h1>Task Details</h1></div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Task Details</li>
             </ol>
           </div>

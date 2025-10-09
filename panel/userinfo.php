@@ -6,11 +6,11 @@ $email = $_SESSION['user']['email'];
 $userId = $_SESSION['user']['id'];
 
 try
-{
-$sql="SELECT * FROM users";
-$stmt = $db->prepare($sql);
-
-$stmt->execute(['email' => $email]);
+{$applicationData = $applicationData ?? [];
+  $sql = "SELECT * FROM users";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();  // <-- no parameters
+  
 $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch(Exception $e)
@@ -104,7 +104,8 @@ try {
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">User Details</li>
             </ol>
           </div>

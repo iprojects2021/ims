@@ -1,11 +1,11 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
 
-$userid = $_SESSION['user']['id'];
-
+$userid = $_SESSION['user']['id'] ?? null;
+if (!$userid) {
+    die("User not logged in.");
+}
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
@@ -25,24 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
         }
     }
 
-    // Create 'uploads/ideas' subfolder
-    $ideasSubfolder = $uploadFolder . "\\ideas\\";
-    if (!is_dir($ideasSubfolder)) {
-        if (!mkdir($ideasSubfolder, 0755, true)) {
-            die("Failed to create folder: uploads/ideas");
-        }
-    }
-
     // Handle file upload
     if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
         $originalName = basename($_FILES['attachment']['name']);
         $safeName = preg_replace("/[^A-Z0-9._-]/i", "_", $originalName); // Sanitize
         $uniqueName = time() . '_' . $safeName;
-        $fullPath = $ideasSubfolder . $uniqueName;
+      //  $fullPath = $uploadFolder . $uniqueName; // Added missing slash
+      $fullPath = $uploadFolder . DIRECTORY_SEPARATOR . $uniqueName;
 
         if (move_uploaded_file($_FILES['attachment']['tmp_name'], $fullPath)) {
             // Save relative path for DB/web access
-            $attachmentPath = 'uploads/ideas/' . $uniqueName;
+            $attachmentPath = 'uploads/' . $uniqueName; // This works for web
         } else {
             die("Error uploading the file.");
         }
@@ -72,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
             // Add admin notification
             $menuItem = 'innovationideas';
             $notificationMessage = "New innovation idea submitted by Student ID: " . $userid;
-            $createdBy = $userid;
 
             try {
                 $notifSql = "INSERT INTO notification 
@@ -84,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
                 $notifStmt->execute([
                     ':menu_item' => $menuItem,
                     ':message'   => $notificationMessage,
-                    ':createdBy' => $createdBy
+                    ':createdBy' => $userid
                 ]);
             } catch (Exception $e) {
                 error_log('Notification Insert Failed: ' . $e->getMessage());
@@ -97,9 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
         echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
     }
 }
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">InnovationIdeas </li>
             </ol>
           </div><!-- /.col -->

@@ -67,8 +67,9 @@ $notificationCounts = [
     'task'    => getNotificationCount($db, $userid, 'task', $role),
     'document'    => getNotificationCount($db, $userid, 'document', $role),
     'innovationideas'    => getNotificationCount($db, $userid, 'innovationideas', $role),
+    'feedback'    => getNotificationCount($db, $userid, 'feedback', $role),
 ];
-$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document']+$notificationCounts['innovationideas'];
+$totalNotifications = $notificationCounts['tickets'] + $notificationCounts['application']+$notificationCounts['task']+$notificationCounts['document']+$notificationCounts['innovationideas']+$notificationCounts['feedback'];
 
 // Notification messages
 $ticketMessages = getUnreadNotifications($db, $userid, 'tickets', $role);
@@ -77,6 +78,7 @@ $taskMessages   = getUnreadNotifications($db, $userid, 'task', $role);
 $documentMessages   = getUnreadNotifications($db, $userid, 'document', $role);
 $applicationMessages   = getUnreadNotifications($db, $userid, 'application', $role);
 $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationideas', $role);
+$feedbackMessages   = getUnreadNotifications($db, $userid, 'feedback', $role);
 
 ?>
 
@@ -98,7 +100,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="studenthelp.php" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -199,7 +201,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
 
         <!-- Ticket Messages -->
         <?php foreach ($ticketMessages as $ticket): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($ticket['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($ticket['createdAt'])) ?></span>
@@ -207,7 +209,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 <!-- document Messages -->
 <?php foreach ($documentMessages as $document): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($document['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($document['createdAt'])) ?></span>
@@ -215,17 +217,26 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 <!-- ideas Messages -->
 <?php foreach ($innovationideasMessages as $innovation): ?>
-            <a href="admininnovationideas.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($innovation['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($innovation['createdAt'])) ?></span>
             </a>
         <?php endforeach; ?>
 
+<!--feedback messages-->
+        <?php foreach ($feedbackMessages as $feedback): ?>
+            <a href="#" class="dropdown-item">
+                <i class="fas fa-ticket-alt mr-2"></i>
+                <?= htmlspecialchars($feedback['message']) ?>
+                <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($feedback['createdAt'])) ?></span>
+            </a>
+        <?php endforeach; ?>
+
 
 <!-- application Messages -->
 <?php foreach ($applicationMessages as $apllication): ?>
-            <a href="admintickets.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-ticket-alt mr-2"></i>
                 <?= htmlspecialchars($apllication['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($apllication['createdAt'])) ?></span>
@@ -235,7 +246,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         
 <!-- task Messages -->
 <?php foreach ($taskMessages as $task): ?>
-            <a href="studenthelp.php" class="dropdown-item">
+            <a href="#" class="dropdown-item">
                 <i class="fas fa-life-ring mr-2"></i>
                 <?= htmlspecialchars($task['message']) ?>
                 <span class="float-right text-muted text-sm"><?= date('H:i', strtotime($task['createdAt'])) ?></span>
@@ -243,7 +254,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         <?php endforeach; ?>
 
         <div class="dropdown-divider"></div>
-        <a href="all-notifications.php" class="dropdown-item dropdown-footer">See All Notifications</a>
+        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
     </div>
 </li>
 
@@ -264,7 +275,7 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="https://indsac.com/" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">INDSAC SOFTECH</span>
     </a>
@@ -435,6 +446,19 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="adminevaluations.php" class="nav-link">
+      <i class="nav-icon fas fa-lightbulb"></i>
+        <p>Evaluations <?php if ($notificationCounts['feedback'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['feedback']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
+      </a>
+    </li>
+  
+
   
     <li class="nav-item">
       <a href="adminlogout.php" class="nav-link">
@@ -561,12 +585,19 @@ $innovationideasMessages   = getUnreadNotifications($db, $userid, 'innovationide
     </li> -->
 
 
+   
     <li class="nav-item">
       <a href="evaluations.php" class="nav-link">
-        <i class="nav-icon fas fa-clipboard-check"></i>
-        <p>Evaluations</p>
+      <i class="nav-icon fas fa-clipboard-check"></i>
+        <p>Evaluations <?php if ($notificationCounts['feedback'] > 0): ?>
+        <span class="right badge badge-danger">
+          New <?php echo $notificationCounts['feedback']; ?>
+        </span>
+      <?php endif; ?>
+   </p>
       </a>
     </li>
+  
 
     <li class="nav-item">
       <a href="notifications.php" class="nav-link">

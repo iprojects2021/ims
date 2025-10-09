@@ -1,7 +1,6 @@
 <?php
 include("../includes/db.php");
-include("../panel/util/alerts.php");
-session_start();
+include("../panel/util/session.php");
 $useriddata=$_SESSION['user']['id'];
 ?>
 <?php
@@ -107,7 +106,8 @@ try {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">Document</li>
             </ol>
           </div><!-- /.col -->
@@ -245,6 +245,8 @@ $fileName = str_replace('uploads/', '', $documentdata['file_path']);
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<?php include("../panel/util/alerts.php");?>
+
 </body>
 </html>
 <!-- Script to show file upload when dropdown is selected -->
@@ -280,7 +282,7 @@ document.getElementById('education').addEventListener('change', function () {
   });
 </script>
        <!-- Hidden form to send POST -->
-       <form id="postForm" method="POST" action="documenttype.PHP" style="display:none;">
+       <form id="postForm" method="POST" action="documenttype.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
 </form>
 <script>

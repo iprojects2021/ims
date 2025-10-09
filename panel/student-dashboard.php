@@ -18,6 +18,45 @@ catch(Exception $e)
 }
 ?>
 
+<?php
+$userid = $_SESSION['user']['id'];
+
+// Get count of all statuses
+$stmt = $db->prepare("
+    SELECT status, COUNT(*) AS status_count 
+    FROM referrals 
+    WHERE userid = :id  
+    GROUP BY status
+");
+$stmt->execute(['id' => $userid]);
+$referralCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Initialize variables
+$pendingCount = 0;
+$paidCount = 0;
+$enrolledCount = 0;
+$totalCount = 0;
+
+// Map results
+foreach ($referralCounts as $row) {
+    $status = $row['status'];
+    $count = $row['status_count'];
+    $totalCount += $count;
+
+    switch ($status) {
+        case 'Pending':
+            $pendingCount = $count;
+            break;
+        case 'Paid':
+            $paidCount = $count;
+            break;
+        case 'Enrolled':
+            $enrolledCount = $count;
+            break;
+    }
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +88,92 @@ catch(Exception $e)
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+<style>
+  /* ===== REWARDS SECTION (4 CARDS ONE ROW) ===== */
+.rewards-section {
+    background: linear-gradient(135deg, #ffffff, #f9faff);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 40px 30px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* 4 cards side by side (centered, no scroll) */
+.rewards-grid {
+    display: flex;
+    justify-content: center;  /* ✅ center cards */
+    align-items: stretch;
+    gap: 25px;                /* space between cards */
+    flex-wrap: nowrap;        /* ✅ one row only */
+    margin-top: 20px;
+}
+
+/* Each reward card */
+.reward-card {
+    flex: 0 1 260px;  /* ✅ fixed equal width for all 4 */
+    background: var(--white);
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.reward-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon styling */
+.reward-icon {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Reward title */
+.reward-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+/* Reward amount */
+.reward-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+/* Reward description */
+.reward-desc {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    line-height: 1.5;
+}
+
+/* Responsive (stack vertically for small screens) */
+@media (max-width: 992px) {
+    .rewards-grid {
+        flex-wrap: wrap;   /* ✅ allows wrap only on small screens */
+        justify-content: center;
+    }
+
+    .reward-card {
+        flex: 0 1 45%;
+    }
+}
+
+@media (max-width: 600px) {
+    .reward-card {
+        flex: 0 1 100%;
+    }
+}
+</style>
   <style>
      :root {
             --primary-color: #4361ee;
@@ -204,7 +329,7 @@ catch(Exception $e)
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
@@ -321,15 +446,15 @@ catch(Exception $e)
                 
                 <div class="referral-stats">
                     <div class="stat-item">
-                        <div class="stat-number">8</div>
+                        <div class="stat-number"><?php echo $totalCount; ?></div>
                         <div class="stat-label">Referred</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">3</div>
+                        <div class="stat-number"><?php echo $enrolledCount; ?></div>
                         <div class="stat-label">Enrolled</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">$150</div>
+                        <div class="stat-number"><?php echo $paidCount; ?></div>
                         <div class="stat-label">Earned</div>
                     </div>
                 </div>
@@ -362,6 +487,48 @@ catch(Exception $e)
   </div>
 
         </div>
+        <section class="rewards-section">
+            
+            <p>Here's what you can earn when your referrals enroll in our programs</p>
+            
+            <div class="rewards-grid">
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="reward-title">Basic Enrollment</h3>
+                    <div class="reward-amount">₹100</div>
+                    <p class="reward-desc">When a friend enrolls in any basic internship program</p>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="reward-title">Tech Program</h3>
+                    <div class="reward-amount">₹200</div>
+                    <p class="reward-desc">When a friend enrolls in a technical internship</p>
+                </div>
+                
+                           
+                <div class="reward-card">
+                    <div class="reward-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3 class="reward-title">Premium Program</h3>
+                    <div class="reward-amount">₹500</div>
+                    <p class="reward-desc">When a friend enrolls in a premium internship</p>
+                </div>
+                <div class="reward-card">
+                    <div class="reward-icon">
+                    <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="reward-title">Elite</h3>
+                    <div class="reward-amount">₹800</div>
+                    <p class="reward-desc">When a friend enrolls in a elite internship</p>
+                </div>
+            </div>
+        </section>
     
       </div><!-- /.container-fluid -->
     </section>

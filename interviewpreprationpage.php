@@ -12,6 +12,13 @@ foreach ($clients as $client) {
 }
 
 ?>
+<?php
+
+$stmt = $db->prepare("SELECT * FROM programs WHERE title='Career & Interview Preparation' AND status='upcoming'");
+$stmt->execute();
+$data = $stmt->fetch();
+
+?>
 
 
 
@@ -182,64 +189,6 @@ foreach ($clients as $client) {
   </style>
 </head>
 <body>
-<?php
-// Make sure database connection ($db) is already established here
-// Example: $db = new PDO('mysql:host=localhost;dbname=yourdbname', 'username', 'password');
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Collect form data
-    $mobile = $_POST['mobile'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $project = $_POST['project'] ?? '';
-    $expected_due_date = $_POST['expected_due_date'] ?? '';
-    $outcome = $_POST['outcome'] ?? '';
-
-    try {
-        // Start transaction
-        $db->beginTransaction();
-
-        // 1. Insert into application table
-        $stmt = $db->prepare("INSERT INTO application (mobile, email, project, expected_due_date, outcome, status, type) 
-                              VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $mobile,
-            $email,
-            $project,
-            $expected_due_date,
-            $outcome,
-            "Submited",
-            "Interview & Career Preparation"
-        ]);
-
-        // 2. Check if email or mobile exists in referrals table
-        $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
-
-        // 3. If a referral match is found
-        if ($referral) {
-            $referralid = $referral['id'];
-
-            // 4. Insert into enrollments
-            $enrollStmt = $db->prepare("INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
-                                        VALUES (?, ?, NOW(), ?)");
-            $enrollStmt->execute([$referralid, $project, 0.00]);
-
-            // 5. Update referral status to 'Enrolled'
-            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
-            $updateReferralStmt->execute([$referralid]);
-        }
-
-        // Commit transaction
-        $db->commit();
-
-        // Success Message
-        $showAlert = 'success';
-         } catch (Exception $e) {
-        // Rollback transaction on error
-        $db->rollBack();
-        $showAlert = 'error';
-    }
-}
-?>
 
   <!-- ✅ Navbar -->
   <nav class="navbar">
@@ -268,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-container">
                     <h2 class="form-title">Career & Interview Preparation Enquiry
 </h2>
-                    <form id="projectForm" method="post">
+                    <form id="projectForm" method="post" action="programpayment.php">
                       <!-- Mobile Number -->
                       <div class="mb-3">
     <label for="mobile" class="form-label">Mobile Number*</label>
@@ -288,6 +237,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input type="email" name="email" class="form-control" id="email" placeholder="e.g., student@example.com" required>
     <?php endif; ?>
 </div>
+<div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="text" name="amount" value="5000" class="form-control" id="amount" required readonly>
+                        </div>
+                        
                         <!-- Project Description -->
                         <div class="mb-3">
                             <label for="description" class="form-label">Project Description/Idea*</label>
@@ -302,10 +256,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- Due Date -->
                         <div class="mb-3">
-                            <label for="duedate" class="form-label">Expected Due Date*</label>
-                            <input type="date" name="expected_due_date" class="form-control" id="duedate" required>
+                            <label for="expected_start_date" class="form-label">Expected Start Date*</label>
+                            <input type="date" name="expected_start_date" class="form-control" id="expected_start_date" required>
                         </div>
-
+                                               <input type="hidden" name="program_id" value="<?php echo $data['program_id']?>">
+                        
+                        <input type="hidden" name="type" value="Career & Interview Preparation">
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary btn-submit">Submit Enquiry</button>
                     </form>

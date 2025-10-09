@@ -38,20 +38,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $application_deadline = $_POST['application_deadline'];
         $max_applicants = $_POST['max_applicants'];
         $is_active = $_POST['is_active'];
-
+        $status = $_POST['status'];
+        $SuperProgram = $_POST['SuperProgram'];
+ 
         try {
             $sql = "UPDATE programs SET 
-                        title = ?, slug = ?, short_description = ?, detailed_description = ?, 
+                        title = ?, slug = ?, SuperProgram = ?, short_description = ?, detailed_description = ?, 
                         duration = ?, start_date = ?, end_date = ?, is_remote = ?, 
                         location = ?, timezone = ?, stipend_amount = ?, stipend_currency = ?, 
-                        is_paid = ?, application_deadline = ?, max_applicants = ?, is_active = ?
+                        is_paid = ?, application_deadline = ?, max_applicants = ?, is_active = ?, status = ?
                     WHERE program_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->execute([
-                $title, $slug, $short_description, $detailed_description,
+                $title, $slug, $SuperProgram, $short_description, $detailed_description,
                 $duration, $start_date, $end_date, $is_remote,
                 $location, $timezone, $stipend_amount, $stipend_currency,
-                $is_paid, $application_deadline, $max_applicants, $is_active,
+                $is_paid, $application_deadline, $max_applicants, $is_active, $status,
                 $id
             ]);
             $showAlert = 'success';
@@ -130,7 +132,8 @@ $programsdata = $stmt->fetch();
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">Edit Programs</li>
             </ol>
           </div><!-- /.col -->
@@ -178,7 +181,10 @@ $programsdata = $stmt->fetch();
                       <label for="slug" class="form-label">Slug</label>
                       <input type="text" class="form-control form-control-sm" id="slug" value="<?= htmlspecialchars($row['slug']) ?>" name="slug" required>
                     </div>
-
+                    <div class="col-md-6 mb-2">
+                      <label for="superprogram" class="form-label">Super Program</label>
+                      <input type="text" class="form-control form-control-sm" id="superprogram" value="<?= htmlspecialchars($row['SuperProgram']) ?>" name="SuperProgram" required>
+                    </div>
                     <div class="col-md-6 mb-2">
                       <label for="short_description" class="form-label">Short Description</label>
                       <input type="text" class="form-control form-control-sm" id="short_description" value="<?= htmlspecialchars($row['short_description']) ?>" name="short_description" required>
@@ -263,6 +269,11 @@ $programsdata = $stmt->fetch();
                         <option value="0" <?= $row['is_active'] == '0' ? 'selected' : '' ?>>No</option>
                       </select>
                     </div>
+                    <div class="col-md-6 mb-2">
+                      <label for="status" class="form-label">Status</label>
+                      <input type="text" class="form-control form-control-sm" id="status" value="<?= htmlspecialchars($row['status']) ?>" name="status" required>
+                    </div>
+
                   <?php endforeach; ?>
                 </div>
               </div>
@@ -390,8 +401,8 @@ $programsdata = $stmt->fetch();
                 <?php foreach ($applicationData as $row): ?>
                   <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
                     <td><?= htmlspecialchars($row['program_id']) ?></td>
-                    <td><?= htmlspecialchars($row['fullname']) ?></td>
-                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= htmlspecialchars($row['fullname'] ?? '') ?></td>
+ <td><?= htmlspecialchars($row['email']) ?></td>
                     <td><?= htmlspecialchars($row['project']) ?></td>
                     <td><?= htmlspecialchars($row['type']) ?></td>
                     <td><?= htmlspecialchars($row['expected_start_date']) ?></td>

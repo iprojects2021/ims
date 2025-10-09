@@ -2,6 +2,10 @@
 include("../includes/db.php");
 $sql = "SELECT * FROM programs WHERE title='Java Developer Intern' AND status='upcoming'";
 $stmt = $db->query($sql); // $db is your PDO connection
+$programidelite8000 = $programidelite8000 ?? null; 
+$programidbasic1000 = $programidbasic1000 ?? null;
+$programidadvance2000 = $programidadvance2000 ?? null;
+$programidprofessional5000 = $programidprofessional5000 ?? null;
 
 if ($stmt) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all rows into an array
@@ -29,7 +33,7 @@ if ($stmt) {
          }
         }
     } else {
-        echo "No results found";
+       // echo "No results found";
     }
 } else {
     echo "Query failed.";
@@ -134,7 +138,8 @@ if ($stmt) {
                 <div class="col-md-4 text-md-end">
                     <div class="d-flex flex-column">
                         <span class="mb-2"><i class="fas fa-calendar-alt me-2"></i> <span id="program-duration">15 days to 6 months</span></span>
-                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date1"><?php echo htmlspecialchars($row['start_date']); ?></span></span>
+                        <span class="mb-2"><i class="fas fa-play-circle me-2"></i> Starts: <span id="program-start-date1"><?php echo htmlspecialchars($row['start_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</span></span>
                         <span class="mb-2"><i class="fas fa-money-bill-wave me-2"></i>Amount: <span id="program-stipend">₹1000 to ₹8000</span></span>
                         
                         <button class="btn btn-light mt-2 apply-btn" onclick="applyNow('₹ 8000/-','Elite','6 Months',<?php echo $programidelite8000 ?>)">Apply Now</button>
@@ -483,7 +488,8 @@ if ($stmt) {
                 <div class="modal-body">
                     <!-- Plan details section -->
                     <form id="applicationForm" action="../programpayment.php" method="post">
-                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($details[0]['program_id']); ?>" id="program_basic">
+                    <input type="hidden" id="hidden-program_id" name="program_id" value="<?php echo htmlspecialchars($rows[0]['program_id']); ?>">
+                    <?php ?>
 
 
     <div class="plan-details">
@@ -634,7 +640,10 @@ if ($stmt) {
     document.getElementById('hidden-plan-type').value = planType;
     document.getElementById('hidden-amount').value = amount;
     document.getElementById('hidden-duration').value = duration;
+    document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("hidden-program_id").value = programid;
+});
+
 
 
     // Show the modal
@@ -676,5 +685,8 @@ function updateProgramId(planType) {
 
 
         </script> -->
+
 </body>
+
+
 </html>

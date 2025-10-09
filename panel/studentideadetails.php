@@ -1,5 +1,3 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
@@ -36,9 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
   $attachmentPath = null;
 
-  // Define base upload folder and ideas subfolder (use DIRECTORY_SEPARATOR for portability)
-  $ideasSubfolder = $uploadFolder . DIRECTORY_SEPARATOR . 'ideas' . DIRECTORY_SEPARATOR;
-
+  
   // Ensure base uploads folder exists
   if (!is_dir($uploadFolder)) {
       if (!mkdir($uploadFolder, 0755, true)) {
@@ -46,13 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
       }
   }
 
-  // Ensure ideas subfolder exists
-  if (!is_dir($ideasSubfolder)) {
-      if (!mkdir($ideasSubfolder, 0755, true)) {
-          die("Failed to create folder: uploads/ideas");
-      }
-  }
-
+  
   // Handle file upload if provided
   if (!empty($_FILES['attachment']['name']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
       $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
@@ -65,12 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
       $originalName = basename($_FILES['attachment']['name']);
       $safeName = preg_replace("/[^a-zA-Z0-9.\-_]/", "_", $originalName);
       $uniqueName = time() . "_" . $safeName;
-      $fullPath = $ideasSubfolder . $uniqueName;
+     // $fullPath = $ideasSubfolder . $uniqueName;
+     $fullPath = $uploadFolder . DIRECTORY_SEPARATOR . $uniqueName;
 
       // Move uploaded file
       if (move_uploaded_file($_FILES['attachment']['tmp_name'], $fullPath)) {
           // Save relative path for DB/web access
-          $attachmentPath = 'uploads/ideas/' . $uniqueName;
+          $attachmentPath = 'uploads/' . $uniqueName;
       } else {
           die("Error uploading the file.");
       }
@@ -185,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">InnovationIdeas </li>
             </ol>
           </div><!-- /.col -->
@@ -233,7 +224,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
 
                 <div class="form-group mb-2">
                     <label for="feedback" class="mb-1">Feedback</label>
-                    <textarea class="form-control form-control-sm" id="feedback" rows="2" readonly><?php echo htmlspecialchars($data['feedback']); ?></textarea>
+                    <textarea class="form-control form-control-sm" id="feedback" rows="2" readonly><?php echo htmlspecialchars($data['feedback'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</textarea>
                 </div>
 
                 <div class="form-row">
@@ -248,11 +240,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update'])) {
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <label for="reviewed_at" class="mb-1">reviewed_at</label>
-                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewed_at']); ?>" class="form-control form-control-sm" id="reviewed_at" readonly>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewed_at'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+" class="form-control form-control-sm" id="reviewed_at" readonly>
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <label for="reviewer_id" class="mb-1">reviewer_id</label>
-                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewer_id']); ?>" class="form-control form-control-sm" id="reviewer_id" readonly>
+                        <input type="text"  value="<?php echo htmlspecialchars($data['reviewer_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+" class="form-control form-control-sm" id="reviewer_id" readonly>
                     </div>
 
 

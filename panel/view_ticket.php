@@ -1,5 +1,3 @@
-
-
 <?php
 include("../includes/db.php");
 include("../panel/util/session.php");
@@ -79,7 +77,7 @@ try {
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="student-dashboard.php">Dashboard</a></li>
               <li class="breadcrumb-item active">Support</li>
             </ol>
           </div><!-- /.col -->
@@ -141,7 +139,8 @@ try {
               <td>
               <?php
 // Remove the prefix 'uploads/ideas/' to get only the file name
-$fileName = str_replace('uploads/', '', $ticket['filename']);
+$fileName = str_replace('uploads/', '', $ticket['filename'] ?? '');
+
 ?>
 
 <a href="/ims/panel/download.php?file=<?= urlencode($fileName) ?>" target="_blank">View</a>

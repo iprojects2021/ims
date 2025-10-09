@@ -76,7 +76,8 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin_dashboard.php">Dashboard</a>
+</li>
               <li class="breadcrumb-item active">View Programs</li>
             </ol>
           </div>
@@ -104,6 +105,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <th>title	</th>
                   <th>slug</th>
                   <th>short_description</th>
+                  <th>Status</th>
                   <th>detailed_description</th>
                   <th>duration</th>
                   <th>start_date</th>
@@ -128,6 +130,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <td><?= htmlspecialchars($row['title']) ?></td>
     <td><?= htmlspecialchars($row['slug']) ?></td>
     <td><?= htmlspecialchars($row['short_description']) ?></td>
+    <td><?= htmlspecialchars($row['status']) ?></td>
     <td><?= htmlspecialchars($row['detailed_description']) ?></td>
     <td><?= htmlspecialchars($row['duration']) ?></td>
     <td><?= htmlspecialchars($row['start_date']) ?></td>
@@ -152,6 +155,7 @@ $applicationData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <th>title	</th>
                   <th>slug</th>
                   <th>short_description</th>
+                  <th>Status</th>
                   <th>detailed_description</th>
                   <th>duration</th>
                   <th>start_date</th>
