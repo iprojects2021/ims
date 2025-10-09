@@ -83,23 +83,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id = $db->lastInsertId();
         $_SESSION['applicationid']=$id;
         // Check for referral
-        $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
+        // $referral = checkReferralByEmailOrPhone($db, $email, $mobile);
 
-        if ($referral) {
-            $referralid = $referral['id'];
+        // if ($referral) {
+        //     $referralid = $referral['id'];
 
-            // Enroll user
-            $enrollStmt = $db->prepare("
-                INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
-                VALUES (?, ?, NOW(), ?)
-            ");
-            $enrollStmt->execute([$referralid, $project, 0.00]);
+        //     // Enroll user
+        //     $enrollStmt = $db->prepare("
+        //         INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
+        //         VALUES (?, ?, NOW(), ?)
+        //     ");
+        //     $enrollStmt->execute([$referralid, $project, 0.00]);
 
-            // Update referral status
-            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
-            $updateReferralStmt->execute([$referralid]);
-        }
-        // ✅ 6. Insert Notification for Admin
+        //     // Update referral status
+        //     $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
+        //     $updateReferralStmt->execute([$referralid]);
+        // }
+         // ✅ 6. Insert Notification for Admin
         $menuItem = 'application'; // Adjust to appropriate section name
         $notificationMessage = "New application submitted by email: " . $email;
         $createdBy = $email; // or use a fixed value like 'system' or 'webform'

@@ -414,18 +414,30 @@ $feedbackMessages   = getUnreadNotifications($db, $userid, 'feedback', $role);
   </a>
 </li>
 
+<li class="nav-item has-treeview">
+  <a href="#" class="nav-link">
+  <i class="nav-icon fas fa-user-friends"></i>
 
+    <p>
+    Referral
+      <i class="right fas fa-angle-left"></i> <!-- Dropdown arrow -->
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
     <li class="nav-item">
       <a href="adminreferral.php" class="nav-link">
-      <i class="nav-icon fas fa-user-friends"></i>
-
-        <p>
-        Referral Dashboard
-     
-         <!-- <span class="right badge badge-danger">New</span>-->
-        </p>
+        <i class="far fa-circle nav-icon"></i>
+        <p>Referral Dashboard</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="adminreferralpayout.php" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Referral Payout</p>
+      </a>
+    </li>
+  </ul>
+</li>
     <li class="nav-item">
       <a href="admininnovationideas.php" class="nav-link">
       <i class="nav-icon fas fa-lightbulb"></i>
