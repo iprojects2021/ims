@@ -227,7 +227,8 @@
             <!-- Basic Plan -->
              <div class="plan">
                 <h3><i class="fas fa-star"></i> Basic</h3>
-                <ul class="features">
+                <div class="price">₹1,000 <span>/ 15 Days</span></div>
+                    <ul class="features">
                     <li><i class="fas fa-check"></i> Live Meetings</li>
                     <li><i class="fas fa-check"></i> Learning: Quick exposure Projects</li>
                     <li><i class="fas fa-check"></i> 2 hands-on projects task</li>
@@ -242,6 +243,7 @@
             </div>
             <div class="plan">
                 <h3><i class="fas fa-star"></i> Advanced</h3>
+                <div class="price">₹2,000 <span>/ 1 Month</span></div>
                 <ul class="features">
                     <li><i class="fas fa-check"></i> Self-paced video lectures</li>
                     <li><i class="fas fa-check"></i> Learning: Intensive Learning</li>
@@ -257,8 +259,8 @@
             <!-- Premium Plan -->
             <div class="plan">
                 <h3><i class="fas fa-rocket"></i> Professional</h3>
-                <ul class="features">
-                    
+                <div class="price">₹5,000 <span>/ 3 months</span></div>
+                    <ul class="features">                   
                     <li><i class="fas fa-check"></i> 10+ mentor-guided projects task</li>
                     <li><i class="fas fa-check"></i> Learning: Structured Learning</li>
                     <li><i class="fas fa-check"></i> GitHub portfolio review & optimization</li>
@@ -271,7 +273,8 @@
             <!-- Pro Plan (Most Popular) -->
             <div class="plan pro">
                 <h3><i class="fas fa-crown"></i> Elite</h3>
-                <ul class="features">
+                <div class="price">₹8,000 <span>/ 6 months</span></div>
+                    <ul class="features">
                     <li><i class="fas fa-check"></i> 1:1 mentorship</li>
                     <li><i class="fas fa-check"></i> Learning: Deep Learning</li>
                     <li><i class="fas fa-check"></i> Real-world industry projects</li>                    
