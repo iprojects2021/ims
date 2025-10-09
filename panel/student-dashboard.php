@@ -88,8 +88,8 @@ foreach ($referralCounts as $row) {
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
-  <style>
-  /* ================= REWARDS SECTION ================= */
+<style>
+  /* ===== REWARDS SECTION (4 CARDS ONE ROW) ===== */
 .rewards-section {
     background: linear-gradient(135deg, #ffffff, #f9faff);
     border-radius: 12px;
@@ -97,29 +97,21 @@ foreach ($referralCounts as $row) {
     padding: 40px 30px;
     text-align: center;
     margin-top: 40px;
-    transition: box-shadow 0.3s ease;
 }
 
-.rewards-section:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-}
-
-.rewards-section p {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    margin-bottom: 25px;
-}
-
-/* Reward Grid */
+/* 4 cards side by side (centered, no scroll) */
 .rewards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
+    display: flex;
+    justify-content: center;  /* ✅ center cards */
+    align-items: stretch;
+    gap: 25px;                /* space between cards */
+    flex-wrap: nowrap;        /* ✅ one row only */
     margin-top: 20px;
 }
 
-/* Individual Reward Card */
+/* Each reward card */
 .reward-card {
+    flex: 0 1 260px;  /* ✅ fixed equal width for all 4 */
     background: var(--white);
     border: 1px solid #eee;
     border-radius: 10px;
@@ -127,82 +119,58 @@ foreach ($referralCounts as $row) {
     text-align: center;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
-}
-
-.reward-card::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(74,107,255,0.08), transparent 70%);
-    transform: rotate(25deg);
-    z-index: 0;
 }
 
 .reward-card:hover {
-    transform: translateY(-7px) scale(1.02);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Icon */
+/* Icon styling */
 .reward-icon {
-    font-size: 3rem;
+    font-size: 2.8rem;
     color: var(--primary-color);
-    margin-bottom: 18px;
-    z-index: 1;
-    position: relative;
-    transition: transform 0.3s;
+    margin-bottom: 15px;
 }
 
-.reward-card:hover .reward-icon {
-    transform: rotate(8deg) scale(1.1);
-}
-
-/* Title */
+/* Reward title */
 .reward-title {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     color: var(--text-color);
-    z-index: 1;
-    position: relative;
 }
 
-/* Reward Amount */
+/* Reward amount */
 .reward-amount {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--accent-color);
-    margin-bottom: 12px;
-    z-index: 1;
-    position: relative;
+    margin-bottom: 10px;
 }
 
-/* Description */
+/* Reward description */
 .reward-desc {
     font-size: 0.95rem;
     color: var(--light-text);
-    z-index: 1;
-    position: relative;
     line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .rewards-section {
-        padding: 25px 15px;
+/* Responsive (stack vertically for small screens) */
+@media (max-width: 992px) {
+    .rewards-grid {
+        flex-wrap: wrap;   /* ✅ allows wrap only on small screens */
+        justify-content: center;
     }
+
     .reward-card {
-        padding: 20px;
+        flex: 0 1 45%;
     }
-    .reward-icon {
-        font-size: 2.5rem;
-    }
-    .reward-amount {
-        font-size: 1.3rem;
+}
+
+@media (max-width: 600px) {
+    .reward-card {
+        flex: 0 1 100%;
     }
 }
 </style>
@@ -538,7 +506,7 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-laptop-code"></i>
                     </div>
                     <h3 class="reward-title">Tech Program</h3>
-                    <div class="reward-amount">₹500</div>
+                    <div class="reward-amount">₹200</div>
                     <p class="reward-desc">When a friend enrolls in a technical internship</p>
                 </div>
                 
@@ -548,8 +516,16 @@ foreach ($referralCounts as $row) {
                         <i class="fas fa-medal"></i>
                     </div>
                     <h3 class="reward-title">Premium Program</h3>
-                    <div class="reward-amount">₹800</div>
+                    <div class="reward-amount">₹500</div>
                     <p class="reward-desc">When a friend enrolls in a premium internship</p>
+                </div>
+                <div class="reward-card">
+                    <div class="reward-icon">
+                    <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="reward-title">Elite</h3>
+                    <div class="reward-amount">₹800</div>
+                    <p class="reward-desc">When a friend enrolls in a elite internship</p>
                 </div>
             </div>
         </section>
