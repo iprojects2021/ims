@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
               <!-- Program Table -->
               <div class="card mt-4">
                 <div class="card-header bg-secondary text-white">
-                  <h4 class="card-title mb-0"><i class="fas fa-list-alt mr-2"></i>All List</h4>
+                  <h4 class="card-title mb-0"><i class="fas fa-list-alt mr-2"></i>Enrollment Table</h4>
                 </div>
                 <div class="card-body table-responsive">
                   <table id="example1" class="table table-bordered table-hover table-striped">

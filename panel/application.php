@@ -155,6 +155,7 @@ if (isset($_POST['email'])) {
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
+                  <th>Id</th>
                   <th>Project</th>
                   <th>Outcome</th>
                   <th>Status</th>
@@ -163,18 +164,22 @@ if (isset($_POST['email'])) {
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($applicationData as $row): ?>
-                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
-                    <td><?= htmlspecialchars($row['project']) ?></td>
-                    <td><?= htmlspecialchars($row['outcome']) ?></td>
-                    <td><?= getStatusBadge($row['status']) ?></td>
-                    <td><?= htmlspecialchars($row['type']) ?></td>
-                    <td><?= htmlspecialchars($row['createddate']) ?></td>
-                  </tr>
-                <?php endforeach; ?>
-              </tbody>
+  <?php foreach ($applicationData as $row): ?>
+    <tr class="clickable-row" 
+        data-id="<?= (int)$row['id'] ?>" 
+        data-email="<?= htmlspecialchars($row['email']) ?>">
+      <td><?= htmlspecialchars($row['id']) ?></td>
+      <td><?= htmlspecialchars($row['project']) ?></td>
+      <td><?= htmlspecialchars($row['outcome']) ?></td>
+      <td><?= getStatusBadge($row['status']) ?></td>
+      <td><?= htmlspecialchars($row['type']) ?></td>
+      <td><?= htmlspecialchars($row['createddate']) ?></td>
+    </tr>
+  <?php endforeach; ?>
+</tbody>
               <tfoot>
                 <tr>
+                  <th>Id</th>
                   <th>Project</th>
                   <th>Outcome</th>
                   <th>Status</th>
@@ -216,6 +221,7 @@ if (isset($_POST['email'])) {
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="dist/js/adminlte.min.js"></script>
 
+
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -226,17 +232,40 @@ if (isset($_POST['email'])) {
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     // Clickable rows redirect
-    $('.clickable-row').on('click', function () {
-      const id = $(this).data('id');
-      $('<form>', {
-        'method': 'POST',
-        'action': 'admintypedetails.php'
-      }).append($('<input>', {
-        'type': 'hidden',
-        'name': 'id',
-        'value': id
-      })).appendTo('body').submit();
-    });
+    // $('.clickable-row').on('click', function () {
+    //   const id = $(this).data('id');
+    //   $('<form>', {
+    //     'method': 'POST',
+    //     'action': 'admintypedetails.php'
+    //   }).append($('<input>', {
+    //     'type': 'hidden',
+    //     'name': 'id',
+    //     'value': id
+    //   })).appendTo('body').submit();
+    // });
+  });
+</script>
+<script>
+  $(document).on('click', '.clickable-row', function () {
+    const id = $(this).data('id');
+    const email = $(this).data('email');
+
+    $('<form>', {
+      method: 'POST',
+      action: 'admintypedetails.php'
+    })
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'id',
+      value: id
+    }))
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'email',
+      value: email
+    }))
+    .appendTo('body')
+    .submit();
   });
 </script>
 

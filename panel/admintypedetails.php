@@ -3,7 +3,36 @@ include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
 $applicationData = [];
+$userdetails = [];
+//print_r($_POST);die;
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['email']))
+{ 
+  $email = $_POST['email'];
+  try {
+    $sql = "SELECT referredby FROM users WHERE email = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$email]);   // ✅ Pass as array
+    $referredbydetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $referredby = $referredbydetails[0]['referredby'];
+    $sql = "SELECT id, contact, upiid, full_name FROM users WHERE refercode = :refercode";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([':refercode' => $referredby]);
+    $userdetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  //print_r($userdetails);die;
 
+
+} catch (Exception $e) {
+    $logger->log(
+        'ERROR',
+        'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage()
+    );
+}
+  
+}
+else
+{
+
+}
 
 
 
@@ -467,6 +496,21 @@ try {
         </div>
       </div>
     </div>
+        <!-- user details -->
+        <?php foreach ($userdetails as $userinfo): ?>
+
+        <div class="col-md-4">
+          <h5><i class="fas fa-credit-card"></i> User Details</h5>
+          <ul class="list-group list-group-flush">
+         <li class="list-group-item">User ID: <b><?php echo htmlspecialchars($userinfo['id'] ?? ''); ?></b></li>
+<li class="list-group-item">Full Name: <b><?php echo htmlspecialchars($userinfo['full_name'] ?? ''); ?></b></li>
+<li class="list-group-item">Mobile: <b><?php echo htmlspecialchars($userinfo['contact'] ?? ''); ?></b></li>
+<li class="list-group-item">Upi Id: <b><?php echo htmlspecialchars($userinfo['upiid'] ?? ''); ?></b></li>
+<!-- <button type="button" class="btn btn-sm btn-primary" onclick="redirectToForm('<?php echo $userinfo['PaymentVerificationID']; ?>')">Edit</button> -->
+          </ul>
+        </div>
+      </div>
+    </div><?php endforeach; ?>
     <!-- Applications table -->
   <div class="card">
           <div class="card-header">
