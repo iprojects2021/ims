@@ -2,6 +2,7 @@
 
 $role = $_SESSION['user']['role'] ?? null;
 $userid = $_SESSION['user']['id'] ?? null;
+$page = $page ?? '';
 
 // Function to get unread notification count
 function getNotificationCount($db, $userid, $menu_item, $role) {

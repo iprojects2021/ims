@@ -24,44 +24,24 @@ try {
         fgetcsv($handle);
 
         $stmtInsert = $db->prepare("
-        INSERT INTO programs (
-            SuperProgram, title, programtype, duration, amount,
-            short_description, detailed_description, start_date, end_date,
-            is_remote, timezone, is_paid, stipend_currency, stipend_amount,
-            application_deadline, max_applicants, status, slug,
-            location, is_active, mentorid
-        ) VALUES (
-            :SuperProgram, :title, :programtype, :duration, :amount,
-            :short_description, :detailed_description, :start_date, :end_date,
-            :is_remote, :timezone, :is_paid, :stipend_currency, :stipend_amount,
-            :application_deadline, :max_applicants, :status, :slug,
-            :location, :is_active, :mentorid
-        )
-    ");
-    
-        $stmtCheck = $db->prepare("
-            SELECT COUNT(*) FROM programs WHERE title = :title AND status = 'upcoming'
+            INSERT INTO programs (
+                SuperProgram, title, programtype, duration, amount,
+                short_description, detailed_description, start_date, end_date,
+                is_remote, timezone, is_paid, stipend_currency, stipend_amount,
+                application_deadline, max_applicants, status, slug,
+                location, is_active, mentorid
+            ) VALUES (
+                :SuperProgram, :title, :programtype, :duration, :amount,
+                :short_description, :detailed_description, :start_date, :end_date,
+                :is_remote, :timezone, :is_paid, :stipend_currency, :stipend_amount,
+                :application_deadline, :max_applicants, :status, :slug,
+                :location, :is_active, :mentorid
+            )
         ");
 
         $insertedCount = 0;
-        $skippedCount = 0;
-        $skippedTitles = [];
 
         while (($row = fgetcsv($handle, 1000, ",")) !== false) {
-
-            $title = trim($row[0] ?? '');
-            $status = strtolower(trim($row[17] ?? 'upcoming'));
-
-            if ($title === '') continue; // skip empty titles
-
-            // Check for duplicates
-            $stmtCheck->execute([':title' => $title]);
-            if ($stmtCheck->fetchColumn() > 0 && $status === 'upcoming') {
-                $skippedCount++;
-                $skippedTitles[] = $title;
-                continue; // skip this row
-            }
-
             $data = [
                 ':SuperProgram'         => $row[0] ?? null,
                 ':title'                => $row[1] ?? null,
@@ -94,12 +74,7 @@ try {
 
         // Show result message
         $message = "$insertedCount program(s) imported successfully.";
-        if ($skippedCount > 0) {
-            $message .= " $skippedCount duplicate program(s) were skipped: " . implode(", ", $skippedTitles);
-            $alertClass = "alert-warning";
-        } else {
-            $alertClass = "alert-success";
-        }
+        $alertClass = "alert-success";
 
         echo "
         <div id='statusContainer' style='position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%);
@@ -111,7 +86,7 @@ try {
         <script>
             setTimeout(function() {
                 window.location.href = 'admin_addprogrms.php';
-            }, 5000);
+            }, 1000);
         </script>
         ";
 
@@ -130,11 +105,12 @@ try {
     <script>
         setTimeout(function() {
             window.location.href = 'admin_addprogrms.php';
-        }, 5000);
+        }, 1000);
     </script>
     ";
 }
 ?>
+
 
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

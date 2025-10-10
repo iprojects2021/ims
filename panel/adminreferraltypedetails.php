@@ -32,25 +32,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST['id'])) {
     }
 
     
-    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id'])) 
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']) && isset($_POST['userid'])) 
     {
       $id = $_POST['id'];
+      $userid= $_POST['userid'];
       try{
-        $sql = "SELECT * 
-        FROM payments 
-        JOIN enrollments ON payments.referralid = enrollments.referralid 
-        WHERE payments.id = ?";  // or enrollments.id = ? if needed
+         $sql = "SELECT * FROM enrollments WHERE referralid = ?";  
+         $stmt = $db->prepare($sql);
+         $stmt->execute([$id]);
+         $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $db->prepare($sql);
-$stmt->execute([$id]);
-$paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-      }
+         $sql = "SELECT * FROM users WHERE id = ?";  
+         $stmt = $db->prepare($sql);
+         $stmt->execute([$userid]);
+         $userdetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+         }
       catch(Exception $e)
-      {
+         {
         $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-      }
-    }
+         }
+         }
     
       
 }
@@ -124,8 +126,8 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-sm-4 mb-3">
                   <div class="info-box bg-light border border-success shadow-sm">
                     <div class="info-box-content text-center">
-                      <span class="info-box-text text-success font-weight-bold">Payment Status</span>
-                      <span class="info-box-number text-dark display-6"><?= htmlspecialchars($row['status']) ?></span>
+                      <span class="info-box-text text-success font-weight-bold">--</span>
+                      <span class="info-box-number text-dark display-6">--</span>
                     </div>
                   </div>
                 </div>
@@ -152,37 +154,31 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>ID</th>
                         <th>Referral ID</th>
                         <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Status</th>
                         <th>Program</th>
                         <th>Enrollment Date</th>
-                        <th>Fee Paid</th>
-                      </tr>
+                        <th>Enrolled User Email</th>
+                        </tr>
                     </thead>
                     <tbody>
                       <?php foreach ($paymentandenrollmentdata as $row): ?>
                         <tr class="clickable-row" data-id="<?= $row['id'] ?>">
                           <td><?= htmlspecialchars($row['id']) ?></td>
                           <td><?= htmlspecialchars($row['referralid']) ?></td>
-                          <td><?= htmlspecialchars($row['amount']) ?></td>
-                          <td><?= htmlspecialchars($row['payment_date']) ?></td>
-                          <td><?= htmlspecialchars($row['status']) ?></td>
+                          <td><?= htmlspecialchars($row['fee_paid']) ?></td>
                           <td><?= htmlspecialchars($row['program']) ?></td>
                           <td><?= htmlspecialchars($row['enrollmentdate']) ?></td>
-                          <td><?= htmlspecialchars($row['fee_paid']) ?></td>
+                          <td><?= htmlspecialchars($row['enrolleduseremail']) ?></td>
                         </tr>
                       <?php endforeach; ?>
                     </tbody>
                     <tfoot class="bg-light">
                       <tr>
-                        <th>ID</th>
+                      <th>ID</th>
                         <th>Referral ID</th>
                         <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Status</th>
                         <th>Program</th>
                         <th>Enrollment Date</th>
-                        <th>Fee Paid</th>
+                        <th>Enrolled User Email</th>
                       </tr>
                     </tfoot>
                   </table>
@@ -192,7 +188,19 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Right: Application Details -->
             <div class="col-md-4">
-              <div class="border p-3 rounded shadow-sm bg-light">
+            <div class="border p-3 rounded shadow-sm bg-light">
+            <?php foreach ($userdetails as $client): ?>
+                <h5 class="text-primary"><i class="fas fa-info-circle mr-2"></i>User Details</h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><strong>User Id:</strong> <?= htmlspecialchars($client['id']) ?></li>
+                  <li class="list-group-item"><strong>Name:</strong> <?= htmlspecialchars($client['full_name']) ?? ''?></li>
+                  <li class="list-group-item"><strong>Email:</strong> <?= htmlspecialchars($client['email'] ?? '') ?></li>
+                  <li class="list-group-item"><strong>Phone:</strong> <?= htmlspecialchars($client['contact'] ?? '')?></li>
+                  <li class="list-group-item"><strong>Upi Id:</strong> <?= htmlspecialchars($client['upiid']) ?? '' ?></li>
+                  </ul>
+              </div>  
+              <?php endforeach; ?>
+            <div class="border p-3 rounded shadow-sm bg-light">
                 <h5 class="text-primary"><i class="fas fa-info-circle mr-2"></i>Referral Summary</h5>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item"><strong>ID:</strong> <?= htmlspecialchars($applicationData['id']) ?></li>
@@ -204,6 +212,7 @@ $paymentandenrollmentdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </ul>
               </div>
             </div>
+            
 
           </div> <!-- /.row -->
         </div> <!-- /.card-body -->

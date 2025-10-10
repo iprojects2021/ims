@@ -373,6 +373,7 @@ $enrollmentcount = $stmt->fetchColumn();
 <!-- Hidden form to send POST -->
 <form id="postForm" method="POST" action="adminreferraltypedetails.php" style="display:none;">
     <input type="hidden" name="id" id="hiddenId">
+    <input type="hidden" id="hiddenId" name="userid" value="<?php echo $referaldatainfo['userid'] ?>">
 </form>
 <script>
   

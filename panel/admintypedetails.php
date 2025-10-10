@@ -2,7 +2,7 @@
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
-
+$applicationData = [];
 
 
 
