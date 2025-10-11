@@ -23,10 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $experience = $_POST['experience'];
   $course = $_POST['course'];
   $college = $_POST['college'];
+  $upiid = $_POST['upiid'];
   try{
-  $sql="UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=?,course=?,college=? WHERE id =$useriddata";
+  $sql="UPDATE users SET full_name = ?, email = ?, contact = ?, skills = ?,experience=?,course=?,college=?,upiid=? WHERE id =$useriddata";
   $stmt = $db->prepare($sql);
-  $stmt->execute([$full_name, $email, $contact, $skills,$experience,$course,$college]);
+  $stmt->execute([$full_name, $email, $contact, $skills,$experience,$course,$college,$upiid]);
   }
   catch(Exception $e)
   {
@@ -332,6 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                           <input type="text" name="contact" class="form-control" id="inputName2" value="<?php echo htmlspecialchars($client['contact']); ?>">
                         </div>
                       </div>
+                      
                       <div class="form-group row">
                         <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
                         <div class="col-sm-10">
@@ -358,6 +360,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ">
                         </div>
                       </div>
+                      <div class="form-group row">
+                        <label for="upiid" class="col-sm-2 col-form-label">Upi Id</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="upiid" class="form-control" id="upiid" value="<?php echo htmlspecialchars($client['upiid'] ?? ''); ?>">
+                        </div><br><br><br>
+                      
                       <!--<div class="form-group row">
                         <div class="offset-sm-2 col-sm-10">
                           <div class="checkbox">

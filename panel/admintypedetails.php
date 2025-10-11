@@ -2,7 +2,53 @@
 include("../panel/util/statuscolour.php");
 include("../includes/db.php");
 include("../panel/util/session.php");
+$applicationData = [];
+$userdetails = [];
+//print_r($_POST);die;
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['email']) && isset($_POST['mobile'])) { 
+  $email = $_POST['email'];
+  $mobile = $_POST['mobile'];
 
+  try {
+      // First, try to get referredby from users table
+      $sql = "SELECT referredby FROM users WHERE email = ?";
+      $stmt = $db->prepare($sql);
+      $stmt->execute([$email]);
+      $referredbydetails = $stmt->fetch(PDO::FETCH_ASSOC); // fetch single row
+
+      // If not found in users, try referrals table
+      if (!$referredbydetails) {
+          $sql = "SELECT referredby FROM referrals WHERE referred_email = ? OR referred_phone = ?";
+          $stmt = $db->prepare($sql);
+          $stmt->execute([$email, $mobile]);
+          $referredbydetails = $stmt->fetch(PDO::FETCH_ASSOC);
+      }
+
+      // If we found a referredby, get user details
+      if ($referredbydetails && !empty($referredbydetails['referredby'])) {
+          $referredby = $referredbydetails['referredby'];
+
+          $sql = "SELECT id, contact, upiid, full_name FROM users WHERE refercode = :refercode";
+          $stmt = $db->prepare($sql);
+          $stmt->execute([':refercode' => $referredby]);
+          $userdetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+          // Optional: print for debugging
+          // print_r($userdetails);
+      } else {
+          $userdetails = [];
+      }
+
+  } catch (Exception $e) {
+      $logger->log(
+          'ERROR',
+          'Line ' . __LINE__ . ': Query - ' . $sql . ' , Exception Error = ' . $e->getMessage()
+      );
+      $userdetails = [];
+  }
+} else {
+  $userdetails = [];
+}
 
 
 
@@ -467,8 +513,23 @@ try {
         </div>
       </div>
     </div>
-    <!-- Applications table -->
-  <div class="card">
+            <!-- user details -->
+            <?php foreach ($userdetails as $userinfo): ?>
+
+<div class="col-md-4">
+  <h5><i class="fas fa-credit-card"></i> User Payout Details</h5>
+  <ul class="list-group list-group-flush">
+ <li class="list-group-item">User ID: <b><?php echo htmlspecialchars($userinfo['id'] ?? ''); ?></b></li>
+<li class="list-group-item">Full Name: <b><?php echo htmlspecialchars($userinfo['full_name'] ?? ''); ?></b></li>
+<li class="list-group-item">Mobile: <b><?php echo htmlspecialchars($userinfo['contact'] ?? ''); ?></b></li>
+<li class="list-group-item">Upi Id: <b><?php echo htmlspecialchars($userinfo['upiid'] ?? ''); ?></b></li>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPayoutModal">
+<i class="fas fa-plus"></i> Add Referral Payout
+</button>
+  </ul>
+</div><br>
+<!-- Applications table -->
+<div class="card">
           <div class="card-header">
             <h3 class="card-title">Application Status History</h3>
           </div>
@@ -487,7 +548,7 @@ try {
               </thead>
               <tbody>
                 <?php foreach ($applicationData as $row): ?>
-                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
+                  <tr>
                     <td><?= htmlspecialchars($row['id']) ?></td>
                     <td><?= htmlspecialchars($row['applicationid']) ?></td>
                     <td><?= htmlspecialchars($row['userid']) ?></td>
@@ -515,6 +576,82 @@ try {
   </div>
   
   <?php endforeach; ?>
+
+</div>
+
+</div><?php endforeach; ?>
+
+      <!-- Modal -->
+<div class="modal fade" id="addPayoutModal" tabindex="-1" role="dialog" aria-labelledby="addPayoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="addPayoutModalLabel">Add Referral Payout</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="payoutForm">
+        <div class="modal-body">
+          <div class="form-row">
+            
+            <div class="form-group col-md-6">
+              <label>Application ID</label>
+              <input type="number" name="applicationid" value="<?php echo $id ?>" class="form-control" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>User ID</label>
+              <input type="number" name="userid" class="form-control" value="<?php echo $userinfo['id'] ?>" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Payout Amount</label>
+              <input type="text" name="payoutamount" class="form-control" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Payout Method</label>
+              <select name="payoutmethod" class="form-control">
+                <option value="UPI">UPI</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label>Payout Details</label>
+              <input type="text" name="payoutdetails" value="<?php echo $userinfo['upiid'] ?>" class="form-control" required> 
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Transaction ID</label>
+              <input type="text" name="transactionid" class="form-control" required>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Created By</label>
+              <input type="text" name="createby" class="form-control" value="<?php echo $_SESSION['user']['id']?>" required>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label>Notes</label>
+              <textarea name="notes" class="form-control" rows="2"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Save Payout</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
   
     </section>
   </div>
@@ -600,6 +737,10 @@ document.getElementById('statusForm').addEventListener('submit', function(e) {
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="dist/js/adminlte.min.js"></script>
+<!-- ✅ Toastr -->
+<link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+<script src="plugins/toastr/toastr.min.js"></script>
+
 
 <script>
   $(function () {
@@ -624,6 +765,35 @@ document.getElementById('statusForm').addEventListener('submit', function(e) {
     });
   });
 </script>
+<script>
+$(document).ready(function(){
+  $("#payoutForm").on("submit", function(e){
+    e.preventDefault(); // stop form from reloading page
+
+    $.ajax({
+      url: "referralpayout.php",
+      type: "POST",
+      data: $(this).serialize(),
+      dataType: "json",
+      success: function(response){
+        if(response.status === "success"){
+          toastr.success("Payout added successfully!");
+          $("#addPayoutModal").modal('hide');
+          $("#payoutForm")[0].reset();
+          // optionally reload your payout table
+          // $('#payoutTable').DataTable().ajax.reload();
+        } else {
+          toastr.error("❌ " + response.message);
+        }
+      },
+      error: function(){
+        toastr.error("⚠️ Something went wrong while saving payout.");
+      }
+    });
+  });
+});
+</script>
+
 <style>
   /* Hide the + icon cell if it somehow still appears */
   table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child::before,

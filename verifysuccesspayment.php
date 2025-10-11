@@ -1,8 +1,9 @@
 <?php
 
 include(__DIR__ . '/includes/db.php');
+include(__DIR__ . '/panel/util/checkemailandmobile.php');
 session_start();
-
+ //print_r($_SESSION);die;
 $program_id = $_SESSION['application_data']['program_id'];
 $applicationiddata = $_SESSION['applicationid'];
 $userid = $_SESSION['user']['id'] ?? null;
@@ -23,8 +24,10 @@ if ($transaction) {
     }
 }
 
-$email = $_POST['email'] ?? null;
-$phone = $_POST['phone'] ?? null;
+// $email = $_POST['email'] ?? null;
+// $phone = $_POST['phone'] ?? null;
+$email=$_SESSION['application_data']['email'];
+$phone=$_SESSION['application_data']['mobile'];
 
 try {
     // Insert Payment Verification
@@ -74,8 +77,43 @@ try {
     } catch (Exception $e) {
 
     }
+        // ✅ ---- Referral Check Section ----
+        $referral = checkReferralByEmailOrPhone($db, $email, $phone);
 
-} catch (PDOException $e) {
+        if ($referral === null || $referral === '' || $referral === 'empty') {
+            $referral = insertReferralByEmailOrPhone($db, $email, $phone);
+        }
+        
+        if ($referral) {
+           // $referralid = $referral;  // ✅ directly the ID
+            $referralid = is_array($referral) ? $referral['id'] : $referral;  // ✅ safe for both cases
+
+            $project = $_SESSION['application_data']['project'];
+        
+            // Enroll user
+            $enrollStmt = $db->prepare("
+                INSERT INTO enrollments (referralid, program, enrollmentdate, fee_paid) 
+                VALUES (?, ?, NOW(), ?)
+            ");
+            $enrollStmt->execute([$referralid, $project, $amount_paid]);
+        
+            // Update referral status
+            $updateReferralStmt = $db->prepare("UPDATE referrals SET status = 'Enrolled' WHERE id = ?");
+            $updateReferralStmt->execute([$referralid]);
+        } else {
+            $project = $_SESSION['application_data']['project'];
+            $enrolleduseremail=$_SESSION['application_data']['email'];        
+            $enrollStmt = $db->prepare("
+                INSERT INTO enrollments (enrolleduseremail, program, enrollmentdate, fee_paid) 
+                VALUES (?, ?, NOW(), ?)
+            ");
+            $enrollStmt->execute([$enrolleduseremail, $project, $amount_paid]);
+        }
+        
+    } 
+    
+
+ catch (PDOException $e) {
 
 }
 ?>

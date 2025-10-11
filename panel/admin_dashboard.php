@@ -187,6 +187,7 @@ catch(Exception $e)
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
+                  <th>Id</th>
                   <th>Project</th>
                   <th>Outcome</th>
                   <th>Status</th>
@@ -196,7 +197,10 @@ catch(Exception $e)
               </thead>
               <tbody>
                 <?php foreach ($applicationData as $row): ?>
-                  <tr class="clickable-row" data-id="<?= (int)$row['id'] ?>">
+                  <tr class="clickable-row" 
+        data-id="<?= (int)$row['id'] ?>" 
+        data-email="<?= htmlspecialchars($row['email']) ?>" data-mobile="<?= htmlspecialchars($row['mobile']) ?>">
+          <td><?= htmlspecialchars($row['id']) ?></td>
                     <td><?= htmlspecialchars($row['project']) ?></td>
                     <td><?= htmlspecialchars($row['outcome']) ?></td>
                     <td><?= getStatusBadge($row['status']) ?></td>
@@ -207,6 +211,7 @@ catch(Exception $e)
               </tbody>
               <tfoot>
                 <tr>
+                  <th>Id</th>
                   <th>Project</th>
                   <th>Outcome</th>
                   <th>Status</th>
@@ -258,19 +263,49 @@ catch(Exception $e)
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     // Clickable rows redirect
-    $('.clickable-row').on('click', function () {
-      const id = $(this).data('id');
-      $('<form>', {
-        'method': 'POST',
-        'action': 'admintypedetails.php'
-      }).append($('<input>', {
-        'type': 'hidden',
-        'name': 'id',
-        'value': id
-      })).appendTo('body').submit();
-    });
+    // $('.clickable-row').on('click', function () {
+    //   const id = $(this).data('id');
+    //   $('<form>', {
+    //     'method': 'POST',
+    //     'action': 'admintypedetails.php'
+    //   }).append($('<input>', {
+    //     'type': 'hidden',
+    //     'name': 'id',
+    //     'value': id
+    //   })).appendTo('body').submit();
+    // });
   });
 </script>
+<script>
+  $(document).on('click', '.clickable-row', function () {
+    const id = $(this).data('id');
+    const email = $(this).data('email');
+    const mobile = $(this).data('mobile');
+
+    $('<form>', {
+      method: 'POST',
+      action: 'admintypedetails.php'
+    })
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'id',
+      value: id
+    }))
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'email',
+      value: email
+    }))
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'mobile',
+      value: mobile
+    }))
+    .appendTo('body')
+    .submit();
+  });
+</script>
+
 
 </body>
 </html>
