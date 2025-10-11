@@ -4,103 +4,13 @@ include("../panel/util/session.php");
 // Get current student/user ID
 $studentId = $_SESSION["user"]["id"];
 $createdBy = $studentId; // Assuming student created the ticket
-
-// Handle form submission
-// if ($_SERVER["REQUEST_METHOD"] === "POST") {
-//     $subject = trim($_POST["subject"]);
-//     $message = trim($_POST["message"]);
-//     $status = "New"; // Default status
-
-//     $filename = null;
-
-//     // Handle file upload if a file was uploaded
-//     if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
-//         $uploadDir = "../uploads/tickets/";
-//         if (!is_dir($uploadDir)) {
-//             mkdir($uploadDir, 0777, true);
-//         }
-
-//         $originalName = basename($_FILES["file"]["name"]);
-//         $filename = time() . "_" . preg_replace("/[^a-zA-Z0-9\._-]/", "_", $originalName); // sanitize filename
-//         $targetPath = $uploadDir . $filename;
-
-//         if (!move_uploaded_file($_FILES["file"]["tmp_name"], $targetPath)) {
-//             echo "<div class='alert alert-danger'>Failed to upload file.</div>";
-//             exit();
-//         }
-//     }
-//    try{
-//     // Prepare SQL statement
-//     $sql="INSERT INTO ticket 
-//     (studentid, subject, message, status, assignedto, filename, createdate, createdby)
-//     VALUES
-//     (:studentid, :subject, :message, :status, :assignedto, :filename, NOW(), :createdby)
-// ";
-//     $stmt = $db->prepare($sql);
-
-//     $result = $stmt->execute([
-//         ':studentid' => $studentId,
-//         ':subject' => $subject,
-//         ':message' => $message,
-//         ':status' => $status,
-//         ':assignedto' => null,       // Ticket not yet assigned
-//         ':filename' => $filename,
-//         ':createdby' => $createdBy
-//     ]);
-//   }
-//   catch(Exception $e)
-//   {
-//     $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' ,Exception Error = ' . $e->getMessage());
-//   }
-
-//     if ($result) {
-//       echo '<div class="alert alert-success alert-dismissible">
-//       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-//       <h5><i class="icon fas fa-check"></i> Alert!</h5>
-//       Data saved successfully
-//     </div>';
-//     echo '<script type="text/javascript">
-//     setTimeout(function() {
-//         window.location.href = "studenthelp.php"; 
-//     }, 2000); // Redirect after 2 seconds
-//   </script>';
-
-//     } else {
-//       echo '<div class="alert alert-danger alert-dismissible">
-//       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-//       <h5><i class="icon fas fa-times"></i> Error!</h5>
-//       There was an error updating the data.
-//     </div>';
-//     }
-// }
 ?>
 <?php
-try {
-    // Fetch the count of rows from the referrals table
-    $sql = "SELECT COUNT(*) FROM referrals";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    // Use fetchColumn() to get the count
-    $count = $stmt->fetchColumn();
-    } catch (Exception $e) {
-    // Log any errors that occur during the query
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
-}
+$sql = "SELECT * FROM referralpaymentpayout";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$referaldata = $stmt->fetchAll();
 ?>
-<?php
-try {
-    // Fetch the count of rows from the enrollments table
-    $sql = "SELECT COUNT(*) FROM enrollments";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    // Use fetchColumn() to get the count
-    $enrollmentcount = $stmt->fetchColumn();
-    } catch (Exception $e) {
-    // Log any errors that occur during the query
-    $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - ' . $sql . ' ,Exception Error = ' . $e->getMessage());
-}
-?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -109,8 +19,6 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin-Referral | INDSAC SOFTECH</title>
   <link rel="icon" type="image/png" href="../favico.png">
-
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -144,7 +52,7 @@ try {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard UNDER DEVELOPMENT</h1>
+            <h1 class="m-0">Dashboard</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -164,101 +72,11 @@ try {
 
       <!-- AdminLTE Card Wrapper -->
 
-
-
-      <?php
-if (isset($_POST['userid'])) {
-    $id = $_POST['userid'];
-
-    try {
-        // Fetch referral data
-$sql = "SELECT * FROM referrals WHERE userid = :id ORDER BY created_at DESC";
-$stmt = $db->prepare($sql);
-$stmt->bindParam(':id', $id, PDO::PARAM_INT);
-$stmt->execute();
-$referaldata = $stmt->fetchAll();
-
-// Count referrals
-$sql = "SELECT COUNT(*) FROM referrals WHERE userid = :id";
-$stmt = $db->prepare($sql);
-$stmt->bindParam(':id', $id, PDO::PARAM_INT);
-$stmt->execute();
-$count = $stmt->fetchColumn();
-
-// Count enrollments
-$stmt = $db->prepare("SELECT COUNT(*) FROM enrollments e JOIN referrals r ON e.referralid = r.id WHERE r.userid = :userid
-");
-$stmt->bindParam(':userid', $_SESSION['UserID'], PDO::PARAM_INT);
-$stmt->execute();
-$enrollmentcount = $stmt->fetchColumn();
- } catch(Exception $e) {
-        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' , Exception Error = ' . $e->getMessage());
- }
-} else {
-    try {
-        $sql = "SELECT * FROM referrals";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $referaldata = $stmt->fetchAll();
-    } catch(Exception $e) {
-        $logger->log('ERROR', 'Line ' . __LINE__ . ': Query - '.$sql.' , Exception Error = ' . $e->getMessage());
-    }
-}
-?>
-        <!-- Stat boxes -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3><?php echo $count ?></h3>
-                <p>Total Referrals</p>
-              </div>
-              <div class="icon"><i class="ion ion-bag"></i></div>
-              <p class="small-box-footer">Total Referrals</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3><?php echo $enrollmentcount?></h3>
-                <p>Conversion Rate</p>
-              </div>
-              <div class="icon"><i class="ion ion-stats-bars"></i></div>
-              <p class="small-box-footer">Conversion Rate</p>
-              
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-              <div class="inner">
-              <h3>123</h3>
-                <p>Pending Approvals</p>
-             
-                </div>
-              <div class="icon"><i class="ion ion-person-add"></i></div>
-              <p class="small-box-footer">Pending Approvals</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>123</h3>
-                <p>Total Revenue</p>
-              </div>
-              <div class="icon"><i class="ion ion-pie-graph"></i></div>
-              <p class="small-box-footer">Total Revenue</p>
-
-            </div>
-          </div>
-        </div>
-
+        
 <!-- AdminLTE Card with Table -->
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">Referral List</h3>
+    <h3 class="card-title">ReferralPaymentPayout Table</h3>
   </div>
 
   <!-- /.card-header -->
@@ -266,26 +84,32 @@ $enrollmentcount = $stmt->fetchColumn();
     <table id="example1" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>User ID</th>
-          <th>Referred Email</th>
-          <th>Referred Mobile</th>
-          <th>Status</th>
-          <th>Created At</th>
+          <th>Id</th>
+          <th>ApplicationId</th>
+          <th>UserId</th>
+          <th>PayoutAmount</th>
+          <th>PayoutMethod</th>
+          <th>PayoutDetails</th>
+          <th>TransactionId</th>
+          <th>Notes</th>
+          <th>CreateBy</th>
+          <th>CreateDate</th>
             </tr>
       </thead>
       <tbody>
         <?php if ($referaldata): ?>
           <?php foreach ($referaldata as $referaldatainfo): ?>
-            <tr class="clickable-row" data-id="<?= $referaldatainfo['id'] ?>">
-            <td><?= htmlspecialchars($referaldatainfo['id']) ?></td>
-              <td><?= htmlspecialchars($referaldatainfo['userid']) ?></td>
-              <td><?= htmlspecialchars(($referaldatainfo['referred_email'] ?? '') && strtolower($referaldatainfo['referred_email']) !== 'null' ? $referaldatainfo['referred_email'] : '--') ?>
-</td>
-              <td><?= htmlspecialchars(($referaldatainfo['referred_phone'] ?? '') && strtolower($referaldatainfo['referred_phone']) !== 'null' ? $referaldatainfo['referred_phone'] : '--') ?>
-</td>
-              <td><?= htmlspecialchars($referaldatainfo['status']) ?></td>
-              <td><?= date("Y-m-d H:i", strtotime($referaldatainfo['created_at'])) ?></td>
+            <tr>
+              <td><?= htmlspecialchars($referaldatainfo['id']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['applicationid']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['userid']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['payoutamount']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['payoutmethod']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['payoutdetails']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['transactionid']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['notes']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['createby']) ?? '' ?></td>
+              <td><?= htmlspecialchars($referaldatainfo['createdate']) ?? '' ?></td>
               
             </tr>
           <?php endforeach; ?>

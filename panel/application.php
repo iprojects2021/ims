@@ -167,7 +167,7 @@ if (isset($_POST['email'])) {
   <?php foreach ($applicationData as $row): ?>
     <tr class="clickable-row" 
         data-id="<?= (int)$row['id'] ?>" 
-        data-email="<?= htmlspecialchars($row['email']) ?>">
+        data-email="<?= htmlspecialchars($row['email']) ?>" data-mobile="<?= htmlspecialchars($row['mobile']) ?>">
       <td><?= htmlspecialchars($row['id']) ?></td>
       <td><?= htmlspecialchars($row['project']) ?></td>
       <td><?= htmlspecialchars($row['outcome']) ?></td>
@@ -249,6 +249,7 @@ if (isset($_POST['email'])) {
   $(document).on('click', '.clickable-row', function () {
     const id = $(this).data('id');
     const email = $(this).data('email');
+    const mobile = $(this).data('mobile');
 
     $('<form>', {
       method: 'POST',
@@ -263,6 +264,11 @@ if (isset($_POST['email'])) {
       type: 'hidden',
       name: 'email',
       value: email
+    }))
+    .append($('<input>', {
+      type: 'hidden',
+      name: 'mobile',
+      value: mobile
     }))
     .appendTo('body')
     .submit();
